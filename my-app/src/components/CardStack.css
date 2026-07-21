@@ -1,0 +1,104 @@
+:root {
+  --cards: 4;
+  --cardHeight: 85vh;
+  --cardTopPadding: 1.5em;
+  --cardMargin: 4vw;
+}
+
+.container {
+  width: 90%;
+  max-w: 1400px;
+  margin: 0 auto;
+}
+
+#cards {
+  list-style: none;
+  padding-left: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(var(--cards), var(--cardHeight));
+  gap: var(--cardMargin);
+  padding-bottom: calc(var(--cards) * var(--cardTopPadding));
+  margin-bottom: var(--cardMargin);
+}
+
+#card1 {
+  --index: 1;
+}
+#card2 {
+  --index: 2;
+}
+#card3 {
+  --index: 3;
+}
+#card4 {
+  --index: 4;
+}
+
+.card {
+  position: sticky;
+  top: 0;
+  padding-top: calc(var(--index) * var(--cardTopPadding));
+}
+
+/* Card 1: Pure Glacier Blue (#9DB4C6 -> #7A95A8) */
+#card1 .card-body {
+  background: linear-gradient(135deg, #9DB4C6 0%, #7A95A8 100%);
+  color: #0B0F14;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+/* Card 2: Arctic Navy (#1E2A39 -> #16212E) with Glacier Blue Accent */
+#card2 .card-body {
+  background: linear-gradient(135deg, #1E2A39 0%, #16212E 100%);
+  color: #F5F8FA;
+  border: 1px solid #9DB4C6;
+  box-shadow: 0 10px 40px rgba(157, 180, 198, 0.15);
+}
+
+/* Card 3: Metallic Glacier Steel (#A8C0D2 -> #8DA6BA) */
+#card3 .card-body {
+  background: linear-gradient(135deg, #A8C0D2 0%, #8DA6BA 100%);
+  color: #0B0F14;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Card 4: Midnight Arctic Obsidian (#121A24 -> #0B0F14) with Bold Glacier Blue Frame */
+#card4 .card-body {
+  background: linear-gradient(135deg, #121A24 0%, #0B0F14 100%);
+  color: #F5F8FA;
+  border: 2px solid #9DB4C6;
+  box-shadow: 0 0 50px rgba(157, 180, 198, 0.25);
+}
+
+.card-body {
+  box-sizing: border-box;
+  padding: clamp(24px, 4vw, 40px);
+  border-radius: 40px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  height: var(--cardHeight);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(157, 180, 198, 0.4) transparent;
+}
+
+.card-body::-webkit-scrollbar {
+  width: 6px;
+}
+.card-body::-webkit-scrollbar-thumb {
+  background-color: rgba(157, 180, 198, 0.4);
+  border-radius: 10px;
+}
+
+.card-body h2 {
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}

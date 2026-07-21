@@ -4,7 +4,16 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['"Black Ops One"', 'system-ui'],
+        outfit: ['"Black Ops One"', 'system-ui'],
+        space: ['"Black Ops One"', 'system-ui'],
+        jakarta: ['"Black Ops One"', 'system-ui'],
+        mono: ['"Black Ops One"', 'system-ui'], 
+        marker: ['"Permanent Marker"', 'cursive'],
+      }
+    },
   },
   plugins: [],
 }

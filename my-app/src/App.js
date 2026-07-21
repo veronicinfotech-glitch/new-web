@@ -8,9 +8,15 @@ import Contact from "./components/Contact";
 import Packages  from "./components/Packages";
 import BookDemo from "./components/BookDemo";
 
+import SharedNavbar from "./components/SharedNavbar";
+import ScrollToTop from "./components/ScrollToTop";
+import WhatsAppFloat from "./components/WhatsAppFloat";
+
 function App() {
   return (
     <Router>
+      <ScrollToTop />
+      <SharedNavbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -19,8 +25,8 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/packages" element={<Packages />} />
         <Route path="/book-demo" element={<BookDemo />} />
-
       </Routes>
+      <WhatsAppFloat />
     </Router>
   );
 }

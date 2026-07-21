@@ -1,172 +1,198 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
 import {
   motion,
   useScroll,
   useTransform,
   AnimatePresence,
 } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
 import {
   ArrowRight,
-  Sparkles,
-  Shield,
-  Users,
-  TrendingUp,
-  Star,
   CheckCircle,
   Play,
-  Code2,
-  Palette,
-  Search,
+  Monitor,
   Smartphone,
   Globe,
+  Database,
+  Megaphone,
+  Layout,
+  Code,
+  Sparkles,
+  Zap,
+  Clock,
+  Shield,
+  Star,
+  Rocket,
+  TrendingUp,
+  Target,
+  BarChart3,
+  Github,
+  Linkedin,
+  Instagram,
   Mail,
   Phone,
   MapPin,
-  Instagram,
-  Github,
-  Linkedin,
-  Menu,
   X,
-  Award,
-  Rocket,
+  CreditCard,
+  Building,
+  CheckCircle2,
   Crown,
-  Gem,
-  Target,
-  BarChart3,
-  Clock,
-  Layers,
-  Camera,
-  Video,
-  Layout,
-  Database,
-  ShoppingCart,
-  Settings,
-  BarChart,
-  Megaphone,
-  Cloud,
-  Bot,
-  LineChart,
   Briefcase,
-  Workflow,
+  Bot,
   Factory,
+  Settings,
+  Workflow,
+  MousePointerClick,
+  MonitorSmartphone,
+  Code2,
+  Brush,
+  Gauge,
+  ShoppingCart,
+  Building2,
+  UserCheck,
   Instagram as InstagramIcon,
-  Cpu as CpuIcon,
-  Sparkles as SparklesIcon,
+  Facebook,
+  Search,
+  MessageCircle,
+  Share2,
+  Cpu as CpuIcon
 } from "lucide-react";
-
 import lolo1 from "../images/lolo1.png";
 
-// Website Packages Modal Component
+const GlassCard = ({ children, className, isHighlighted, cardColor, cardIndex, onClick, style }) => {
+  return (
+    <motion.div
+      className={`relative overflow-hidden ${className}`}
+      onClick={onClick}
+      style={style || {}}
+      whileTap={{ scale: 0.98 }}
+    >
+      {/* Background gradients for all cards */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div className={`absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl ${
+          isHighlighted ? 'bg-current opacity-30' : 'bg-[#9DB4C6]'
+        }`} style={isHighlighted && cardColor ? { backgroundColor: cardColor } : {}} />
+        <div className={`absolute -bottom-20 -left-20 w-40 h-40 rounded-full blur-3xl ${
+          isHighlighted ? 'bg-current opacity-30' : 'bg-[#1E2A39]'
+        }`} style={isHighlighted && cardColor ? { backgroundColor: cardColor } : {}} />
+      </div>
+
+      {/* Dynamic click effect */}
+      <motion.div
+        className="absolute inset-0 bg-white/20 pointer-events-none rounded-2xl opacity-0"
+        whileTap={{ opacity: 1 }}
+        transition={{ duration: 0.1 }}
+      />
+      
+      <div className="relative z-10 h-full flex flex-col">
+        {children}
+      </div>
+    </motion.div>
+  );
+};
+
+// ============================================================
+// WEBSITE PACKAGES MODAL
+// ============================================================
 const WebsitePackagesModal = ({ isOpen, onClose }) => {
+  const [expandedPackage, setExpandedPackage] = useState(null);
+
   if (!isOpen) return null;
 
-  const subPackages = [
+  const websitePackages = [
     {
       id: 1,
-      title: "Starter Website",
-      price: "$18,000",
-      description:
-        "Perfect for small businesses starting their online presence",
+      title: "Landing Page Website",
+      price: "₹12,999",
+      description: "Perfect for single product, service, or event promotion",
       features: [
-        "5 page website",
-        "Mobile responsive",
-        "Contact form",
-        "WhatsApp chat",
+        "1 Long-scroll landing page",
+        "Mobile-first responsive design",
+        "WhatsApp chat integration",
+        "Contact form & Lead capture",
         "Basic SEO setup",
-        "Google map integration",
+        "Social media integration",
+        "Premium UI/UX layout",
       ],
-      platformCosts: {
-        domain: "$800 – $1,200 / year",
-        hosting: "$3,000 – $5,000 / year",
-        extra: null,
-      },
-      icon: Globe,
-      gradient: "from-blue-500 to-cyan-500",
-      badge: "Basic Package",
-      color: "blue",
-      setupTime: "2-3 Weeks",
+      icon: Layout,
+      badge: "Basic",
+      setupTime: "1 Week",
+      isPopular: false,
+      isProfessional: false,
     },
     {
       id: 2,
-      title: "Business Website",
-      price: "$35,000",
-      description: "Comprehensive solution for growing businesses",
+      title: "Business Starter Website",
+      price: "₹24,999",
+      description: "Ideal for small businesses needing a professional online presence",
       features: [
-        "8-10 pages website",
-        "Custom UI design",
-        "CMS dashboard",
-        "Lead capture forms",
-        "Blog system",
-        "Speed optimization",
-        "Basic analytics",
+        "Up to 5 Pages (Home, About, Services, etc.)",
+        "Dynamic Contact Form",
+        "WhatsApp & Calling Integration",
+        "Basic CMS for simple updates",
+        "Google My Business Setup",
+        "Responsive across all devices",
+        "On-page SEO optimization",
       ],
-      platformCosts: {
-        domain: "$800 – $1,200 / year",
-        hosting: "$4,000 – $6,000 / year",
-        extra: null,
-      },
-      icon: Layout,
-      gradient: "from-purple-500 to-pink-500",
+      icon: Building,
       badge: "Popular Choice",
-      color: "purple",
-      setupTime: "3-4 Weeks",
+      setupTime: "2-3 Weeks",
+      isPopular: true,
+      isProfessional: false,
     },
     {
       id: 3,
-      title: "Professional Website",
-      price: "$60,000",
-      description:
-        "Advanced website with premium features for established businesses",
+      title: "Professional Business Website",
+      price: "₹49,999",
+      description: "For growing companies needing advanced features and management",
       features: [
-        "10-15 pages website",
-        "Premium UI/UX design",
-        "CMS system",
-        "Landing pages",
-        "Payment gateway integration",
-        "Advanced SEO setup",
-        "Lead management integration",
+        "Up to 15 Pages",
+        "Full CMS Admin Dashboard",
+        "Blog & News Management",
+        "Product/Service Catalog",
+        "Advanced Lead Generation Forms",
+        "Google Analytics Integration",
+        "Live Chat / WhatsApp Support",
+        "Advanced SEO Setup",
       ],
-      platformCosts: {
-        domain: "$800 – $1,200 / year",
-        hosting: "$6,000 – $10,000 / year",
-        extra: "Payment gateway charges: ~2% per transaction",
-      },
-      icon: Crown,
-      gradient: "from-cyan-500 to-blue-500",
+      icon: Briefcase,
       badge: "Professional",
-      color: "cyan",
-      setupTime: "4-5 Weeks",
+      setupTime: "3-4 Weeks",
+      isPopular: false,
+      isProfessional: true,
     },
     {
       id: 4,
-      title: "Advanced Web System",
-      price: "$90,000 – $120,000",
-      description: "Custom web application with full-scale system architecture",
+      title: "E-Commerce / Custom Portal",
+      price: "₹99,999",
+      description: "Complete online selling or custom business solution",
       features: [
-        "Custom web application",
-        "Admin panel",
-        "User login system",
-        "Database architecture",
-        "API integrations",
-        "Security system",
-        "Analytics dashboard",
+        "Unlimited Products/Pages capability",
+        "Payment Gateway Integration",
+        "Shopping Cart & Checkout",
+        "Order Management System",
+        "Customer Login/Dashboard",
+        "Inventory Management",
+        "Automated Email Notifications",
+        "Premium Custom Design",
       ],
-      platformCosts: {
-        domain: "$800 – $1,200 / year",
-        hosting: "$10,000 – $25,000 / year",
-        extra: "Cloud hosting (premium infrastructure)",
-      },
-      icon: Database,
-      gradient: "from-pink-500 to-rose-500",
+      icon: ShoppingCart,
       badge: "Enterprise",
-      color: "pink",
-      setupTime: "5-6 Weeks",
+      setupTime: "4-6 Weeks",
+      isPopular: false,
+      isProfessional: false,
     },
   ];
 
+  const togglePackage = (id) => {
+    setExpandedPackage(expandedPackage === id ? null : id);
+  };
+
+  const popularColor = '#FFF4E5';
+  const professionalColor = '#E8F4FF';
+
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isOpen && (
         <>
           <motion.div
@@ -174,134 +200,159 @@ const WebsitePackagesModal = ({ isOpen, onClose }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100]"
+            className="fixed inset-0 bg-[#0B0F14]/60 backdrop-blur-sm z-[100]"
           />
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
             className="fixed inset-0 z-[101] flex items-center justify-center p-4 overflow-y-auto"
           >
-            <div className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-3xl bg-gradient-to-br from-gray-900 to-black border border-white/20 shadow-2xl">
+            <div className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#F5F8FA] border border-[#9DB4C6]/30 shadow-2xl">
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 backdrop-blur-sm text-white/80 hover:text-white hover:bg-black/70 transition-all"
+                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-[#1E2A39]/10 backdrop-blur-sm text-[#0B0F14]/80 hover:text-[#0B0F14] hover:bg-[#1E2A39]/20 transition-all"
               >
                 <X className="w-5 h-5" />
               </button>
 
               <div className="p-6 md:p-8">
                 <div className="mb-8 text-center">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 mb-4">
-                    <Layout className="w-4 h-4 text-purple-400" />
-                    <span className="text-sm text-purple-400">
-                      Website & Basic Integration Packages
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1E2A39]/10 border border-[#1E2A39]/20 mb-4">
+                    <Globe className="w-4 h-4 text-[#1E2A39]" />
+                    <span className="text-sm text-[#1E2A39]">
+                      Business Website Packages
                     </span>
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent mb-3">
-                    Complete Business Website Solutions
+                  <h2 className="text-3xl md:text-4xl font-bold text-[#0B0F14] mb-3">
+                    Professional Web Solutions
                   </h2>
-                  <p className="text-white/60 text-base max-w-2xl mx-auto">
-                    Choose the perfect website package for your business needs.
+                  <p className="text-[#0B0F14]/60 text-base max-w-2xl mx-auto">
+                    Click on any package to view pricing details
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {subPackages.map((pkg, index) => {
+                  {websitePackages.map((pkg, index) => {
                     const Icon = pkg.icon;
+                    const isExpanded = expandedPackage === pkg.id;
+                    
+                    const isPopular = pkg.isPopular;
+                    const isProfessional = pkg.isProfessional;
+                    const isHighlighted = isPopular || isProfessional;
+                    
+                    const cardColor = isPopular ? popularColor : (isProfessional ? professionalColor : null);
+                    
                     return (
                       <motion.div
                         key={pkg.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="h-full"
+                        transition={{ delay: index * 0.08, duration: 0.4, ease: "easeOut" }}
+                        className="h-full cursor-pointer"
+                        onClick={() => togglePackage(pkg.id)}
                       >
-                        <div
-                          className={`h-full flex flex-col p-5 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20`}
+                        <GlassCard
+                          isHighlighted={isHighlighted}
+                          cardColor={cardColor}
+                          cardIndex={index}
+                          className={`h-full flex flex-col p-6 transition-all duration-500 rounded-2xl border-2 ${
+                            isPopular
+                              ? `glass-popular-animated backdrop-blur-xl border-transparent hover:border-[#FF9900]/80 shadow-[0_8px_32px_rgba(255,153,0,0.15)] hover:shadow-[0_12px_48px_rgba(255,153,0,0.25)]`
+                              : isProfessional
+                                ? `glass-professional-animated backdrop-blur-xl border-transparent hover:border-[#00A4EF]/80 shadow-[0_8px_32px_rgba(0,164,239,0.15)] hover:shadow-[0_12px_48px_rgba(0,164,239,0.25)]`
+                                : 'bg-white border-transparent hover:border-[#1E2A39]/50 shadow-sm hover:shadow-lg'
+                          } ${
+                            isExpanded 
+                              ? isPopular
+                                ? `shadow-2xl border-[#FF9900]/80`
+                                : isProfessional
+                                  ? `shadow-2xl border-[#00A4EF]/80`
+                                  : 'border-[#1E2A39] shadow-lg'
+                              : ''
+                          }`}
                         >
-                          <div
-                            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-${pkg.color}-500/20 border border-${pkg.color}-500/30 mb-4 self-start`}
-                          >
-                            <Icon className={`w-3 h-3 text-${pkg.color}-400`} />
-                            <span className={`text-xs text-${pkg.color}-400`}>
+                          
+                          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${
+                            isHighlighted 
+                              ? `backdrop-blur-sm border border-white/30`
+                              : 'bg-[#1E2A39]/10 border border-[#1E2A39]/20'
+                          } mb-4 self-start z-10`}
+                          style={{
+                            background: isHighlighted ? `${cardColor}40` : undefined,
+                          }}>
+                            <Icon className={`w-3 h-3 ${isHighlighted ? 'text-[#0B0F14]' : 'text-[#1E2A39]'}`} />
+                            <span className={`text-xs font-semibold ${isHighlighted ? 'text-[#0B0F14]' : 'text-[#1E2A39]'}`}>
                               {pkg.badge}
                             </span>
                           </div>
-                          <h3
-                            className={`text-lg font-bold mb-2 bg-gradient-to-r ${pkg.gradient} bg-clip-text text-transparent`}
-                          >
+                          
+                          <h3 className={`text-lg font-bold mb-2 z-10 ${
+                            isHighlighted ? 'text-[#0B0F14]' : 'text-[#0B0F14]'
+                          }`}>
                             {pkg.title}
                           </h3>
-                          <div
-                            className={`text-xl font-bold text-${pkg.color}-400 mb-3`}
+                          
+                          <motion.div 
+                            className={`text-xl font-bold ${isHighlighted ? 'text-[#0B0F14]' : 'text-[#1E2A39]'} z-10 overflow-hidden`}
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ 
+                              opacity: isExpanded ? 1 : 0,
+                              height: isExpanded ? 'auto' : 0,
+                              marginBottom: isExpanded ? '12px' : '0px'
+                            }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
                           >
                             {pkg.price}
-                          </div>
-                          <div className="space-y-1.5 mb-4 flex-grow">
+                          </motion.div>
+                          
+                          <div className="space-y-1.5 mb-4 flex-grow z-10">
                             {pkg.features.map((feature, idx) => (
                               <div key={idx} className="flex items-start gap-2">
-                                <CheckCircle
-                                  className={`w-3 h-3 text-${pkg.color}-400 flex-shrink-0 mt-0.5`}
-                                />
-                                <span className="text-xs text-white/70">
+                                <CheckCircle className={`w-3 h-3 ${isHighlighted ? 'text-[#0B0F14]' : 'text-[#1E2A39]'} flex-shrink-0 mt-0.5`} />
+                                <span className={`text-xs ${isHighlighted ? 'text-[#0B0F14]/80' : 'text-[#0B0F14]/70'}`}>
                                   {feature}
                                 </span>
                               </div>
                             ))}
                           </div>
-                          <div className="mt-4 pt-3 border-t border-white/10">
-                            <div className="text-xs text-white/40 mb-2 font-semibold">
-                              Platform Costs
-                            </div>
-                            <div className="space-y-1.5">
-                              <div className="flex justify-between text-xs">
-                                <span className="text-white/50">Domain</span>
-                                <span className="text-white/80 font-medium">
-                                  {pkg.platformCosts.domain}
-                                </span>
-                              </div>
-                              <div className="flex justify-between text-xs">
-                                <span className="text-white/50">Hosting</span>
-                                <span className="text-white/80 font-medium">
-                                  {pkg.platformCosts.hosting}
-                                </span>
-                              </div>
-                              {pkg.platformCosts.extra && (
-                                <div className="text-xs text-amber-400/80 mt-1 pt-1 border-t border-white/5">
-                                  {pkg.platformCosts.extra}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          <div className="mt-3 flex items-center justify-between text-xs pt-2">
-                            <span className="text-white/40">Setup Time</span>
-                            <span className="text-white/80">
+                          
+                          <div className="mt-3 flex items-center justify-between text-xs pt-2 border-t border-[#9DB4C6]/20 pt-3 z-10">
+                            <span className={isHighlighted ? 'text-[#0B0F14]/50' : 'text-[#0B0F14]/40'}>
+                              Setup Time
+                            </span>
+                            <span className={isHighlighted ? 'text-[#0B0F14]/90 font-medium' : 'text-[#0B0F14]/80'}>
                               {pkg.setupTime}
                             </span>
                           </div>
-                        </div>
+                          
+                          <div className="mt-2 text-center z-10">
+                            <span className={`text-[10px] font-medium ${isHighlighted ? 'text-[#0B0F14]' : 'text-[#1E2A39]/60'}`}>
+                              {isExpanded ? 'Click to hide price' : 'Click to view price'}
+                            </span>
+                          </div>
+                        </GlassCard>
                       </motion.div>
                     );
                   })}
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8 pt-6 border-t border-white/10">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8 pt-6 border-t border-[#9DB4C6]/20">
                   <Link to="/contact" onClick={onClose}>
                     <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-8 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold flex items-center justify-center gap-2"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="px-8 py-3 rounded-xl bg-[#1E2A39] text-[#F5F8FA] font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
                     >
                       Get Started <ArrowRight className="w-4 h-4" />
                     </motion.button>
                   </Link>
                   <Link to="/book-demo" onClick={onClose}>
                     <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-8 py-3 rounded-xl border border-white/20 text-white font-semibold hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="px-8 py-3 rounded-xl border border-[#1E2A39]/30 text-[#0B0F14] font-semibold hover:bg-[#1E2A39]/5 transition-all flex items-center justify-center gap-2"
                     >
                       <Play className="w-4 h-4" /> Book a Demo
                     </motion.button>
@@ -316,15 +367,19 @@ const WebsitePackagesModal = ({ isOpen, onClose }) => {
   );
 };
 
-// Automation Packages Modal Component
+// ============================================================
+// AUTOMATION PACKAGES MODAL
+// ============================================================
 const AutomationPackagesModal = ({ isOpen, onClose }) => {
+  const [expandedPackage, setExpandedPackage] = useState(null);
+
   if (!isOpen) return null;
 
   const automationPackages = [
     {
       id: 1,
       title: "Basic Business System",
-      price: "₹65,000",
+      price: "₹49,999",
       description: "Essential automation tools for small businesses",
       features: [
         "Admin dashboard",
@@ -333,21 +388,19 @@ const AutomationPackagesModal = ({ isOpen, onClose }) => {
         "Basic inventory",
         "Sales reports",
         "User roles",
+        "Product or service management",
+        "30-day post-launch technical support",
       ],
-      platformCosts: {
-        cloudHosting: "₹8,000 – ₹12,000 / year",
-        extra: null,
-      },
       icon: Settings,
-      gradient: "from-blue-500 to-cyan-500",
       badge: "Essential",
-      color: "blue",
       setupTime: "2-3 Weeks",
+      isPopular: false,
+      isProfessional: false,
     },
     {
       id: 2,
       title: "Business Management System",
-      price: "₹1,10,000",
+      price: "₹79,999",
       description: "Comprehensive management solution for growing businesses",
       features: [
         "CRM system",
@@ -357,67 +410,66 @@ const AutomationPackagesModal = ({ isOpen, onClose }) => {
         "Supplier management",
         "Sales analytics",
         "Notification system",
+        "Role access",
+        "User and staff management",
+        "Data import/export",
       ],
-      platformCosts: {
-        cloudHosting: "₹10,000 – ₹15,000 / year",
-        extra: null,
-      },
       icon: Briefcase,
-      gradient: "from-purple-500 to-pink-500",
-      badge: "Popular",
-      color: "purple",
+      badge: "Popular Choice",
       setupTime: "3-4 Weeks",
+      isPopular: true,
+      isProfessional: false,
     },
     {
       id: 3,
       title: "Advanced Business Automation",
-      price: "₹1,75,000",
+      price: "₹99,999",
       description: "Advanced automation for established businesses",
       features: [
         "Full CRM",
-        "Inventory & purchase management",
+        "Full ERP Basic",
         "Order management",
-        "Workflow automation",
-        "Analytics dashboard",
         "Document management",
+        "Advanced analytics",
+        "Workflow automation",
       ],
-      platformCosts: {
-        cloudHosting: "₹12,000 – ₹20,000 / year",
-        extra: null,
-      },
       icon: Workflow,
-      gradient: "from-cyan-500 to-blue-500",
-      badge: "Advanced",
-      color: "cyan",
+      badge: "Professional",
       setupTime: "4-5 Weeks",
+      isPopular: false,
+      isProfessional: true,
     },
     {
       id: 4,
       title: "Enterprise Business System",
-      price: "₹2,50,000 – ₹4,00,000",
+      price: "₹1,49,999",
       description: "Complete enterprise-level business automation",
       features: [
-        "Full ERP system",
-        "Multi-branch management",
+        "Full ERP",
         "Custom modules",
-        "API integrations",
-        "Automation workflows",
+        "Custom business understanding and planning",
+        "Sales pipeline",
         "Business intelligence dashboard",
+        "Multi-branch management",
+        "API integrations",
       ],
-      platformCosts: {
-        cloudHosting: "₹20,000 – ₹50,000 / year",
-        extra: "SMS / WhatsApp API charges (pay as you go)",
-      },
       icon: Factory,
-      gradient: "from-pink-500 to-rose-500",
       badge: "Enterprise",
-      color: "pink",
       setupTime: "6-8 Weeks",
+      isPopular: false,
+      isProfessional: false,
     },
   ];
 
+  const togglePackage = (id) => {
+    setExpandedPackage(expandedPackage === id ? null : id);
+  };
+
+  const popularColor = '#FFF4E5';
+  const professionalColor = '#E8F4FF';
+
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isOpen && (
         <>
           <motion.div
@@ -425,131 +477,159 @@ const AutomationPackagesModal = ({ isOpen, onClose }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100]"
+            className="fixed inset-0 bg-[#0B0F14]/60 backdrop-blur-sm z-[100]"
           />
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
             className="fixed inset-0 z-[101] flex items-center justify-center p-4 overflow-y-auto"
           >
-            <div className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-3xl bg-gradient-to-br from-gray-900 to-black border border-white/20 shadow-2xl">
+            <div className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#F5F8FA] border border-[#9DB4C6]/30 shadow-2xl">
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 backdrop-blur-sm text-white/80 hover:text-white hover:bg-black/70 transition-all"
+                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-[#1E2A39]/10 backdrop-blur-sm text-[#0B0F14]/80 hover:text-[#0B0F14] hover:bg-[#1E2A39]/20 transition-all"
               >
                 <X className="w-5 h-5" />
               </button>
 
               <div className="p-6 md:p-8">
                 <div className="mb-8 text-center">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 mb-4">
-                    <Database className="w-4 h-4 text-purple-400" />
-                    <span className="text-sm text-purple-400">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1E2A39]/10 border border-[#1E2A39]/20 mb-4">
+                    <Database className="w-4 h-4 text-[#1E2A39]" />
+                    <span className="text-sm text-[#1E2A39]">
                       Business Automation Packages
                     </span>
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent mb-3">
+                  <h2 className="text-3xl md:text-4xl font-bold text-[#0B0F14] mb-3">
                     Complete Business Automation Solutions
                   </h2>
-                  <p className="text-white/60 text-base max-w-2xl mx-auto">
-                    Streamline your operations with our comprehensive automation
-                    systems. Choose the perfect package for your business needs.
+                  <p className="text-[#0B0F14]/60 text-base max-w-2xl mx-auto">
+                    Click on any package to view pricing details
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {automationPackages.map((pkg, index) => {
                     const Icon = pkg.icon;
+                    const isExpanded = expandedPackage === pkg.id;
+                    
+                    const isPopular = pkg.isPopular;
+                    const isProfessional = pkg.isProfessional;
+                    const isHighlighted = isPopular || isProfessional;
+                    
+                    const cardColor = isPopular ? popularColor : (isProfessional ? professionalColor : null);
+                    
                     return (
                       <motion.div
                         key={pkg.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="h-full"
+                        transition={{ delay: index * 0.08, duration: 0.4, ease: "easeOut" }}
+                        className="h-full cursor-pointer"
+                        onClick={() => togglePackage(pkg.id)}
                       >
-                        <div
-                          className={`h-full flex flex-col p-5 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20`}
+                        <GlassCard
+                          isHighlighted={isHighlighted}
+                          cardColor={cardColor}
+                          cardIndex={index}
+                          className={`h-full flex flex-col p-6 transition-all duration-500 rounded-2xl border-2 ${
+                            isPopular
+                              ? `glass-popular-animated backdrop-blur-xl border-transparent hover:border-[#FF9900]/80 shadow-[0_8px_32px_rgba(255,153,0,0.15)] hover:shadow-[0_12px_48px_rgba(255,153,0,0.25)]`
+                              : isProfessional
+                                ? `glass-professional-animated backdrop-blur-xl border-transparent hover:border-[#00A4EF]/80 shadow-[0_8px_32px_rgba(0,164,239,0.15)] hover:shadow-[0_12px_48px_rgba(0,164,239,0.25)]`
+                                : 'bg-white border-transparent hover:border-[#1E2A39]/50 shadow-sm hover:shadow-lg'
+                          } ${
+                            isExpanded 
+                              ? isPopular
+                                ? `shadow-2xl border-[#FF9900]/80`
+                                : isProfessional
+                                  ? `shadow-2xl border-[#00A4EF]/80`
+                                  : 'border-[#1E2A39] shadow-lg'
+                              : ''
+                          }`}
                         >
-                          <div
-                            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-${pkg.color}-500/20 border border-${pkg.color}-500/30 mb-4 self-start`}
-                          >
-                            <Icon className={`w-3 h-3 text-${pkg.color}-400`} />
-                            <span className={`text-xs text-${pkg.color}-400`}>
+                          
+                          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${
+                            isHighlighted 
+                              ? `backdrop-blur-sm border border-white/30`
+                              : 'bg-[#1E2A39]/10 border border-[#1E2A39]/20'
+                          } mb-4 self-start z-10`}
+                          style={{
+                            background: isHighlighted ? `${cardColor}40` : undefined,
+                          }}>
+                            <Icon className={`w-3 h-3 ${isHighlighted ? 'text-[#0B0F14]' : 'text-[#1E2A39]'}`} />
+                            <span className={`text-xs font-semibold ${isHighlighted ? 'text-[#0B0F14]' : 'text-[#1E2A39]'}`}>
                               {pkg.badge}
                             </span>
                           </div>
-                          <h3
-                            className={`text-lg font-bold mb-2 bg-gradient-to-r ${pkg.gradient} bg-clip-text text-transparent`}
-                          >
+                          
+                          <h3 className={`text-lg font-bold mb-2 z-10 ${
+                            isHighlighted ? 'text-[#0B0F14]' : 'text-[#0B0F14]'
+                          }`}>
                             {pkg.title}
                           </h3>
-                          <div
-                            className={`text-xl font-bold text-${pkg.color}-400 mb-3`}
+                          
+                          <motion.div 
+                            className={`text-xl font-bold ${isHighlighted ? 'text-[#0B0F14]' : 'text-[#1E2A39]'} z-10 overflow-hidden`}
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ 
+                              opacity: isExpanded ? 1 : 0,
+                              height: isExpanded ? 'auto' : 0,
+                              marginBottom: isExpanded ? '12px' : '0px'
+                            }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
                           >
                             {pkg.price}
-                          </div>
-                          <div className="space-y-1.5 mb-4 flex-grow">
+                          </motion.div>
+                          
+                          <div className="space-y-1.5 mb-4 flex-grow z-10">
                             {pkg.features.map((feature, idx) => (
                               <div key={idx} className="flex items-start gap-2">
-                                <CheckCircle
-                                  className={`w-3 h-3 text-${pkg.color}-400 flex-shrink-0 mt-0.5`}
-                                />
-                                <span className="text-xs text-white/70">
+                                <CheckCircle className={`w-3 h-3 ${isHighlighted ? 'text-[#0B0F14]' : 'text-[#1E2A39]'} flex-shrink-0 mt-0.5`} />
+                                <span className={`text-xs ${isHighlighted ? 'text-[#0B0F14]/80' : 'text-[#0B0F14]/70'}`}>
                                   {feature}
                                 </span>
                               </div>
                             ))}
                           </div>
-                          <div className="mt-4 pt-3 border-t border-white/10">
-                            <div className="text-xs text-white/40 mb-2 font-semibold">
-                              Platform Costs
-                            </div>
-                            <div className="space-y-1.5">
-                              <div className="flex justify-between text-xs">
-                                <span className="text-white/50">
-                                  Cloud Hosting
-                                </span>
-                                <span className="text-white/80 font-medium">
-                                  {pkg.platformCosts.cloudHosting}
-                                </span>
-                              </div>
-                              {pkg.platformCosts.extra && (
-                                <div className="text-xs text-amber-400/80 mt-1 pt-1 border-t border-white/5">
-                                  {pkg.platformCosts.extra}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          <div className="mt-3 flex items-center justify-between text-xs pt-2">
-                            <span className="text-white/40">Setup Time</span>
-                            <span className="text-white/80">
+                          
+                          <div className="mt-3 flex items-center justify-between text-xs pt-2 border-t border-[#9DB4C6]/20 pt-3 z-10">
+                            <span className={isHighlighted ? 'text-[#0B0F14]/50' : 'text-[#0B0F14]/40'}>
+                              Setup Time
+                            </span>
+                            <span className={isHighlighted ? 'text-[#0B0F14]/90 font-medium' : 'text-[#0B0F14]/80'}>
                               {pkg.setupTime}
                             </span>
                           </div>
-                        </div>
+                          
+                          <div className="mt-2 text-center z-10">
+                            <span className={`text-[10px] font-medium ${isHighlighted ? 'text-[#0B0F14]' : 'text-[#1E2A39]/60'}`}>
+                              {isExpanded ? 'Click to hide price' : 'Click to view price'}
+                            </span>
+                          </div>
+                        </GlassCard>
                       </motion.div>
                     );
                   })}
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8 pt-6 border-t border-white/10">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8 pt-6 border-t border-[#9DB4C6]/20">
                   <Link to="/contact" onClick={onClose}>
                     <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-8 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold flex items-center justify-center gap-2"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="px-8 py-3 rounded-xl bg-[#1E2A39] text-[#F5F8FA] font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
                     >
                       Get Started <ArrowRight className="w-4 h-4" />
                     </motion.button>
                   </Link>
                   <Link to="/book-demo" onClick={onClose}>
                     <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-8 py-3 rounded-xl border border-white/20 text-white font-semibold hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="px-8 py-3 rounded-xl border border-[#1E2A39]/30 text-[#0B0F14] font-semibold hover:bg-[#1E2A39]/5 transition-all flex items-center justify-center gap-2"
                     >
                       <Play className="w-4 h-4" /> Book a Demo
                     </motion.button>
@@ -564,108 +644,95 @@ const AutomationPackagesModal = ({ isOpen, onClose }) => {
   );
 };
 
-// Marketing & Growth Packages Modal Component
+// ============================================================
+// MARKETING & GROWTH PACKAGES MODAL
+// ============================================================
 const MarketingPackagesModal = ({ isOpen, onClose }) => {
+  const [expandedPackage, setExpandedPackage] = useState(null);
+
   if (!isOpen) return null;
 
   const marketingPackages = [
     {
       id: 1,
-      title: "BASIC - Online Presence",
-      price: "₹18,000",
+      title: "Basic - Online Presence",
+      price: "₹19,999",
       description: "Best for small businesses starting their digital journey",
       features: [
         "Social media profile setup (Instagram + Facebook)",
         "9 professional social media posts",
-        "4 reels",
+        "4 professional business reels",
         "GMB Profile",
         "Basic brand design (logo polish + colors)",
-        "Monthly Report",
-        "Content Calendar",
-      ],
-      results: [
-        "Your business becomes searchable online",
-        "Professional brand presence",
-        "Customers can contact easily",
+        "Content calendar",
       ],
       icon: InstagramIcon,
-      gradient: "from-blue-500 to-cyan-500",
       badge: "Basic",
-      color: "blue",
       deliveryTime: "1-2 Weeks",
+      isPopular: false,
+      isProfessional: false,
     },
     {
       id: 2,
-      title: "GROWTH – Lead Generation System",
-      price: "₹35,000",
+      title: "Growth - Lead Generation System",
+      price: "₹39,999",
       description: "Best for businesses that want consistent inquiries",
       features: [
         "Everything in Basic",
         "Google Business Profile optimization",
-        "Professional website (5–8 pages)",
-        "Mobile responsive design",
-        "Basic SEO Optimization",
+        "Professional website (5-7 pages)",
+        "Basic SEO optimization",
         "Just Dial business profile",
         "Google Business ranking optimization",
-      ],
-      results: [
-        "Website that converts visitors into leads",
-        "Social media growth",
-        "Regular inquiries from ads",
+        "Lead generation system",
       ],
       icon: Target,
-      gradient: "from-purple-500 to-pink-500",
-      badge: "Growth",
-      color: "purple",
+      badge: "Popular Choice",
       deliveryTime: "3-4 Weeks",
+      isPopular: true,
+      isProfessional: false,
     },
     {
       id: 3,
-      title: "ADVANCED – Smart Business Automation",
-      price: "₹75,000",
+      title: "Advanced - Smart Business System",
+      price: "₹59,999",
       description: "Best for businesses that want automation and scalability",
       features: [
-        "Everything in Growth",
-        "Custom Web Application / Admin Panel",
         "CRM system for lead management",
-        "Banner and Poster",
-      ],
-      results: [
-        "Performance analytics dashboard",
-        "Conversion funnel setup",
+        "Banner and poster design",
+        "Lead generation system",
+        "Customer offer & research",
+        "Monthly dashboard",
+        "Google Ads management",
+        "Performance analytics",
       ],
       icon: CpuIcon,
-      gradient: "from-cyan-500 to-blue-500",
-      badge: "Advanced",
-      color: "cyan",
+      badge: "Professional",
       deliveryTime: "4-5 Weeks",
+      isPopular: false,
+      isProfessional: true,
     },
     {
       id: 4,
-      title: "ENTERPRISE – Full Digital Ecosystem",
-      price: "₹1,20,000+",
+      title: "Enterprise - Full Digital Ecosystem",
+      price: "₹69,999",
       description: "Best for companies ready to dominate their market",
       features: [
-        "Everything in Advanced",
-        "Custom AI workflow automation",
-        "Multi-platform integrations",
-        "Inventory / billing / CRM modules",
-        "Full marketing funnel system",
-        "Google + Meta Ads management",
-        "Retargeting system",
-        "Data-driven growth strategy",
-        "Monthly performance consultation",
-      ],
-      results: [
-        "End-to-end digital infrastructure",
-        "Predictable lead generation",
-        "Scalable business growth",
+        "Multi-platform integration",
+        "Full marketing funnel setup",
+        "Meta + Google Ads management",
+        "Data-driven strategy system",
+        "Offer testing",
+        "Audience testing",
+        "Creative testing",
+        "Lead tracking system",
+        "All Add-ons included",
       ],
       icon: Rocket,
-      gradient: "from-pink-500 to-rose-500",
       badge: "Enterprise",
-      color: "pink",
       deliveryTime: "6-8 Weeks",
+      isPopular: false,
+      isProfessional: false,
     },
   ];
 
@@ -703,8 +770,15 @@ const MarketingPackagesModal = ({ isOpen, onClose }) => {
     },
   ];
 
+  const togglePackage = (id) => {
+    setExpandedPackage(expandedPackage === id ? null : id);
+  };
+
+  const popularColor = '#FFF4E5';
+  const professionalColor = '#E8F4FF';
+
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isOpen && (
         <>
           <motion.div
@@ -712,143 +786,171 @@ const MarketingPackagesModal = ({ isOpen, onClose }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100]"
+            className="fixed inset-0 bg-[#0B0F14]/60 backdrop-blur-sm z-[100]"
           />
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
             className="fixed inset-0 z-[101] flex items-center justify-center p-4 overflow-y-auto"
           >
-            <div className="relative w-full max-w-7xl max-h-[90vh] overflow-y-auto rounded-3xl bg-gradient-to-br from-gray-900 to-black border border-white/20 shadow-2xl">
+            <div className="relative w-full max-w-7xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#F5F8FA] border border-[#9DB4C6]/30 shadow-2xl">
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 backdrop-blur-sm text-white/80 hover:text-white hover:bg-black/70 transition-all"
+                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-[#1E2A39]/10 backdrop-blur-sm text-[#0B0F14]/80 hover:text-[#0B0F14] hover:bg-[#1E2A39]/20 transition-all"
               >
                 <X className="w-5 h-5" />
               </button>
 
               <div className="p-6 md:p-8">
-                {/* Header */}
                 <div className="mb-8 text-center">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 mb-4">
-                    <Megaphone className="w-4 h-4 text-purple-400" />
-                    <span className="text-sm text-purple-400">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1E2A39]/10 border border-[#1E2A39]/20 mb-4">
+                    <Megaphone className="w-4 h-4 text-[#1E2A39]" />
+                    <span className="text-sm text-[#1E2A39]">
                       Marketing & Growth Packages
                     </span>
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent mb-3">
+                  <h2 className="text-3xl md:text-4xl font-bold text-[#0B0F14] mb-3">
                     Complete Marketing & Growth Solutions
                   </h2>
-                  <p className="text-white/60 text-base max-w-2xl mx-auto">
-                    Scale your business with our comprehensive marketing and
-                    growth packages. Choose the perfect plan for your business
-                    goals.
+                  <p className="text-[#0B0F14]/60 text-base max-w-2xl mx-auto">
+                    Click on any package to view pricing details
                   </p>
                 </div>
 
-                {/* 4 Packages Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                   {marketingPackages.map((pkg, index) => {
                     const Icon = pkg.icon;
+                    const isExpanded = expandedPackage === pkg.id;
+                    
+                    const isPopular = pkg.isPopular;
+                    const isProfessional = pkg.isProfessional;
+                    const isHighlighted = isPopular || isProfessional;
+                    
+                    const cardColor = isPopular ? popularColor : (isProfessional ? professionalColor : null);
+                    
                     return (
                       <motion.div
                         key={pkg.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="h-full"
+                        transition={{ delay: index * 0.08, duration: 0.4, ease: "easeOut" }}
+                        className="h-full cursor-pointer"
+                        onClick={() => togglePackage(pkg.id)}
                       >
-                        <div
-                          className={`h-full flex flex-col p-5 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20`}
+                        <GlassCard
+                          isHighlighted={isHighlighted}
+                          cardColor={cardColor}
+                          cardIndex={index}
+                          className={`h-full flex flex-col p-6 rounded-2xl transition-all duration-500 border-2 ${
+                            isPopular
+                              ? `glass-popular-animated backdrop-blur-xl border-transparent hover:border-[#FF9900]/80 shadow-[0_8px_32px_rgba(255,153,0,0.15)] hover:shadow-[0_12px_48px_rgba(255,153,0,0.25)]`
+                              : isProfessional
+                                ? `glass-professional-animated backdrop-blur-xl border-transparent hover:border-[#00A4EF]/80 shadow-[0_8px_32px_rgba(0,164,239,0.15)] hover:shadow-[0_12px_48px_rgba(0,164,239,0.25)]`
+                                : 'bg-white border-transparent hover:border-[#1E2A39]/50 shadow-sm hover:shadow-lg'
+                          } ${
+                            isExpanded 
+                              ? isPopular
+                                ? `shadow-2xl border-[#FF9900]/80`
+                                : isProfessional
+                                  ? `shadow-2xl border-[#00A4EF]/80`
+                                  : 'border-[#1E2A39] shadow-lg'
+                              : ''
+                          }`}
                         >
-                          {/* Badge */}
-                          <div
-                            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-${pkg.color}-500/20 border border-${pkg.color}-500/30 mb-4 self-start`}
-                          >
-                            <Icon className={`w-3 h-3 text-${pkg.color}-400`} />
-                            <span className={`text-xs text-${pkg.color}-400`}>
+                          
+                          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${
+                            isHighlighted 
+                              ? `backdrop-blur-sm border border-white/30`
+                              : 'bg-[#1E2A39]/10 border border-[#1E2A39]/20'
+                          } mb-4 self-start z-10`}
+                          style={{
+                            background: isHighlighted ? `${cardColor}40` : undefined,
+                          }}>
+                            <Icon className={`w-3 h-3 ${isHighlighted ? 'text-[#0B0F14]' : 'text-[#1E2A39]'}`} />
+                            <span className={`text-xs font-semibold ${isHighlighted ? 'text-[#0B0F14]' : 'text-[#1E2A39]'}`}>
                               {pkg.badge}
                             </span>
                           </div>
-
-                          {/* Title */}
-                          <h3
-                            className={`text-base font-bold mb-2 bg-gradient-to-r ${pkg.gradient} bg-clip-text text-transparent leading-tight`}
-                          >
+                          
+                          <h3 className={`text-base font-bold mb-2 leading-tight z-10 ${
+                            isHighlighted ? 'text-[#0B0F14]' : 'text-[#0B0F14]'
+                          }`}>
                             {pkg.title}
                           </h3>
-
-                          {/* Price */}
-                          <div
-                            className={`text-xl font-bold text-${pkg.color}-400 mb-3`}
-                          >
-                            {pkg.price}
-                          </div>
-
-                          {/* Description */}
-                          <p className="text-xs text-white/50 mb-3 italic">
+                          
+                          <p className={`text-xs ${isHighlighted ? 'text-[#0B0F14]/60' : 'text-[#0B0F14]/50'} mb-3 italic z-10`}>
                             {pkg.description}
                           </p>
-
-                          {/* Features */}
-                          <div className="space-y-1.5 mb-4 flex-grow">
+                          
+                          <motion.div 
+                            className={`text-xl font-bold ${isHighlighted ? 'text-[#0B0F14]' : 'text-[#1E2A39]'} z-10 overflow-hidden`}
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ 
+                              opacity: isExpanded ? 1 : 0,
+                              height: isExpanded ? 'auto' : 0,
+                              marginBottom: isExpanded ? '12px' : '0px'
+                            }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                          >
+                            {pkg.price}
+                          </motion.div>
+                          
+                          <div className="space-y-1.5 mb-4 flex-grow z-10">
                             {pkg.features.map((feature, idx) => (
                               <div key={idx} className="flex items-start gap-2">
-                                <CheckCircle
-                                  className={`w-3 h-3 text-${pkg.color}-400 flex-shrink-0 mt-0.5`}
-                                />
-                                <span className="text-xs text-white/70">
+                                <CheckCircle className={`w-3 h-3 ${isHighlighted ? 'text-[#0B0F14]' : 'text-[#1E2A39]'} flex-shrink-0 mt-0.5`} />
+                                <span className={`text-xs ${isHighlighted ? 'text-[#0B0F14]/80' : 'text-[#0B0F14]/70'}`}>
                                   {feature}
                                 </span>
                               </div>
                             ))}
                           </div>
-
-                          {/* Results Section */}
-                          <div className="mt-3 pt-3 border-t border-white/10">
-                            <div className="text-xs text-amber-400/80 mb-2 font-semibold flex items-center gap-1">
-                              <Star className="w-3 h-3" /> Result:
-                            </div>
-                            {pkg.results.map((result, idx) => (
-                              <div key={idx} className="flex items-start gap-2 mb-1">
-                                <CheckCircle className="w-3 h-3 text-green-400 flex-shrink-0 mt-0.5" />
-                                <span className="text-xs text-white/60">
-                                  {result}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-
-                          {/* Delivery Time */}
-                          <div className="mt-3 flex items-center justify-between text-xs pt-2">
-                            <span className="text-white/40">Delivery Time</span>
-                            <span className="text-white/80">
+                          
+                          <div className="mt-3 flex items-center justify-between text-xs pt-2 border-t border-[#9DB4C6]/20 pt-3 z-10">
+                            <span className={isHighlighted ? 'text-[#0B0F14]/50' : 'text-[#0B0F14]/40'}>
+                              Delivery Time
+                            </span>
+                            <span className={isHighlighted ? 'text-[#0B0F14]/90 font-medium' : 'text-[#0B0F14]/80'}>
                               {pkg.deliveryTime}
                             </span>
                           </div>
-                        </div>
+                          
+                          {pkg.id === 4 && (
+                            <div className="mt-2 inline-flex items-center gap-1 text-[10px] text-[#1E2A39] font-medium bg-[#1E2A39]/10 px-2 py-1 rounded-full self-start z-10">
+                              <Star className="w-3 h-3 fill-[#1E2A39]" />
+                              Best Value
+                            </div>
+                          )}
+                          
+                          <div className="mt-2 text-center z-10">
+                            <span className={`text-[10px] font-medium ${isHighlighted ? 'text-[#0B0F14]' : 'text-[#1E2A39]/60'}`}>
+                              {isExpanded ? 'Click to hide price' : 'Click to view price'}
+                            </span>
+                          </div>
+                        </GlassCard>
                       </motion.div>
                     );
                   })}
                 </div>
 
-                {/* Add-On Features Section */}
                 <div className="mt-8">
                   <div className="text-center mb-6">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 mb-4">
-                      <SparklesIcon className="w-4 h-4 text-purple-400" />
-                      <span className="text-sm text-purple-400">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1E2A39]/10 border border-[#1E2A39]/20 mb-4">
+                      <Sparkles className="w-4 h-4 text-[#1E2A39]" />
+                      <span className="text-sm text-[#1E2A39]">
                         Customize Your Package
                       </span>
                     </div>
-                    <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                    <h3 className="text-2xl font-bold text-[#0B0F14]">
                       Add-On Features
                     </h3>
-                    <p className="text-white/60 text-sm mt-2">
-                      Clients can customize their package with these additional
-                      features
+                    <p className="text-[#0B0F14]/60 text-sm mt-2">
+                      Clients can customize their package with these additional features
+                    </p>
+                    <p className="text-[#1E2A39] text-sm font-medium mt-1">
+                      * Enterprise package includes all add-ons
                     </p>
                   </div>
 
@@ -860,14 +962,14 @@ const MarketingPackagesModal = ({ isOpen, onClose }) => {
                           key={idx}
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.4 + idx * 0.1 }}
-                          className="rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 p-5"
+                          transition={{ delay: 0.4 + idx * 0.1, duration: 0.4, ease: "easeOut" }}
+                          className="rounded-2xl bg-white border-2 border-transparent hover:border-[#1E2A39] transition-all duration-300 shadow-sm hover:shadow-lg p-5"
                         >
                           <div className="flex items-center gap-2 mb-4">
-                            <div className="p-2 rounded-lg bg-purple-500/20">
-                              <CategoryIcon className="w-4 h-4 text-purple-400" />
+                            <div className="p-2 rounded-lg bg-[#1E2A39]/10">
+                              <CategoryIcon className="w-4 h-4 text-[#1E2A39]" />
                             </div>
-                            <h4 className="text-base font-semibold text-white">
+                            <h4 className="text-base font-semibold text-[#0B0F14]">
                               {category.category}
                             </h4>
                           </div>
@@ -875,12 +977,12 @@ const MarketingPackagesModal = ({ isOpen, onClose }) => {
                             {category.items.map((item, itemIdx) => (
                               <div
                                 key={itemIdx}
-                                className="flex justify-between items-center py-2 border-b border-white/10"
+                                className="flex justify-between items-center py-2 border-b border-[#9DB4C6]/10"
                               >
-                                <span className="text-xs text-white/70">
+                                <span className="text-xs text-[#0B0F14]/70">
                                   {item.name}
                                 </span>
-                                <span className="text-xs font-semibold text-purple-400">
+                                <span className="text-xs font-semibold text-[#1E2A39]">
                                   {item.price}
                                 </span>
                               </div>
@@ -892,22 +994,21 @@ const MarketingPackagesModal = ({ isOpen, onClose }) => {
                   </div>
                 </div>
 
-                {/* CTA Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8 pt-6 border-t border-white/10">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8 pt-6 border-t border-[#9DB4C6]/20">
                   <Link to="/contact" onClick={onClose}>
                     <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-8 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold flex items-center justify-center gap-2"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="px-8 py-3 rounded-xl bg-[#1E2A39] text-[#F5F8FA] font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
                     >
                       Get Started <ArrowRight className="w-4 h-4" />
                     </motion.button>
                   </Link>
                   <Link to="/book-demo" onClick={onClose}>
                     <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-8 py-3 rounded-xl border border-white/20 text-white font-semibold hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="px-8 py-3 rounded-xl border border-[#1E2A39]/30 text-[#0B0F14] font-semibold hover:bg-[#1E2A39]/5 transition-all flex items-center justify-center gap-2"
                     >
                       <Play className="w-4 h-4" /> Book a Demo
                     </motion.button>
@@ -922,10 +1023,12 @@ const MarketingPackagesModal = ({ isOpen, onClose }) => {
   );
 };
 
+// ============================================================
+// MAIN PACKAGES PAGE
+// ============================================================
 const PackagesPage = () => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const [navbarScrolled, setNavbarScrolled] = useState(false);
   const [isWebsiteModalOpen, setIsWebsiteModalOpen] = useState(false);
@@ -947,29 +1050,26 @@ const PackagesPage = () => {
     {
       id: 1,
       title: "COMPLETE BUSINESS WEBSITE PACKAGE",
-      price: "₹20,999 – ₹1,19,999",
+      price: "₹12,999 – ₹99,999",
       description: "Complete business website package for your online presence",
       features: [
-        "8–10 PAGE PROFESSIONAL WEBSITE",
+        "5-15 PAGE PROFESSIONAL WEBSITE",
         "MOBILE OPTIMIZED DESIGN",
         "CUSTOM UI/UX LAYOUT",
         "CMS DASHBOARD ACCESS",
         "LEAD CAPTURE + WHATSAPP CHAT",
         "SEO SETUP + GOOGLE BUSINESS",
         "BLOG & GALLERY SYSTEM",
-        "ANALYTICS + SECURITY SETUP",
+        "PAYMENT GATEWAY INTEGRATION",
       ],
       icon: Layout,
-      gradient: "from-blue-500 to-cyan-500",
       badge: "Website Solution",
-      color: "blue",
     },
     {
       id: 2,
       title: "BUSINESS AUTOMATION SYSTEM",
-      price: "₹64,999 – ₹3,99,999",
-      description:
-        "Complete business automation system for streamlined operations",
+      price: "₹49,999 – ₹1,49,999",
+      description: "Complete business automation system for streamlined operations",
       features: [
         "SMART ADMIN DASHBOARD",
         "CRM & LEAD MANAGEMENT",
@@ -981,29 +1081,25 @@ const PackagesPage = () => {
         "SMS / WHATSAPP NOTIFICATIONS",
       ],
       icon: Database,
-      gradient: "from-purple-500 to-pink-500",
       badge: "Automation Solution",
-      color: "purple",
     },
     {
       id: 3,
       title: "MARKETING & GROWTH SYSTEM",
-      price: "₹24,999 – ₹3,49,999",
-      description:
-        "Complete marketing and growth system for business expansion",
+      price: "₹19,999 – ₹69,999",
+      description: "Complete marketing and growth system for business expansion",
       features: [
-        "GOOGLE & META ADS MANAGEMENT",
-        "PROFESSIONAL POSTS, REELS & CREATIVES",
-        "BASIC SEO & GOOGLE RANKING SETUP",
+        "SOCIAL MEDIA SETUP & MANAGEMENT",
+        "PROFESSIONAL POSTS & REELS",
+        "SEO & GOOGLE RANKING SETUP",
         "CRM FOR LEAD MANAGEMENT",
         "CONVERSION FUNNEL SETUP",
+        "GOOGLE & META ADS MANAGEMENT",
         "MARKETING ANALYTICS DASHBOARD",
-        "SOCIAL MEDIA SETUP & CONTENT STRATEGY",
+        "PERFORMANCE CONSULTATION",
       ],
       icon: Megaphone,
-      gradient: "from-green-500 to-emerald-500",
       badge: "Growth Solution",
-      color: "green",
     },
   ];
 
@@ -1017,6 +1113,7 @@ const PackagesPage = () => {
     }
   };
 
+  // Close mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -1032,6 +1129,7 @@ const PackagesPage = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -1043,22 +1141,31 @@ const PackagesPage = () => {
     };
   }, [isMenuOpen]);
 
+  // Handle scroll for navbar
   useEffect(() => {
+    let lastScrollY = window.scrollY;
+    
     const handleScroll = () => {
-      const currentScrollPos = window.scrollY;
-      setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
-      setPrevScrollPos(currentScrollPos);
-
-      if (currentScrollPos > 50) {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setVisible(false);
+      } else {
+        setVisible(true);
+      }
+      
+      lastScrollY = currentScrollY;
+      
+      if (currentScrollY > 50) {
         setNavbarScrolled(true);
       } else {
         setNavbarScrolled(false);
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [prevScrollPos]);
+  }, []);
 
   const handleLinkClick = () => {
     setIsMenuOpen(false);
@@ -1088,7 +1195,8 @@ const PackagesPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0f19] text-white font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-[#F5F8FA] text-[#0B0F14] font-sans overflow-x-hidden">
+      {/* Modals */}
       <WebsitePackagesModal
         isOpen={isWebsiteModalOpen}
         onClose={() => setIsWebsiteModalOpen(false)}
@@ -1102,165 +1210,41 @@ const PackagesPage = () => {
         onClose={() => setIsMarketingModalOpen(false)}
       />
 
+      {/* Background Effects */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(120,80,255,0.08),transparent_70%)]" />
-        <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom,rgba(80,200,255,0.08),transparent_70%)]" />
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(30,42,57,0.06),transparent_70%)]" />
+        <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom,rgba(157,180,198,0.06),transparent_70%)]" />
         <motion.div
           animate={{ y: [0, -30, 0], x: [0, 20, 0] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-20 left-[10%] w-64 h-64 bg-purple-500/10 rounded-full blur-3xl"
+          className="absolute top-20 left-[10%] w-64 h-64 bg-[#1E2A39]/10 rounded-full blur-3xl"
         />
         <motion.div
           animate={{ y: [0, 30, 0], x: [0, -20, 0] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-20 right-[10%] w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"
+          className="absolute bottom-20 right-[10%] w-96 h-96 bg-[#9DB4C6]/10 rounded-full blur-3xl"
         />
       </div>
 
-      <motion.nav
-        ref={navbarRef}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${visible ? "translate-y-0" : "-translate-y-full"} ${navbarScrolled ? "bg-[#0b0f19]/90 backdrop-blur-md border-b border-white/10" : "bg-transparent"}`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 sm:h-20">
-            <Link
-              to="/"
-              className="flex items-center gap-2 sm:gap-3 group z-50"
-            >
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                transition={{ duration: 0.2 }}
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/20"
-              >
-                <img
-                  src={lolo1}
-                  alt="logo"
-                  className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg"
-                />
-              </motion.div>
-              <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                veronic
-              </span>
-            </Link>
-            <div className="hidden md:flex items-center gap-6 lg:gap-8">
-              {[
-                { name: "Home", to: "/" },
-                { name: "About", to: "/about" },
-                { name: "Services", to: "/services" },
-                { name: "Packages", to: "/packages" },
-                { name: "Products", to: "/products" },
-                { name: "Contact", to: "/contact" },
-              ].map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.to}
-                  className={`relative px-2 py-1 text-sm lg:text-base font-medium transition-colors whitespace-nowrap ${location.pathname === item.to ? "text-white" : "text-white/60 hover:text-white"}`}
-                >
-                  {item.name}
-                  {location.pathname === item.to && (
-                    <motion.div
-                      layoutId="activeNav"
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500"
-                    />
-                  )}
-                </Link>
-              ))}
-            </div>
-            <Link to="/book-demo" className="hidden md:block">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-5 lg:px-6 py-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium text-sm lg:text-base shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 transition-shadow"
-              >
-                Book Demo <ArrowRight className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
-              </motion.button>
-            </Link>
-            <motion.button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="menu-button md:hidden relative w-10 h-10 flex flex-col items-center justify-center gap-1.5 rounded-lg hover:bg-white/5 transition-colors z-50"
-              whileTap={{ scale: 0.95 }}
-            >
-              <span
-                className={`w-6 h-0.5 bg-white transform transition-all duration-300 ${isMenuOpen ? "rotate-45 translate-y-2" : ""}`}
-              />
-              <span
-                className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? "opacity-0" : ""}`}
-              />
-              <span
-                className={`w-6 h-0.5 bg-white transform transition-all duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-2" : ""}`}
-              />
-            </motion.button>
-          </div>
-        </div>
-        <AnimatePresence>
-          {isMenuOpen && (
-            <>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="fixed inset-0 bg-black/60 backdrop-blur-sm md:hidden"
-                onClick={() => setIsMenuOpen(false)}
-              />
-              <motion.div
-                ref={mobileMenuRef}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="absolute top-16 left-0 right-0 mx-4 mt-2 md:hidden bg-gradient-to-b from-gray-900 to-black border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
-              >
-                <div className="p-6 space-y-4">
-                  {[
-                    { name: "Home", to: "/" },
-                    { name: "About", to: "/about" },
-                    { name: "Services", to: "/services" },
-                    { name: "Packages", to: "/packages" },
-                    { name: "Products", to: "/products" },
-                    { name: "Contact", to: "/contact" },
-                  ].map((item, index) => (
-                    <motion.div
-                      key={item.name}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                    >
-                      <Link
-                        to={item.to}
-                        className="block py-3 px-4 text-base text-white/90 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-all duration-300"
-                        onClick={handleLinkClick}
-                      >
-                        {item.name}
-                      </Link>
-                    </motion.div>
-                  ))}
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="pt-2"
-                  >
-                    <Link to="/book-demo" onClick={handleLinkClick}>
-                      <button className="w-full py-4 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300">
-                        Book Demo
-                      </button>
-                    </Link>
-                  </motion.div>
-                </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-      </motion.nav>
+      {/* NAVBAR */}
+      {/* Navbar is managed globally in App.js */}
 
+      {/* HERO SECTION */}
       <section
         ref={heroRef}
-        className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
+        className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-[#0B0F14]"
       >
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-10 w-48 sm:w-64 md:w-96 h-48 sm:h-64 md:h-96 bg-[#1E2A39]/30 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-10 w-48 sm:w-64 md:w-96 h-48 sm:h-64 md:h-96 bg-[#9DB4C6]/20 rounded-full blur-3xl" />
+        </div>
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
+            backgroundSize: '40px 40px'
+          }} />
+        </div>
+
         <motion.div
           style={{ scale: heroScale, opacity: heroOpacity }}
           className="relative z-10 text-center px-4"
@@ -1268,39 +1252,36 @@ const PackagesPage = () => {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 mb-6"
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-6"
           >
-            <Sparkles className="w-4 h-4 text-purple-400" />
-            <span className="text-sm font-medium">Pricing Plans</span>
+            <Sparkles className="w-4 h-4 text-[#9DB4C6]" />
+            <span className="text-sm font-medium text-white/80">Pricing Plans</span>
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
+            transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6"
           >
-            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
-              Flexible Packages
-            </span>
+            <span className="text-white">Flexible</span>
             <br />
-            <span className="text-white">for Every Business</span>
+            <span className="text-[#9DB4C6]">Packages</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
             className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-10"
           >
-            Choose the perfect plan for your digital growth and development
-            needs.
+            Choose the perfect plan for your digital growth and development needs.
           </motion.p>
           <motion.button
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
             onClick={() => scrollToSection(showcaseRef)}
-            className="group px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full font-semibold text-lg shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 transition-all hover:scale-105"
+            className="group px-8 py-4 bg-[#1E2A39] text-[#F5F8FA] rounded-full font-semibold text-lg shadow-lg shadow-[#1E2A39]/30 hover:shadow-[#1E2A39]/40 transition-all hover:scale-105"
           >
             <span className="flex items-center gap-2">
               Explore Packages{" "}
@@ -1308,29 +1289,12 @@ const PackagesPage = () => {
             </span>
           </motion.button>
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        >
-          {/* <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center"
-          >
-            <motion.div
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="w-1 h-2 bg-white/60 rounded-full mt-2"
-            />
-          </motion.div> */}
-        </motion.div>
       </section>
 
+      {/* SHOWCASE SECTION */}
       <section
         ref={showcaseRef}
-        className="relative py-24 sm:py-32 overflow-hidden"
+        className="relative py-24 sm:py-32 overflow-hidden bg-[#F5F8FA]"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <motion.div
@@ -1340,13 +1304,18 @@ const PackagesPage = () => {
             variants={fadeInUp}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#1E2A39]/10 border border-[#1E2A39]/20 mb-4 sm:mb-6">
+              <Layout className="w-3 h-3 sm:w-4 sm:h-4 text-[#1E2A39]" />
+              <span className="text-xs sm:text-sm text-[#1E2A39]">Our Packages</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#0B0F14]">
               Choose Your{" "}
-              <span className="block bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="block text-[#0D44D1] mt-2">
                 Growth Path
               </span>
             </h2>
           </motion.div>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {packages.map((pkg, index) => {
               const Icon = pkg.icon;
@@ -1358,49 +1327,31 @@ const PackagesPage = () => {
                   viewport={{ once: true, margin: "-50px" }}
                   variants={scaleIn}
                   transition={{ delay: index * 0.1 }}
-                  className="relative"
+                  className="relative group"
                 >
-                  <div
-                    className={`relative h-full p-8 rounded-3xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20`}
-                  >
-                    <div
-                      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-${pkg.color}-500/20 border border-${pkg.color}-500/30 mb-6`}
-                    >
-                      <Icon className={`w-3 h-3 text-${pkg.color}-400`} />
-                      <span className={`text-xs text-${pkg.color}-400`}>
-                        {pkg.badge}
-                      </span>
+                  <div className="relative h-full p-8 rounded-3xl bg-white border-2 border-transparent group-hover:border-[#1E2A39] transition-all duration-300 shadow-sm group-hover:shadow-xl">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1E2A39]/10 border border-[#1E2A39]/20 mb-6">
+                      <Icon className="w-3 h-3 text-[#1E2A39]" />
+                      <span className="text-xs text-[#1E2A39]">{pkg.badge}</span>
                     </div>
-                    <h3
-                      className={`text-xl sm:text-2xl font-bold mb-3 bg-gradient-to-r ${pkg.gradient} bg-clip-text text-transparent`}
-                    >
-                      {pkg.title}
-                    </h3>
-                    <div
-                      className={`text-2xl sm:text-3xl font-bold text-${pkg.color}-400 mb-6`}
-                    >
-                      {pkg.price}
-                    </div>
+                    <h3 className="text-xl sm:text-2xl font-bold mb-3 text-[#0B0F14]">{pkg.title}</h3>
+                    {/* <div className="text-2xl sm:text-3xl font-bold text-[#1E2A39] mb-6">{pkg.price}</div> */}
                     <div className="space-y-3 mb-8">
                       {pkg.features.map((feature, idx) => (
                         <div key={idx} className="flex items-start gap-2">
-                          <CheckCircle
-                            className={`w-4 h-4 text-${pkg.color}-400 flex-shrink-0 mt-0.5`}
-                          />
-                          <span className="text-sm text-white/70">
-                            {feature}
-                          </span>
+                          <CheckCircle className="w-4 h-4 text-[#1E2A39] flex-shrink-0 mt-0.5" />
+                          <span className="text-sm text-[#0B0F14]/70">{feature}</span>
                         </div>
                       ))}
                     </div>
                     <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => handleShowMore(pkg)}
-                      className={`group w-full py-3 rounded-full bg-gradient-to-r ${pkg.gradient} font-semibold text-white transition-all`}
+                      className="group w-full py-3 rounded-full bg-[#1E2A39] font-semibold text-[#F5F8FA] transition-all hover:opacity-90"
                     >
                       <span className="flex items-center justify-center gap-2">
-                        Show More{" "}
+                        View Details{" "}
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </span>
                     </motion.button>
@@ -1412,11 +1363,11 @@ const PackagesPage = () => {
         </div>
       </section>
 
+      {/* COMPARISON SECTION */}
       <section
         ref={comparisonRef}
-        className="relative py-24 sm:py-32 overflow-hidden"
+        className="relative py-24 sm:py-32 overflow-hidden bg-[#F5F8FA] border-t border-[#9DB4C6]/20"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-purple-900/10 to-transparent" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <motion.div
             initial="hidden"
@@ -1425,13 +1376,18 @@ const PackagesPage = () => {
             variants={fadeInUp}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#1E2A39]/10 border border-[#1E2A39]/20 mb-4 sm:mb-6">
+              <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4 text-[#1E2A39]" />
+              <span className="text-xs sm:text-sm text-[#1E2A39]">Compare Packages</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#0B0F14]">
               Compare{" "}
-              <span className="block bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="block text-[#0D44D1] mt-2">
                 Packages at a Glance
               </span>
             </h2>
           </motion.div>
+
           <div className="relative">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {packages.map((pkg, idx) => (
@@ -1442,83 +1398,69 @@ const PackagesPage = () => {
                   viewport={{ once: true, margin: "-50px" }}
                   variants={scaleIn}
                   transition={{ delay: idx * 0.1 }}
-                  className={`relative p-6 rounded-2xl bg-gradient-to-br from-${pkg.color}-500/5 to-transparent border border-${pkg.color}-500/20`}
+                  className="relative group"
                 >
-                  <div
-                    className={`w-12 h-12 rounded-full bg-${pkg.color}-500/20 flex items-center justify-center mb-4`}
-                  >
-                    {idx === 0 && (
-                      <Layout className={`w-6 h-6 text-${pkg.color}-400`} />
-                    )}
-                    {idx === 1 && (
-                      <Database className={`w-6 h-6 text-${pkg.color}-400`} />
-                    )}
-                    {idx === 2 && (
-                      <Megaphone className={`w-6 h-6 text-${pkg.color}-400`} />
-                    )}
-                  </div>
-                  <h3
-                    className={`text-2xl font-bold mb-2 text-${pkg.color}-400`}
-                  >
-                    {pkg.title.split(" ")[0]}
-                  </h3>
-                  <div className={`text-xl font-bold mb-4 text-white`}>
-                    {pkg.price}
-                  </div>
-                  <div className="space-y-2 mb-4">
-                    {pkg.features.slice(0, 4).map((feature, fIdx) => (
-                      <div
-                        key={fIdx}
-                        className="flex items-center gap-2 text-white/70 text-sm"
-                      >
-                        <CheckCircle
-                          className={`w-3 h-3 text-${pkg.color}-400`}
-                        />
-                        <span className="line-clamp-1">{feature}</span>
+                  <div className="relative p-6 rounded-2xl bg-white border-2 border-transparent group-hover:border-[#1E2A39] transition-all duration-300 shadow-sm group-hover:shadow-lg">
+                    <div className="w-12 h-12 rounded-full bg-[#1E2A39]/10 flex items-center justify-center mb-4">
+                      {idx === 0 && <Layout className="w-6 h-6 text-[#1E2A39]" />}
+                      {idx === 1 && <Database className="w-6 h-6 text-[#1E2A39]" />}
+                      {idx === 2 && <Megaphone className="w-6 h-6 text-[#1E2A39]" />}
+                    </div>
+                    <h3 className="text-2xl font-bold mb-2 text-[#1E2A39]">
+                      {pkg.title.split(" ")[0]}
+                    </h3>
+                    {/* <div className="text-xl font-bold mb-4 text-[#0B0F14]">{pkg.price}</div> */}
+                    <div className="space-y-2 mb-4">
+                      {pkg.features.slice(0, 4).map((feature, fIdx) => (
+                        <div key={fIdx} className="flex items-center gap-2 text-[#0B0F14]/70 text-sm">
+                          <CheckCircle className="w-3 h-3 text-[#1E2A39]" />
+                          <span className="line-clamp-1">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="pt-4 border-t border-[#9DB4C6]/20">
+                      <div className="text-xs text-[#0B0F14]/40 mb-1">Best for</div>
+                      <div className="text-sm font-semibold text-[#0B0F14]/80">
+                        {idx === 0 && "Businesses needing website presence"}
+                        {idx === 1 && "Companies requiring automation"}
+                        {idx === 2 && "Businesses focused on growth"}
                       </div>
-                    ))}
-                  </div>
-                  <div className="pt-4 border-t border-white/10">
-                    <div className="text-xs text-white/40 mb-1">Best for</div>
-                    <div className="text-sm font-semibold text-white/80">
-                      {idx === 0 && "Businesses needing website presence"}
-                      {idx === 1 && "Companies requiring automation"}
-                      {idx === 2 && "Businesses focused on growth"}
                     </div>
                   </div>
                 </motion.div>
               ))}
             </div>
           </div>
+
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
             variants={scaleIn}
-            className="mt-16 p-8 rounded-3xl bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-white/10 text-center"
+            className="mt-16 p-8 rounded-3xl bg-[#1E2A39]/5 border-2 border-transparent hover:border-[#1E2A39] transition-all duration-300 text-center"
           >
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
               <div className="flex items-center gap-3">
-                <Rocket className="w-8 h-8 text-purple-400" />
+                <Rocket className="w-8 h-8 text-[#1E2A39]" />
                 <div>
-                  <div className="text-sm text-white/40">Scalability</div>
-                  <div className="font-semibold">Start → Scale → Dominate</div>
+                  <div className="text-sm text-[#0B0F14]/40">Scalability</div>
+                  <div className="font-semibold text-[#0B0F14]">Start → Scale → Dominate</div>
                 </div>
               </div>
-              <div className="w-px h-8 bg-white/20 hidden sm:block" />
+              <div className="w-px h-8 bg-[#9DB4C6]/20 hidden sm:block" />
               <div className="flex items-center gap-3">
-                <Target className="w-8 h-8 text-cyan-400" />
+                <Target className="w-8 h-8 text-[#1E2A39]" />
                 <div>
-                  <div className="text-sm text-white/40">Perfect For</div>
-                  <div className="font-semibold">Every Business Stage</div>
+                  <div className="text-sm text-[#0B0F14]/40">Perfect For</div>
+                  <div className="font-semibold text-[#0B0F14]">Every Business Stage</div>
                 </div>
               </div>
-              <div className="w-px h-8 bg-white/20 hidden sm:block" />
+              <div className="w-px h-8 bg-[#9DB4C6]/20 hidden sm:block" />
               <div className="flex items-center gap-3">
-                <Clock className="w-8 h-8 text-pink-400" />
+                <Clock className="w-8 h-8 text-[#1E2A39]" />
                 <div>
-                  <div className="text-sm text-white/40">Setup Time</div>
-                  <div className="font-semibold">2-4 Weeks</div>
+                  <div className="text-sm text-[#0B0F14]/40">Setup Time</div>
+                  <div className="font-semibold text-[#0B0F14]">1-8 Weeks</div>
                 </div>
               </div>
             </div>
@@ -1526,13 +1468,14 @@ const PackagesPage = () => {
         </div>
       </section>
 
+      {/* CTA SECTION */}
       <section ref={ctaRef} className="relative py-24 sm:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-pink-600 to-cyan-600">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1E2A39] via-[#2A3A4F] to-[#0B0F14]">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMzAgMzBtMC0yMGEyMCAyMCAwIDAgMSAwIDQwIDIwIDIwIDAgMCAxIDAtNDB6IiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+')] opacity-10" />
           <motion.div
             animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/20 rounded-full blur-3xl"
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#9DB4C6]/20 rounded-full blur-3xl"
           />
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
@@ -1543,23 +1486,22 @@ const PackagesPage = () => {
             variants={fadeInUp}
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 mb-6">
-              <Play className="w-4 h-4" />
-              <span className="text-sm">Start Your Journey</span>
+              <Play className="w-4 h-4 text-white" />
+              <span className="text-sm text-white">Start Your Journey</span>
             </div>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-white">
               Choose the Right Package
-              <span className="block text-white mt-2">for Your Growth</span>
+              <span className="block text-[#9DB4C6] mt-2">for Your Growth</span>
             </h2>
             <p className="text-lg sm:text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-              Start your journey with our expert digital solutions. Transform
-              your business today.
+              Start your journey with our expert digital solutions. Transform your business today.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Link to="/contact">
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="group px-8 py-4 bg-white text-purple-600 rounded-full font-semibold text-lg shadow-2xl hover:shadow-white/25 transition-all"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group px-8 py-4 bg-[#F5F8FA] text-[#1E2A39] rounded-full font-semibold text-lg shadow-2xl hover:shadow-white/25 transition-all"
                 >
                   <span className="flex items-center gap-2">
                     Get Started Now{" "}
@@ -1568,14 +1510,14 @@ const PackagesPage = () => {
                 </motion.button>
               </Link>
               <Link to="/book-demo">
-  <motion.button
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-    className="px-8 py-4 rounded-full border-2 border-white/30 text-white font-semibold text-lg hover:bg-white/10 transition-colors"
-  >
-    Book a Demo
-  </motion.button>
-</Link>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-8 py-4 rounded-full border-2 border-white/30 text-white font-semibold text-lg hover:bg-white/10 transition-colors"
+                >
+                  Book a Demo
+                </motion.button>
+              </Link>
             </div>
             <div className="flex flex-wrap justify-center gap-6 mt-12">
               {[
@@ -1589,7 +1531,7 @@ const PackagesPage = () => {
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: 0.2 + index * 0.1 }}
+                  transition={{ delay: 0.2 + index * 0.1, duration: 0.4, ease: "easeOut" }}
                   className="flex items-center gap-2"
                 >
                   <CheckCircle className="w-4 h-4 text-white/60" />
@@ -1601,47 +1543,27 @@ const PackagesPage = () => {
         </div>
       </section>
 
-      <footer className="relative py-12 sm:py-16 border-t border-white/10 bg-[#0b0f19]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      {/* FOOTER */}
+      <footer className="relative py-12 sm:py-16 px-4 sm:px-6 bg-black">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0B0F14] to-black" />
+        <div className="relative z-10 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-8 sm:mb-12">
             <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
-                  <img
-                    src={lolo1}
-                    alt="logo"
-                    className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg"
-                  />
+                <div className="flex items-center justify-center">
+                  <img src={lolo1} alt="logo" className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-lg object-contain" />
                 </div>
-                <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  veronic
-                </span>
+                <span className="text-lg sm:text-xl font-bold text-white">veronic</span>
               </div>
               <p className="text-xs sm:text-sm text-white/60 leading-relaxed">
                 Building the future through innovative technology solutions.
               </p>
               <div className="flex gap-2 sm:gap-3 pt-2">
                 {[
-                  {
-                    icon: Instagram,
-                    href: "https://www.instagram.com/veronic_infotech?igsh=ZndleDdjajRxYjNq",
-                    label: "Instagram",
-                  },
-                  {
-                    icon: Github,
-                    href: "https://github.com/veronicinfotech-glitch",
-                    label: "GitHub",
-                  },
-                  {
-                    icon: Linkedin,
-                    href: "https://www.linkedin.com/company/veronic-infotech/?viewAsMember=true",
-                    label: "LinkedIn",
-                  },
-                  {
-                    icon: Mail,
-                    href: "mailto:veronic.infotech@gmail.com",
-                    label: "Email",
-                  },
+                  { icon: Instagram, href: "https://www.instagram.com/veronic_infotech?igsh=ZndleDdjajRxYjNq", label: "Instagram" },
+                  { icon: Github, href: "https://github.com/veronicinfotech-glitch", label: "GitHub" },
+                  { icon: Linkedin, href: "https://www.linkedin.com/company/veronic-infotech/?viewAsMember=true", label: "LinkedIn" },
+                  { icon: Mail, href: "mailto:veronic.infotech@gmail.com", label: "Email" },
                 ].map((social, i) => {
                   const Icon = social.icon;
                   return (
@@ -1652,28 +1574,18 @@ const PackagesPage = () => {
                       rel="noopener noreferrer"
                       className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors group"
                     >
-                      <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white/60 group-hover:text-purple-400 transition-colors" />
+                      <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white/60 group-hover:text-white transition-colors" />
                     </a>
                   );
                 })}
               </div>
             </div>
             <div>
-              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4">
-                Solutions
-              </h4>
+              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4 text-white">Solutions</h4>
               <ul className="space-y-2 sm:space-y-2.5">
-                {[
-                  "Cloud Services",
-                  "Cybersecurity",
-                  "AI & Automation",
-                  "Data Analytics",
-                ].map((item) => (
+                {["Cloud Services", "Cybersecurity", "AI & Automation", "Data Analytics"].map((item) => (
                   <li key={item}>
-                    <Link
-                      to="/services"
-                      className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors"
-                    >
+                    <Link to="/services" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors">
                       {item}
                     </Link>
                   </li>
@@ -1681,97 +1593,41 @@ const PackagesPage = () => {
               </ul>
             </div>
             <div>
-              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4">
-                Company
-              </h4>
+              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4 text-white">Company</h4>
               <ul className="space-y-2 sm:space-y-2.5">
-                <li>
-                  <Link
-                    to="/"
-                    className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors"
-                  >
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/about"
-                    className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors"
-                  >
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/services"
-                    className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors"
-                  >
-                    Services
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/packages"
-                    className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors"
-                  >
-                    Packages
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/products"
-                    className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors"
-                  >
-                    Products
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/contact"
-                    className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors"
-                  >
-                    Contact
-                  </Link>
-                </li>
+                <li><Link to="/" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors">Home</Link></li>
+                <li><Link to="/about" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors">About</Link></li>
+                <li><Link to="/services" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors">Services</Link></li>
+                <li><Link to="/packages" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors">Packages</Link></li>
+                <li><Link to="/products" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors">Products</Link></li>
+                <li><Link to="/contact" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors">Contact</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4">
-                Contact
-              </h4>
+              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4 text-white">Contact</h4>
               <ul className="space-y-3 sm:space-y-4">
                 <li className="flex items-start gap-2 sm:gap-3">
                   <div className="flex-shrink-0 mt-1">
-                    <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
+                    <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-white/60" />
                   </div>
-                  <Link
-                    to="/contact"
-                    className="text-xs sm:text-sm text-white/60 hover:text-purple-400 transition-colors break-all"
-                  >
+                  <Link to="/contact" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors break-all">
                     veronic.infotech@gmail.com
                   </Link>
                 </li>
                 <li className="flex items-start gap-2 sm:gap-3">
                   <div className="flex-shrink-0 mt-1">
-                    <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
+                    <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-white/60" />
                   </div>
-                  <Link
-                    to="/contact"
-                    className="text-xs sm:text-sm text-white/60 hover:text-purple-400 transition-colors"
-                  >
+                  <Link to="/contact" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors">
                     +91 95106 53051
                   </Link>
                 </li>
                 <li className="flex items-start gap-2 sm:gap-3">
                   <div className="flex-shrink-0 mt-1">
-                    <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
+                    <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-white/60" />
                   </div>
-                  <Link
-                    to="/contact"
-                    className="text-xs sm:text-sm text-white/60 hover:text-purple-400 transition-colors leading-relaxed"
-                  >
-                    Rao InfoTech, University Road, Behind Shilpan Onyx, Rajkot,
-                    Gujarat 360005
+                  <Link to="/contact" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors leading-relaxed">
+                    Rao InfoTech, University Road, Behind Shilpan Onyx, Rajkot, Gujarat 360005
                   </Link>
                 </li>
               </ul>
@@ -1779,8 +1635,7 @@ const PackagesPage = () => {
           </div>
           <div className="pt-6 sm:pt-8 border-t border-white/10 text-center">
             <p className="text-xs sm:text-sm text-white/40">
-              © 2026 veronic. All rights reserved. | Built with innovation for
-              the future
+              © 2026 veronic. All rights reserved. | Built with innovation for the future
             </p>
           </div>
         </div>

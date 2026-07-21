@@ -22,12 +22,9 @@ import {
   Lock,
   Gauge,
   Layers,
-  ChevronRight,
   Download,
-  Share2,
   Bell,
   Camera,
-  QrCode,
   BarChart3,
   Globe,
   Mail,
@@ -37,103 +34,333 @@ import {
   Play,
   Github,
   Linkedin,
-  Instagram
+  Instagram,
+  Award,
+  Cpu,
+  Server,
+  DollarSign,
+  CreditCard,
+  FileCheck,
+  UserCheck,
+  Calendar,
+  MessageSquare,
+  AlertCircle,
+  Settings,
+  Box,
+  ClipboardCheck,
+  Truck,
+  Route,
+  Headphones,
+  RefreshCw,
+  Building2,
+  FileText,
+  Sun,
+  Calculator,
+  Store,
+  Factory,
+  Activity,
+  Monitor,
+  GraduationCap,
+  BookOpen,
+  UsersRound,
+  Receipt,
+  MessagesSquare,
+  Code,
+  GitBranch,
+  Terminal,
+  Hexagon,
+  Cog,
+  Wifi,
+  Radio,
+  Cpu as CpuIcon,
+  HardDrive,
+  Network,
+  ShieldCheck,
+  Rocket,
+  Target,
+  Eye,
+  Lightbulb,
+  PenTool,
+  Layout,
+  Sliders,
+  RefreshCw as RefreshIcon,
+  CheckCircle as CheckIcon,
 } from "lucide-react";
 
 import lolo1 from "../images/lolo1.png";
 import hub from "../images/hub.png";
 import parcel from "../images/parcel.png";
+import solar_os from "../images/solar_os.png";
+import retail_solution from "../images/Retail_Solution.png";
+import shcool from "../images/shcool.png";
+import industrial_solution from "../images/Industrial_Solution.png";
 
 const ProductPage = () => {
   const location = useLocation();
   const [activeSection, setActiveSection] = useState("hero");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [prevScrollPos, setPrevScrollPos] = useState(0);
-  const [visible, setVisible] = useState(true);
-  const [activeProduct, setActiveProduct] = useState("mobilehub");
-  const [navbarScrolled, setNavbarScrolled] = useState(false);
+
 
   // Refs
   const heroRef = useRef(null);
   const mobileHubRef = useRef(null);
-  const mobileHubFlowRef = useRef(null);
   const parcelRef = useRef(null);
+  const solarRef = useRef(null);
+  const kiranaRef = useRef(null);
+  const manufacturingRef = useRef(null);
+  const schoolHubRef = useRef(null);
   const techRef = useRef(null);
   const benefitsRef = useRef(null);
-  const comparisonRef = useRef(null);
+  const productsRef = useRef(null);
   const ctaRef = useRef(null);
-  const navbarRef = useRef(null);
-  const mobileMenuRef = useRef(null);
+
 
   const { scrollYProgress } = useScroll();
   const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
-  // Close mobile menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && 
-          !event.target.closest('.menu-button')) {
-        setIsMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  // Prevent body scroll when mobile menu is open
-  useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
+  // All Products Data - 6 Products
+  const allProducts = [
+    {
+      id: "mobilehub",
+      name: "MobileHub",
+      icon: Smartphone,
+      color: "from-[#1E2A39] to-[#3A4A5F]",
+      bgColor: "#1E2A39",
+      lightColor: "from-[#1E2A39] to-[#9DB4C6]",
+      description: "Complete mobile device management platform for enterprises with real-time monitoring and advanced security.",
+      image: hub,
+      features: [
+        { title: "Smart Device Management", description: "Centralized control for all mobile devices with real-time monitoring.", icon: Smartphone },
+        { title: "Advanced Security", description: "Enterprise-grade security with biometric authentication.", icon: Shield },
+        { title: "Real-time Analytics", description: "Track device performance and usage patterns.", icon: TrendingUp },
+        { title: "Automated Updates", description: "Seamless OTA updates with zero downtime.", icon: Zap }
+      ],
+      price: "$499/month",
+      downloadLink: "/PDF/MobileHub-Proposal.pdf",
+      tag: "Enterprise Solution"
+    },
+    {
+      id: "parcel",
+      name: "Parcel Management",
+      icon: Package,
+      color: "from-[#1E2A39] to-[#9DB4C6]",
+      bgColor: "#1E2A39",
+      lightColor: "from-[#1E2A39] to-[#9DB4C6]",
+      description: "AI-powered parcel delivery tracking and management system with real-time GPS tracking and route optimization.",
+      image: parcel,
+      features: [
+        { title: "Real-time Tracking", description: "Live GPS tracking with route optimization.", icon: MapPin },
+        { title: "Automated Dispatching", description: "Smart routing for maximum efficiency.", icon: Gauge },
+        { title: "Proof of Delivery", description: "Digital signatures and photo confirmation.", icon: Camera },
+        { title: "Customer Notifications", description: "Automated updates at every stage.", icon: Bell }
+      ],
+      price: "$599/month",
+      downloadLink: "/PDF/Parcel-Management-Proposal.pdf",
+      tag: "Logistics Solution"
+    },
+    {
+      id: "solar",
+      name: "Solar Sales OS",
+      icon: Sun,
+      color: "from-[#1E2A39] to-[#F59E0B]",
+      bgColor: "#1E2A39",
+      lightColor: "from-[#1E2A39] to-[#FCD34D]",
+      description: "Smart lead management and solar proposal system that turns every inquiry into an installation — faster, smarter, and at scale.",
+      image: solar_os,
+      features: [
+        { title: "Solar Calculator", description: "Instantly estimates consumption, recommends system size, calculates cost and savings.", icon: Calculator },
+        { title: "Lead Management", description: "Centralized database storing every customer's details in one place.", icon: Users },
+        { title: "Smart Lead Scoring", description: "Automatically categorizes leads as Hot, Warm, or Cold based on bill value.", icon: TrendingUp },
+        { title: "Follow-Up Management", description: "Tracks follow-ups made and pending actions per lead.", icon: Bell }
+      ],
+      price: "$399/month",
+      downloadLink: "/PDF/Solar-Sales-OS-Proposal.pdf",
+      tag: "Solar Solution"
+    },
+    {
+      id: "kirana",
+      name: "Smart Kirana & General Store",
+      icon: Store,
+      color: "from-[#1E2A39] to-[#10B981]",
+      bgColor: "#1E2A39",
+      lightColor: "from-[#1E2A39] to-[#6EE7B7]",
+      description: "Complete digital management system built specifically for Indian Kirana stores and general retail shops.",
+      image: retail_solution,
+      features: [
+        { title: "Inventory Management", description: "Batch-level tracking with expiry alerts and low-stock notifications.", icon: Package },
+        { title: "AI Invoice Scanner", description: "Scan supplier invoices and pre-fill everything in 2 minutes.", icon: Camera },
+        { title: "Fast Billing (POS)", description: "Live product grid, barcode scanning, and FIFO stock deduction.", icon: CreditCard },
+        { title: "Udhaar Management", description: "Digital passbook-style customer credit tracking with automatic balance updates.", icon: Users }
+      ],
+      price: "$299/month",
+      downloadLink: "/PDF/Kirana-Management-Proposal.pdf",
+      tag: "Retail Solution"
+    },
+    {
+      id: "manufacturing",
+      name: "Manufacturing Management",
+      icon: Factory,
+      color: "from-[#1E2A39] to-[#8B5CF6]",
+      bgColor: "#1E2A39",
+      lightColor: "from-[#1E2A39] to-[#C4B5FD]",
+      description: "Complete web-based solution to digitize and simplify daily factory operations with real-time production tracking.",
+      image: industrial_solution,
+      features: [
+        { title: "Production Tracking", description: "Record output by machine, product, operator, and shift with daily targets.", icon: Activity },
+        { title: "Machine Status", description: "One-click status changes with color-coded indicators for instant visibility.", icon: Monitor },
+        { title: "Downtime Analysis", description: "Automatic downtime logging with categorized reasons and precise duration tracking.", icon: Clock },
+        { title: "Loss Calculation", description: "Automatically computes financial impact when machines resume after stoppage.", icon: DollarSign }
+      ],
+      price: "$549/month",
+      downloadLink: "/PDF/Manufacturing-Management-Proposal.pdf",
+      tag: "Industrial Solution"
+    },
+    {
+      id: "schoolhub",
+      name: "SchoolHub ERP",
+      icon: GraduationCap,
+      color: "from-[#1E2A39] to-[#EC4899]",
+      bgColor: "#1E2A39",
+      lightColor: "from-[#1E2A39] to-[#F9A8D4]",
+      description: "Centralized web-based platform that digitizes and automates every aspect of school operations - from admissions to examinations, fees, and parent communication.",
+      image: shcool,
+      features: [
+        { title: "Academic Management", description: "Complete student lifecycle from admission to examination, results, and promotion.", icon: BookOpen },
+        { title: "Role-Based Dashboards", description: "7 user roles with personalized dashboards - Admin, Principal, Teacher, Student, Parent, Accountant.", icon: UsersRound },
+        { title: "Fee & Payroll Management", description: "Complete fee collection, receipt generation, accounting, and staff payroll processing.", icon: Receipt },
+        { title: "Communication & Documents", description: "Multi-channel communication with document storage, certificates, and ID card management.", icon: MessagesSquare }
+      ],
+      price: "$699/month",
+      downloadLink: "/PDF/SchoolHub-ERP-Proposal.pdf",
+      tag: "Education Solution"
     }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isMenuOpen]);
+  ];
 
-  // Very simple animations - only fade and slide
-  const fadeIn = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.5 } },
-  };
+  // Benefits - Theme Colors
+  const benefits = [
+    {
+      value: "99.9%",
+      label: "Uptime",
+      description: "Enterprise-grade reliability",
+      icon: Shield,
+      color: "#1E2A39"
+    },
+    {
+      value: "3x",
+      label: "Faster Delivery",
+      description: "Optimized routing",
+      icon: Zap,
+      color: "#1E2A39"
+    },
+    {
+      value: "50%",
+      label: "Cost Reduction",
+      description: "Streamlined operations",
+      icon: TrendingUp,
+      color: "#1E2A39"
+    },
+    {
+      value: "10k+",
+      label: "Active Users",
+      description: "Trusted worldwide",
+      icon: Users,
+      color: "#1E2A39"
+    },
+  ];
 
-  const fadeUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-  };
+  // Technology features
+  const techFeatures = [
+    {
+      icon: Code,
+      title: "Modern Tech Stack",
+      description: "Built with React, Node.js, and cutting-edge technologies",
+      color: "from-[#1E2A39] to-[#3A4A5F]"
+    },
+    {
+      icon: ShieldCheck,
+      title: "Enterprise Security",
+      description: "End-to-end encryption, OAuth, and role-based access control",
+      color: "from-[#1E2A39] to-[#9DB4C6]"
+    },
+    {
+      icon: Cloud,
+      title: "Cloud Native",
+      description: "AWS, Azure, and GCP ready with auto-scaling capabilities",
+      color: "from-[#1E2A39] to-[#3A4A5F]"
+    },
+    {
+      icon: GitBranch,
+      title: "CI/CD Pipeline",
+      description: "Automated testing, deployment, and version control",
+      color: "from-[#1E2A39] to-[#9DB4C6]"
+    },
+    {
+      icon: Database,
+      title: "Data Integration",
+      description: "Seamless integration with existing databases and APIs",
+      color: "from-[#1E2A39] to-[#3A4A5F]"
+    },
+    {
+      icon: Wifi,
+      title: "Real-Time Sync",
+      description: "WebSocket and event-driven architecture for instant updates",
+      color: "from-[#1E2A39] to-[#9DB4C6]"
+    },
+  ];
+
+  const integrationFeatures = [
+    {
+      icon: Cog,
+      title: "API First",
+      description: "RESTful APIs for seamless third-party integration"
+    },
+    {
+      icon: Radio,
+      title: "Webhooks",
+      description: "Real-time event notifications and triggers"
+    },
+    {
+      icon: Network,
+      title: "Microservices",
+      description: "Scalable, decoupled service architecture"
+    },
+    {
+      icon: HardDrive,
+      title: "Data Storage",
+      description: "Flexible storage options including cloud and on-premise"
+    },
+  ];
+
+
 
   // Handle PDF download
-  const handlePDFDownload = () => {
-    const link = document.createElement('a');
-    link.href = '../PDF/Parcel Management System.PPTX';
-    link.download = 'Parcel-Management-System.pptx';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handlePDFDownload = (link) => {
+    try {
+      const linkElement = document.createElement('a');
+      linkElement.href = link;
+      linkElement.download = link.split('/').pop();
+      document.body.appendChild(linkElement);
+      linkElement.click();
+      document.body.removeChild(linkElement);
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+      alert('Unable to download proposal. Please try again later.');
+    }
   };
 
-  // Handle scroll for navbar - simplified
+  // Handle scroll to set active section
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollPos = window.scrollY;
-      setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
-      setPrevScrollPos(currentScrollPos);
-
-      // Simple navbar background change on scroll
-      if (currentScrollPos > 50) {
-        setNavbarScrolled(true);
-      } else {
-        setNavbarScrolled(false);
-      }
-
       const sections = [
         { id: "hero", ref: heroRef },
         { id: "mobilehub", ref: mobileHubRef },
         { id: "parcel", ref: parcelRef },
+        { id: "solar", ref: solarRef },
+        { id: "kirana", ref: kiranaRef },
+        { id: "manufacturing", ref: manufacturingRef },
+        { id: "schoolhub", ref: schoolHubRef },
         { id: "tech", ref: techRef },
+        { id: "benefits", ref: benefitsRef },
         { id: "cta", ref: ctaRef },
       ];
 
@@ -148,350 +375,53 @@ const ProductPage = () => {
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [prevScrollPos]);
+  }, []);
 
-  // Smooth scroll
   const scrollToSection = (ref) => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
-    setIsMenuOpen(false);
   };
-
-  // Handle link click
-  const handleLinkClick = () => {
-    setIsMenuOpen(false);
-  };
-
-  // MobileHub features
-  const mobileHubFeatures = [
-    {
-      title: "Smart Device Management",
-      description:
-        "Centralized control for all your mobile devices with real-time monitoring.",
-      icon: Smartphone,
-      color: "blue",
-    },
-    {
-      title: "Advanced Security",
-      description: "Enterprise-grade security with biometric authentication.",
-      icon: Shield,
-      color: "purple",
-    },
-    {
-      title: "Real-time Analytics",
-      description: "Track device performance and usage patterns.",
-      icon: TrendingUp,
-      color: "green",
-    },
-    {
-      title: "Automated Updates",
-      description: "Seamless OTA updates with zero downtime.",
-      icon: Zap,
-      color: "orange",
-    },
-  ];
-
-  // Parcel features
-  const parcelFeatures = [
-    {
-      title: "Real-time Tracking",
-      description: "Live GPS tracking with route optimization.",
-      icon: MapPin,
-      color: "blue",
-    },
-    {
-      title: "Automated Dispatching",
-      description: "Smart routing for maximum efficiency.",
-      icon: Gauge,
-      color: "green",
-    },
-    {
-      title: "Proof of Delivery",
-      description: "Digital signatures and photo confirmation.",
-      icon: Camera,
-      color: "purple",
-    },
-    {
-      title: "Customer Notifications",
-      description: "Automated updates at every stage.",
-      icon: Bell,
-      color: "orange",
-    },
-  ];
-
-  // MobileHub flow steps
-  const mobileHubFlow = [
-    {
-      step: "01",
-      title: "Connect",
-      description: "Connect all your mobile devices in minutes.",
-      icon: Share2,
-      color: "from-blue-500 to-cyan-500",
-    },
-    {
-      step: "02",
-      title: "Configure",
-      description: "Set up policies and access controls.",
-      icon: Layers,
-      color: "from-purple-500 to-pink-500",
-    },
-    {
-      step: "03",
-      title: "Monitor",
-      description: "Real-time monitoring and alerts.",
-      icon: Gauge,
-      color: "from-green-500 to-emerald-500",
-    },
-    {
-      step: "04",
-      title: "Optimize",
-      description: "Analyze data and optimize usage.",
-      icon: TrendingUp,
-      color: "from-orange-500 to-red-500",
-    },
-  ];
-
-  // Parcel flow steps
-  const parcelFlow = [
-    {
-      step: "01",
-      title: "Scan & Log",
-      description: "Quick QR code scanning.",
-      icon: QrCode,
-      color: "from-blue-500 to-indigo-500",
-    },
-    {
-      step: "02",
-      title: "Route Optimize",
-      description: "AI-powered route planning.",
-      icon: MapPin,
-      color: "from-purple-500 to-pink-500",
-    },
-    {
-      step: "03",
-      title: "Track Live",
-      description: "Real-time tracking updates.",
-      icon: Globe,
-      color: "from-green-500 to-teal-500",
-    },
-    {
-      step: "04",
-      title: "Deliver & Confirm",
-      description: "Digital proof of delivery.",
-      icon: CheckCircle,
-      color: "from-orange-500 to-amber-500",
-    },
-  ];
-
-  // Benefits
-  const benefits = [
-    {
-      value: "99.9%",
-      label: "Uptime",
-      description: "Enterprise-grade reliability",
-      icon: Shield,
-    },
-    {
-      value: "3x",
-      label: "Faster Delivery",
-      description: "Optimized routing",
-      icon: Zap,
-    },
-    {
-      value: "50%",
-      label: "Cost Reduction",
-      description: "Streamlined operations",
-      icon: TrendingUp,
-    },
-    {
-      value: "10k+",
-      label: "Active Users",
-      description: "Trusted worldwide",
-      icon: Users,
-    },
-  ];
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden">
-      {/* Simple Background - No circles */}
-      <div className="fixed inset-0 bg-black">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(120,80,255,0.1),transparent_70%)]" />
-        <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom,rgba(255,80,200,0.1),transparent_70%)]" />
+    <div className="min-h-screen bg-[#F5F8FA] text-[#0B0F14] font-sans overflow-x-hidden">
+      {/* Simple Background */}
+      <div className="fixed inset-0 bg-[#F5F8FA]">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(30,42,57,0.08),transparent_70%)]" />
+        <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom,rgba(157,180,198,0.08),transparent_70%)]" />
       </div>
 
-      {/* Navigation - Simplified with animations */}
-      <motion.nav
-        ref={navbarRef}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          visible ? "translate-y-0" : "-translate-y-full"
-        } ${navbarScrolled ? 'bg-black/80 backdrop-blur-md border-b border-white/10' : 'bg-transparent'}`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 sm:h-20">
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 sm:gap-3 group z-50">
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                transition={{ duration: 0.2 }}
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/20"
-              >
-                <img src={lolo1} alt="logo" className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg" />
-              </motion.div>
-              <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                veronic
-              </span>
-            </Link>
+      {/* Navigation */}
+      {/* Navbar is managed globally in App.js */}
 
-            {/* Desktop Navigation - Added Packages link */}
-            <div className="hidden md:flex items-center gap-6 lg:gap-8">
-              {[
-                { name: "Home", to: "/" },
-                { name: "About", to: "/about" },
-                { name: "Services", to: "/services" },
-                { name: "Packages", to: "/packages" },
-                { name: "Products", to: "/products" },
-                { name: "Contact", to: "/contact" },
-              ].map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.to}
-                  className={`relative px-2 py-1 text-sm lg:text-base font-medium transition-colors whitespace-nowrap ${
-                    location.pathname === item.to
-                      ? "text-white"
-                      : "text-white/60 hover:text-white"
-                  }`}
-                >
-                  {item.name}
-                  {location.pathname === item.to && (
-                    <motion.div
-                      layoutId="activeNav"
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500"
-                    />
-                  )}
-                </Link>
-              ))}
-            </div>
-
-            {/* Desktop CTA */}
-            <Link to="/book-demo" className="hidden md:block">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-5 lg:px-6 py-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium text-sm lg:text-base shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 transition-shadow"
-              >
-                Book Demo
-                <ArrowRight className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
-              </motion.button>
-            </Link>
-
-            {/* Mobile Menu Button - Three Lines */}
-            <motion.button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="menu-button md:hidden relative w-10 h-10 flex flex-col items-center justify-center gap-1.5 rounded-lg hover:bg-white/5 transition-colors z-50"
-              aria-label="Toggle menu"
-              whileTap={{ scale: 0.95 }}
-            >
-              <span className={`w-6 h-0.5 bg-white transform transition-all duration-300 ${
-                isMenuOpen ? 'rotate-45 translate-y-2' : ''
-              }`} />
-              <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${
-                isMenuOpen ? 'opacity-0' : ''
-              }`} />
-              <span className={`w-6 h-0.5 bg-white transform transition-all duration-300 ${
-                isMenuOpen ? '-rotate-45 -translate-y-2' : ''
-              }`} />
-            </motion.button>
-          </div>
-        </div>
-
-        {/* Mobile Menu Overlay - Added Packages link */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <>
-              {/* Backdrop */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="fixed inset-0 bg-black/60 backdrop-blur-sm md:hidden"
-                onClick={() => setIsMenuOpen(false)}
-              />
-              
-              {/* Menu Content */}
-              <motion.div
-                ref={mobileMenuRef}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="absolute top-16 left-0 right-0 mx-4 mt-2 md:hidden bg-gradient-to-b from-gray-900 to-black border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
-              >
-                <div className="p-6 space-y-4">
-                  {[
-                    { name: "Home", to: "/" },
-                    { name: "About", to: "/about" },
-                    { name: "Services", to: "/services" },
-                    { name: "Packages", to: "/packages" },
-                    { name: "Products", to: "/products" },
-                    { name: "Contact", to: "/contact" },
-                  ].map((item, index) => (
-                    <motion.div
-                      key={item.name}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                    >
-                      <Link
-                        to={item.to}
-                        className="block py-3 px-4 text-base text-white/90 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-all duration-300"
-                        onClick={handleLinkClick}
-                      >
-                        {item.name}
-                      </Link>
-                    </motion.div>
-                  ))}
-                  
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="pt-2"
-                  >
-                    <Link to="/book-demo" onClick={handleLinkClick}>
-                      <button className="w-full py-4 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300">
-                        Book Demo
-                      </button>
-                    </Link>
-                  </motion.div>
-                </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-      </motion.nav>
-
-      {/* Hero Section - Exactly the same */}
+      {/* Hero Section */}
       <section
         ref={heroRef}
-        className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 sm:pt-20"
+        className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 sm:pt-20 bg-[#F5F8FA]"
       >
-        {/* Background Shapes - Simplified */}
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-48 sm:w-64 md:w-96 h-48 sm:h-64 md:h-96 bg-purple-500/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-10 w-48 sm:w-64 md:w-96 h-48 sm:h-64 md:h-96 bg-pink-500/10 rounded-full blur-3xl" />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div
+            animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-20 left-[10%] w-32 h-32 md:w-48 md:h-48 bg-white/60 backdrop-blur-md rounded-2xl shadow-xl border border-white/80"
+          />
+          <motion.div
+            animate={{ y: [0, 30, 0], rotate: [0, -10, 0] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute top-40 right-[15%] w-40 h-40 md:w-56 md:h-56 bg-[#00c2ff]/30 backdrop-blur-md rounded-3xl shadow-xl border border-[#00c2ff]/40"
+          />
+          <motion.div
+            animate={{ y: [0, -25, 0], rotate: [0, 15, 0] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            className="absolute bottom-20 left-[20%] w-36 h-36 md:w-52 md:h-52 bg-[#10B981]/30 backdrop-blur-md rounded-2xl shadow-xl border border-[#10B981]/40"
+          />
         </div>
 
-        {/* Grid Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div
             className="absolute inset-0"
             style={{
-              backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
+              backgroundImage: 'radial-gradient(circle at 1px 1px, #1E2A39 1px, transparent 0)',
             }}
           />
         </div>
@@ -504,19 +434,19 @@ const ProductPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 mb-4 sm:mb-8"
+            className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#1E2A39]/10 border border-[#1E2A39]/20 mb-4 sm:mb-8"
           >
-            <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-purple-400" />
-            <span className="text-xs sm:text-sm font-medium">Innovation at Scale</span>
+            <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-[#1E2A39]" />
+            <span className="text-xs sm:text-sm font-medium text-[#1E2A39]">Innovation at Scale</span>
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-4 sm:mb-6"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-4 sm:mb-6 text-[#0B0F14]"
           >
-            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#1E2A39] via-[#3A4A5F] to-[#9DB4C6] bg-clip-text text-transparent">
               Our Products
             </span>
           </motion.h1>
@@ -525,10 +455,10 @@ const ProductPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-white/60 max-w-3xl mx-auto mb-8 sm:mb-12 px-4"
+            className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-[#0B0F14]/60 max-w-3xl mx-auto mb-8 sm:mb-12 px-4"
           >
             Powerful solutions designed to transform how you manage mobile
-            devices and streamline parcel delivery operations.  
+            devices, streamline parcel delivery, and optimize business operations.
           </motion.p>
 
           <motion.div
@@ -538,411 +468,165 @@ const ProductPage = () => {
             className="flex flex-wrap gap-3 sm:gap-4 justify-center px-4"
           >
             <button
-              onClick={() => scrollToSection(mobileHubRef)}
-              className="group px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full font-semibold text-xs sm:text-sm md:text-base hover:opacity-90 transition-opacity"
+              onClick={() => scrollToSection(productsRef)}
+              className="group px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 bg-[#1E2A39] text-[#F5F8FA] rounded-full font-semibold text-xs sm:text-sm md:text-base shadow-lg shadow-[#1E2A39]/20 hover:shadow-[#1E2A39]/30 transition-shadow"
             >
               <span className="flex items-center gap-2">
-                Explore MobileHub
+                Explore Products
                 <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
               </span>
             </button>
 
             <button
-              onClick={() => scrollToSection(parcelRef)}
-              className="px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 rounded-full border border-white/20 text-white font-semibold text-xs sm:text-sm md:text-base hover:bg-white/5 transition-colors"
+              onClick={() => scrollToSection(techRef)}
+              className="px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 rounded-full border border-[#1E2A39]/30 text-[#0B0F14] font-semibold text-xs sm:text-sm md:text-base hover:bg-[#1E2A39]/5 transition-colors"
             >
-              View Parcel Management
+              Technology
             </button>
           </motion.div>
         </motion.div>
       </section>
 
-      {/* MobileHub Product Showcase */}
-      <section
-        ref={mobileHubRef}
-        className="relative min-h-screen py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden"
-      >
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-600/10 via-purple-600/10 to-transparent clip-diagonal" />
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12 sm:mb-16 lg:mb-20"
+      {/* ALL PRODUCTS - 6 Products */}
+      {allProducts.map((product, index) => {
+        const Icon = product.icon;
+        const isMobileHub = product.id === "mobilehub";
+        const isParcel = product.id === "parcel";
+        const isSolar = product.id === "solar";
+        const isKirana = product.id === "kirana";
+        const isManufacturing = product.id === "manufacturing";
+        const isSchoolHub = product.id === "schoolhub";
+        
+        let sectionRef = null;
+        if (isMobileHub) sectionRef = mobileHubRef;
+        else if (isParcel) sectionRef = parcelRef;
+        else if (isSolar) sectionRef = solarRef;
+        else if (isKirana) sectionRef = kiranaRef;
+        else if (isManufacturing) sectionRef = manufacturingRef;
+        else if (isSchoolHub) sectionRef = schoolHubRef;
+        
+        return (
+          <section
+            key={product.id}
+            ref={sectionRef}
+            className="relative min-h-screen py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden bg-[#F5F8FA]"
           >
-            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-blue-500/10 border border-blue-500/20 mb-4 sm:mb-6">
-              <Smartphone className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400" />
-              <span className="text-xs sm:text-sm text-blue-400">Enterprise Solution</span>
+            <div className="absolute inset-0">
+              <div className={`absolute top-0 left-0 w-full h-full bg-gradient-to-br ${product.color}/10 via-[#1E2A39]/5 to-transparent clip-diagonal`} />
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold">
-              <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                MobileHub
-              </span>
-            </h2>
-          </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            {/* Left Content */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="space-y-6 sm:space-y-8"
-            >
-              <div className="relative">
-                <div className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-white/5 select-none">
-                  01
-                </div>
-                <h3 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold mt-2 sm:mt-4">
-                  Complete Mobile Device
-                  <span className="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mt-1 sm:mt-2">
-                    Management Platform
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="text-center mb-12 sm:mb-16 lg:mb-20"
+              >
+                <div className={`inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#1E2A39]/10 border border-[#1E2A39]/20 mb-4 sm:mb-6`}>
+                  <Icon className={`w-3 h-3 sm:w-4 sm:h-4 text-[#1E2A39]`} />
+                  <span className={`text-xs sm:text-sm text-[#1E2A39]`}>
+                    {product.tag}
                   </span>
-                </h3>
-              </div>
+                </div>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold">
+                  <span className={`bg-gradient-to-r ${product.color} bg-clip-text text-transparent`}>
+                    {product.name}
+                  </span>
+                </h2>
+              </motion.div>
 
-              <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-white/70 leading-relaxed">
-                Take full control of your organization's mobile devices with
-                enterprise-grade management, security, and analytics.
-              </p>
-
-              {/* Feature Timeline */}
-              <div className="space-y-4 sm:space-y-5 lg:space-y-6 py-4 sm:py-6 lg:py-8">
-                {mobileHubFeatures.map((feature, index) => {
-                  const Icon = feature.icon;
-                  return (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="flex gap-3 sm:gap-4 items-start"
-                    >
-                      <div
-                        className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-${feature.color}-500/10 flex items-center justify-center flex-shrink-0`}
-                      >
-                        <Icon className={`w-5 h-5 sm:w-6 sm:h-6 text-${feature.color}-400`} />
-                      </div>
-                      <div>
-                        <h4 className="text-sm sm:text-base lg:text-lg font-semibold mb-0.5 sm:mb-1">
-                          {feature.title}
-                        </h4>
-                        <p className="text-xs sm:text-sm text-white/50">
-                          {feature.description}
-                        </p>
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-
-              <button className="group inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-6 lg:px-8 py-2.5 sm:py-3 lg:py-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full font-semibold text-xs sm:text-sm lg:text-base hover:opacity-90 transition-opacity">
-                Explore MobileHub
-                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 group-hover:translate-x-2 transition-transform" />
-              </button>
-            </motion.div>
-
-            {/* Right Image - Clean, no box */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="relative mt-8 lg:mt-0"
-            >
-              {/* Glow effect only - no border, no background */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full blur-3xl opacity-20" />
-              
-              {/* Pure image - no container styling */}
-              <div className="relative flex items-center justify-center">
-                <img 
-                  src={hub}
-                  alt="MobileHub product showcase" 
-                  className="w-full max-w-lg mx-auto h-auto object-contain"
-                  loading="lazy"
-                />
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* MobileHub Flow */}
-      <section
-        ref={mobileHubFlowRef}
-        className="relative py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden"
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 via-purple-600/5 to-pink-600/5" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12 sm:mb-16 lg:mb-20"
-          >
-            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold px-2">
-              How MobileHub
-              <span className="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mt-1 sm:mt-2">
-                Transforms Your Workflow
-              </span>
-            </h3>
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
-            {mobileHubFlow.map((step, index) => {
-              const Icon = step.icon;
-              return (
+              <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
                 <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  transition={{ duration: 0.5 }}
                   className="relative"
                 >
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${step.color} rounded-2xl sm:rounded-3xl opacity-10`}
-                  />
-                  <div className="relative p-5 sm:p-6 lg:p-8 bg-white/5 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-white/10">
-                    <div className="text-4xl sm:text-5xl lg:text-6xl font-black text-white/10 mb-3 sm:mb-4">
-                      {step.step}
-                    </div>
-                    <div
-                      className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br ${step.color} p-3 sm:p-3.5 lg:p-4 mb-4 sm:mb-5 lg:mb-6`}
-                    >
-                      <Icon className="w-full h-full text-white" />
-                    </div>
-                    <h4 className="text-base sm:text-lg lg:text-xl xl:text-2xl font-bold mb-2 sm:mb-3">{step.title}</h4>
-                    <p className="text-xs sm:text-sm lg:text-base text-white/60">{step.description}</p>
+                  <div className={`absolute inset-0 bg-gradient-to-r ${product.color} rounded-full blur-3xl opacity-20`} />
+                  <div className="relative flex items-center justify-center">
+                    <img 
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full max-w-lg mx-auto h-auto object-contain rounded-lg shadow-xl"
+                      loading="lazy"
+                    />
                   </div>
                 </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
-      {/* Parcel-Management App Showcase */}
-      <section
-        ref={parcelRef}
-        className="relative min-h-screen py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden"
-      >
-        <div className="absolute inset-0">
-          <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-green-600/10 via-teal-600/10 to-transparent clip-diagonal-reverse" />
-        </div>
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5 }}
+                  className="space-y-6 sm:space-y-8"
+                >
+                  <div className="relative">
+                    <div className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-[#9DB4C6]/20 select-none">
+                      {String(index + 1).padStart(2, '0')}
+                    </div>
+                    <h3 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold mt-2 sm:mt-4 text-[#0B0F14]">
+                      {product.name}
+                      <span className={`block bg-gradient-to-r ${product.color} bg-clip-text text-transparent mt-1 sm:mt-2`}>
+                        Platform
+                      </span>
+                    </h3>
+                  </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12 sm:mb-16 lg:mb-20"
-          >
-            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-green-500/10 border border-green-500/20 mb-4 sm:mb-6">
-              <Package className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
-              <span className="text-xs sm:text-sm text-green-400">Logistics Solution</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold">
-              <span className="bg-gradient-to-r from-green-400 to-teal-400 bg-clip-text text-transparent">
-                Parcel-Management
-              </span>
-            </h2>
-          </motion.div>
+                  <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-[#0B0F14]/70 leading-relaxed">
+                    {product.description}
+                  </p>
 
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            {/* Left Image - Clean, no box */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="relative order-2 lg:order-1 mt-8 lg:mt-0"
-            >
-              {/* Glow effect only - no border, no background */}
-              <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-teal-500 rounded-full blur-3xl opacity-20" />
-              
-              {/* Pure image - no container styling */}
-              <div className="relative flex items-center justify-center">
-                <img 
-                  src={parcel}
-                  alt="Parcel delivery tracking system" 
-                  className="w-full max-w-lg mx-auto h-auto object-contain"
-                  loading="lazy"
-                />
-              </div>
-            </motion.div>
+                  <div className="space-y-4 sm:space-y-5 lg:space-y-6 py-4 sm:py-6 lg:py-8">
+                    {product.features.map((feature, fIndex) => {
+                      const FeatureIcon = feature.icon;
+                      return (
+                        <motion.div
+                          key={fIndex}
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5, delay: fIndex * 0.1 }}
+                          className="flex gap-3 sm:gap-4 items-start"
+                        >
+                          <div
+                            className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-[#1E2A39]/10 flex items-center justify-center flex-shrink-0`}
+                          >
+                            <FeatureIcon className={`w-5 h-5 sm:w-6 sm:h-6 text-[#1E2A39]`} />
+                          </div>
+                          <div>
+                            <h4 className="text-sm sm:text-base lg:text-lg font-semibold mb-0.5 sm:mb-1 text-[#0B0F14]">
+                              {feature.title}
+                            </h4>
+                            <p className="text-xs sm:text-sm text-[#0B0F14]/50">
+                              {feature.description}
+                            </p>
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
 
-            {/* Right Content */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="space-y-6 sm:space-y-8 order-1 lg:order-2"
-            >
-              <div className="relative">
-                <div className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-white/5 select-none">
-                  02
-                </div>
-                <h3 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold mt-2 sm:mt-4">
-                  Smart Parcel Delivery
-                  <span className="block bg-gradient-to-r from-green-400 to-teal-400 bg-clip-text text-transparent mt-1 sm:mt-2">
-                    Management System
-                  </span>
-                </h3>
-              </div>
-
-              <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-white/70 leading-relaxed">
-                Streamline your entire delivery operation with AI-powered
-                routing, real-time tracking, and automated customer
-                communications.
-              </p>
-
-              {/* Feature Grid */}
-              <div className="grid grid-cols-2 gap-3 sm:gap-4 py-4 sm:py-6 lg:py-8">
-                {parcelFeatures.map((feature, index) => {
-                  const Icon = feature.icon;
-                  return (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-green-500/30 transition-colors"
+                  <div className="flex flex-wrap gap-3 sm:gap-4">
+                    <button
+                      onClick={() => handlePDFDownload(product.downloadLink)}
+                      className={`group inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-6 lg:px-8 py-2.5 sm:py-3 lg:py-4 bg-[#1E2A39] text-[#F5F8FA] rounded-full font-semibold text-xs sm:text-sm lg:text-base shadow-lg shadow-[#1E2A39]/20 hover:shadow-[#1E2A39]/30 transition-shadow`}
                     >
-                      <div
-                        className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-${feature.color}-500/10 flex items-center justify-center mb-2 sm:mb-3`}
-                      >
-                        <Icon className={`w-4 h-4 sm:w-5 sm:h-5 text-${feature.color}-400`} />
-                      </div>
-                      <h4 className="font-semibold text-xs sm:text-sm mb-0.5 sm:mb-1">
-                        {feature.title}
-                      </h4>
-                      <p className="text-white/40 text-xs">
-                        {feature.description}
-                      </p>
-                    </motion.div>
-                  );
-                })}
+                      <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+                      Download Proposal
+                    </button>
+                  </div>
+                </motion.div>
               </div>
-
-              <button className="group inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-6 lg:px-8 py-2.5 sm:py-3 lg:py-4 bg-gradient-to-r from-green-500 to-teal-500 rounded-full font-semibold text-xs sm:text-sm lg:text-base hover:opacity-90 transition-opacity">
-                Explore Parcel System
-                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 group-hover:translate-x-2 transition-transform" />
-              </button>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Technology & Integration Section */}
-      <section ref={techRef} className="relative py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 to-transparent" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12 sm:mb-16 lg:mb-20"
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold px-2">
-              Technology
-              <span className="block bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mt-1 sm:mt-2">
-                & Integration
-              </span>
-            </h2>
-            <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-white/60 max-w-3xl mx-auto mt-4 px-4">
-              Built on modern architecture with seamless integration
-              capabilities
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 lg:gap-8 max-w-4xl mx-auto">
-            {/* Left Column - Data Sources */}
-            <div className="space-y-4 sm:space-y-5 lg:space-y-8">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 text-center"
-              >
-                <Database className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 text-blue-400 mx-auto mb-2 sm:mb-3" />
-                <h4 className="font-semibold text-xs sm:text-sm mb-0.5 sm:mb-1">Data Sources</h4>
-                <p className="text-xs text-white/40">APIs, Databases, IoT</p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 text-center"
-              >
-                <Cloud className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 text-purple-400 mx-auto mb-2 sm:mb-3" />
-                <h4 className="font-semibold text-xs sm:text-sm mb-0.5 sm:mb-1">Cloud Services</h4>
-                <p className="text-xs text-white/40">AWS, Azure, GCP</p>
-              </motion.div>
             </div>
-
-            {/* Center - Core Platform */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="p-5 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl lg:rounded-3xl bg-gradient-to-br from-purple-600 to-pink-600 text-center"
-            >
-              <Layers className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 text-white mx-auto mb-3 sm:mb-4" />
-              <h3 className="text-base sm:text-lg lg:text-xl xl:text-2xl font-bold mb-1 sm:mb-2">Veronic Core</h3>
-              <p className="text-white/80 text-xs sm:text-sm">Integration Platform</p>
-            </motion.div>
-
-            {/* Right Column - Applications */}
-            <div className="space-y-4 sm:space-y-5 lg:space-y-8">
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 text-center"
-              >
-                <Smartphone className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 text-green-400 mx-auto mb-2 sm:mb-3" />
-                <h4 className="font-semibold text-xs sm:text-sm mb-0.5 sm:mb-1">MobileHub</h4>
-                <p className="text-xs text-white/40">Device Management</p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 text-center"
-              >
-                <Package className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 text-orange-400 mx-auto mb-2 sm:mb-3" />
-                <h4 className="font-semibold text-xs sm:text-sm mb-0.5 sm:mb-1">Parcel System</h4>
-                <p className="text-xs text-white/40">Delivery Management</p>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </section>
+          </section>
+        );
+      })}
 
       {/* Benefits Section */}
-      <section ref={benefitsRef} className="relative py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10" />
+      <section ref={benefitsRef} className="relative py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden bg-[#F5F8FA]">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1E2A39]/5 via-[#9DB4C6]/5 to-[#1E2A39]/5" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
           <motion.div
@@ -952,9 +636,13 @@ const ProductPage = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-12 sm:mb-16 lg:mb-20"
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold px-2">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#1E2A39]/10 border border-[#1E2A39]/20 mb-4 sm:mb-6">
+              <Award className="w-3 h-3 sm:w-4 sm:h-4 text-[#1E2A39]" />
+              <span className="text-xs sm:text-sm text-[#1E2A39]">Benefits</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold px-2 text-[#0B0F14]">
               Transform Your
-              <span className="block bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mt-1 sm:mt-2">
+              <span className="block bg-gradient-to-r from-[#1E2A39] to-[#9DB4C6] bg-clip-text text-transparent mt-1 sm:mt-2">
                 Business Operations
               </span>
             </h2>
@@ -972,20 +660,20 @@ const ProductPage = () => {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="relative"
                 >
-                  <div className="relative p-4 sm:p-5 lg:p-6 xl:p-8">
+                  <div className="relative p-4 sm:p-5 lg:p-6 xl:p-8 bg-white/80 backdrop-blur-sm rounded-2xl border border-[#9DB4C6]/20 shadow-sm hover:shadow-md transition-shadow">
                     <div className="flex items-start gap-4 sm:gap-5 lg:gap-6">
-                      <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center flex-shrink-0">
-                        <Icon className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-purple-400" />
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#1E2A39]/20 to-[#9DB4C6]/20 flex items-center justify-center flex-shrink-0">
+                        <Icon className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-[#1E2A39]" />
                       </div>
 
                       <div>
-                        <div className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-1 sm:mb-2">
+                        <div className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-[#1E2A39] to-[#9DB4C6] bg-clip-text text-transparent mb-1 sm:mb-2">
                           {benefit.value}
                         </div>
-                        <div className="text-base sm:text-lg lg:text-xl xl:text-2xl font-semibold mb-1 sm:mb-2">
+                        <div className="text-base sm:text-lg lg:text-xl xl:text-2xl font-semibold text-[#0B0F14] mb-1 sm:mb-2">
                           {benefit.label}
                         </div>
-                        <p className="text-sm sm:text-base lg:text-lg text-white/40">
+                        <p className="text-sm sm:text-base lg:text-lg text-[#0B0F14]/40">
                           {benefit.description}
                         </p>
                       </div>
@@ -998,9 +686,9 @@ const ProductPage = () => {
         </div>
       </section>
 
-      {/* Interactive Product Comparison */}
-      <section ref={comparisonRef} className="relative py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-3xl" />
+      {/* Technology & Integration Section - No Product Cards, Only Tech Content */}
+      <section ref={techRef} className="relative py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden bg-[#F5F8FA]">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1E2A39]/10 to-transparent" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
           <motion.div
@@ -1010,141 +698,117 @@ const ProductPage = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-12 sm:mb-16 lg:mb-20"
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold px-2">
-              Choose Your
-              <span className="block bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mt-1 sm:mt-2">
-                Perfect Solution
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#1E2A39]/10 border border-[#1E2A39]/20 mb-4 sm:mb-6">
+              <Cpu className="w-3 h-3 sm:w-4 sm:h-4 text-[#1E2A39]" />
+              <span className="text-xs sm:text-sm text-[#1E2A39]">Tech Stack</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold px-2 text-[#0B0F14]">
+              Technology
+              <span className="block bg-gradient-to-r from-[#1E2A39] to-[#9DB4C6] bg-clip-text text-transparent mt-1 sm:mt-2">
+                & Integration
               </span>
             </h2>
+            <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-[#0B0F14]/60 max-w-3xl mx-auto mt-4 px-4">
+              Built on modern architecture with seamless integration
+              capabilities for all our products
+            </p>
           </motion.div>
 
-          {/* Toggle Buttons */}
-          <div className="flex justify-center mb-8 sm:mb-12 lg:mb-16">
-            <div className="inline-flex p-1 rounded-full bg-white/5 backdrop-blur-sm border border-white/10">
-              <button
-                onClick={() => setActiveProduct("mobilehub")}
-                className={`px-4 sm:px-6 lg:px-8 py-2 sm:py-2.5 lg:py-3 rounded-full font-medium text-xs sm:text-sm lg:text-base transition-all ${
-                  activeProduct === "mobilehub"
-                    ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white"
-                    : "text-white/60 hover:text-white"
-                }`}
-              >
-                MobileHub
-              </button>
-              <button
-                onClick={() => setActiveProduct("parcel")}
-                className={`px-4 sm:px-6 lg:px-8 py-2 sm:py-2.5 lg:py-3 rounded-full font-medium text-xs sm:text-sm lg:text-base transition-all ${
-                  activeProduct === "parcel"
-                    ? "bg-gradient-to-r from-green-500 to-teal-500 text-white"
-                    : "text-white/60 hover:text-white"
-                }`}
-              >
-                Parcel Management
-              </button>
-            </div>
+          {/* Tech Features Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
+            {techFeatures.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="group relative p-6 sm:p-8 bg-white/80 backdrop-blur-sm rounded-2xl border border-[#9DB4C6]/20 hover:border-[#1E2A39]/30 transition-all shadow-sm hover:shadow-xl"
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-5 rounded-2xl transition-opacity duration-500`} />
+                  <div className="relative">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-[#1E2A39]/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-[#1E2A39]" />
+                    </div>
+                    <h3 className="text-lg sm:text-xl font-bold text-[#0B0F14] mb-2">{feature.title}</h3>
+                    <p className="text-sm text-[#0B0F14]/60">{feature.description}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
 
-          <AnimatePresence mode="wait">
-            {activeProduct === "mobilehub" ? (
-              <motion.div
-                key="mobilehub"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 lg:gap-8"
-              >
-                <div className="p-5 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl lg:rounded-3xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-sm border border-white/10">
-                  <Smartphone className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-blue-400 mb-4 sm:mb-5 lg:mb-6" />
-                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4">MobileHub</h3>
-                  <ul className="space-y-2 sm:space-y-2.5 mb-4 sm:mb-5 lg:mb-8">
-                    {mobileHubFeatures.map((feature, i) => (
-                      <li
-                        key={i}
-                        className="flex items-center gap-1.5 sm:gap-2 text-white/70 text-xs sm:text-sm"
-                      >
-                        <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-400 flex-shrink-0" />
-                        <span className="line-clamp-1">{feature.title}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1">$499</div>
-                  <div className="text-white/40 text-xs sm:text-sm mb-4 sm:mb-5 lg:mb-6">per month</div>
-                  <button className="w-full py-2.5 sm:py-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 font-semibold text-xs sm:text-sm hover:opacity-90 transition-opacity">
-                    Get Started
-                  </button>
-                </div>
+          {/* Integration Features */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <h3 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-[#0B0F14]">
+              Integration <span className="bg-gradient-to-r from-[#1E2A39] to-[#9DB4C6] bg-clip-text text-transparent">Capabilities</span>
+            </h3>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              {integrationFeatures.map((feature, index) => {
+                const Icon = feature.icon;
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="p-5 sm:p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-[#9DB4C6]/20 text-center hover:border-[#1E2A39]/30 transition-all shadow-sm hover:shadow-md group"
+                  >
+                    <div className="w-12 h-12 rounded-full bg-[#1E2A39]/10 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                      <Icon className="w-6 h-6 text-[#1E2A39]" />
+                    </div>
+                    <h4 className="font-semibold text-sm sm:text-base text-[#0B0F14] mb-1">{feature.title}</h4>
+                    <p className="text-xs sm:text-sm text-[#0B0F14]/50">{feature.description}</p>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
 
-                <div className="p-5 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl lg:rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10">
-                  <h4 className="text-base sm:text-lg lg:text-xl font-bold mb-3 sm:mb-4">Key Features</h4>
-                  <div className="space-y-3 sm:space-y-4">
-                    {mobileHubFlow.map((step, i) => (
-                      <div key={i} className="flex items-center gap-2 sm:gap-3">
-                        <div
-                          className={`w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 rounded-lg bg-gradient-to-br ${step.color} p-1.5 sm:p-2 flex-shrink-0`}
-                        >
-                          <step.icon className="w-full h-full text-white" />
-                        </div>
-                        <span className="text-white/70 text-xs sm:text-sm">{step.title}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            ) : (
+          {/* Integration Features Icons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 sm:gap-4 mt-12 sm:mt-16"
+          >
+            {[
+              { icon: Zap, label: "Real-time Sync", color: "text-[#1E2A39]" },
+              { icon: Shield, label: "Security First", color: "text-[#1E2A39]" },
+              { icon: TrendingUp, label: "Scalable", color: "text-[#1E2A39]" },
+              { icon: Globe, label: "Global Reach", color: "text-[#1E2A39]" },
+              { icon: Clock, label: "24/7 Uptime", color: "text-[#1E2A39]" },
+              { icon: Users, label: "Team Ready", color: "text-[#1E2A39]" }
+            ].map((item, index) => (
               <motion.div
-                key="parcel"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 lg:gap-8"
+                key={index}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.05 }}
+                className="flex flex-col items-center p-3 sm:p-4 rounded-xl bg-white/80 backdrop-blur-sm border border-[#9DB4C6]/20 text-center hover:border-[#1E2A39]/30 transition-colors shadow-sm hover:shadow-md"
               >
-                <div className="p-5 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl lg:rounded-3xl bg-gradient-to-br from-green-500/20 to-teal-500/20 backdrop-blur-sm border border-white/10">
-                  <Package className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-green-400 mb-4 sm:mb-5 lg:mb-6" />
-                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4">Parcel Management</h3>
-                  <ul className="space-y-2 sm:space-y-2.5 mb-4 sm:mb-5 lg:mb-8">
-                    {parcelFeatures.map((feature, i) => (
-                      <li
-                        key={i}
-                        className="flex items-center gap-1.5 sm:gap-2 text-white/70 text-xs sm:text-sm"
-                      >
-                        <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-400 flex-shrink-0" />
-                        <span className="line-clamp-1">{feature.title}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1">$599</div>
-                  <div className="text-white/40 text-xs sm:text-sm mb-4 sm:mb-5 lg:mb-6">per month</div>
-                  <button className="w-full py-2.5 sm:py-3 rounded-full bg-gradient-to-r from-green-500 to-teal-500 font-semibold text-xs sm:text-sm hover:opacity-90 transition-opacity">
-                    Get Started
-                  </button>
-                </div>
-
-                <div className="p-5 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl lg:rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10">
-                  <h4 className="text-base sm:text-lg lg:text-xl font-bold mb-3 sm:mb-4">Key Features</h4>
-                  <div className="space-y-3 sm:space-y-4">
-                    {parcelFlow.map((step, i) => (
-                      <div key={i} className="flex items-center gap-2 sm:gap-3">
-                        <div
-                          className={`w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 rounded-lg bg-gradient-to-br ${step.color} p-1.5 sm:p-2 flex-shrink-0`}
-                        >
-                          <step.icon className="w-full h-full text-white" />
-                        </div>
-                        <span className="text-white/70 text-xs sm:text-sm">{step.title}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <item.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${item.color} mb-1 sm:mb-2`} />
+                <span className="text-[10px] sm:text-xs text-[#0B0F14]/60">{item.label}</span>
               </motion.div>
-            )}
-          </AnimatePresence>
+            ))}
+          </motion.div>
         </div>
       </section>
 
-      {/* CTA Section - Updated with PDF Download */}
-      <section ref={ctaRef} className="relative py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-pink-600 to-blue-600">
+      {/* CTA Section */}
+      <section ref={ctaRef} className="relative py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden bg-[#1E2A39]">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1E2A39] via-[#2A3A4F] to-[#0B0F14]">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMzAgMzBtMC0yMGEyMCAyMCAwIDAgMSAwIDQwIDIwIDIwIDAgMCAxIDAtNDB6IiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+')] opacity-10" />
         </div>
 
@@ -1155,9 +819,14 @@ const ProductPage = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 lg:mb-8 px-2">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 mb-4 sm:mb-8">
+              <Play className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+              <span className="text-xs sm:text-sm text-white">Get Started</span>
+            </div>
+
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 lg:mb-8 px-2 text-white">
               Ready to
-              <span className="block text-white mt-1 sm:mt-2">Transform Your Business?</span>
+              <span className="block text-[#9DB4C6] mt-1 sm:mt-2">Transform Your Business?</span>
             </h2>
 
             <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-white/80 mb-6 sm:mb-8 lg:mb-12 max-w-2xl mx-auto px-4">
@@ -1166,20 +835,6 @@ const ProductPage = () => {
             </p>
 
             <div className="flex flex-wrap gap-3 sm:gap-4 justify-center px-4">
-              {/* Parcel Management System Download Button */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handlePDFDownload}
-                className="group px-5 sm:px-6 lg:px-8 xl:px-10 py-3 sm:py-4 lg:py-5 bg-white text-purple-600 rounded-full font-semibold text-xs sm:text-sm lg:text-base xl:text-lg shadow-2xl hover:opacity-90 transition-opacity flex items-center gap-2"
-              >
-                <span className="flex items-center gap-2">
-                  Parcel Management System
-                  <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 group-hover:translate-y-1 transition-transform" />
-                </span>
-              </motion.button>
-
-              {/* Contact Sales Button - Links to Contact page */}
               <Link to="/contact">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -1191,7 +846,6 @@ const ProductPage = () => {
               </Link>
             </div>
 
-            {/* Trust Indicators */}
             <div className="flex flex-wrap justify-center gap-3 sm:gap-4 lg:gap-8 mt-8 sm:mt-12 lg:mt-16">
               {[
                 "Enterprise Ready",
@@ -1217,16 +871,16 @@ const ProductPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="relative py-12 sm:py-16 px-4 sm:px-6 border-t border-white/10">
-        <div className="max-w-7xl mx-auto">
+      <footer className="relative py-12 sm:py-16 px-4 sm:px-6 bg-black">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0B0F14] to-black" />
+        <div className="relative z-10 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-8 sm:mb-12">
-            {/* Company Info */}
             <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
-                  <img src={lolo1} alt="logo" className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg" />
+                <div className="flex items-center justify-center">
+                  <img src={lolo1} alt="logo" className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-lg object-contain" />
                 </div>
-                <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                <span className="text-lg sm:text-xl font-bold text-white">
                   veronic
                 </span>
               </div>
@@ -1250,138 +904,92 @@ const ProductPage = () => {
                       className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors group"
                       aria-label={social.label}
                     >
-                      <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white/60 group-hover:text-purple-400 transition-colors" />
+                      <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white/60 group-hover:text-white transition-colors" />
                     </a>
                   );
                 })}
               </div>
             </div>
 
-            {/* Products */}
             <div>
-              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4">Products</h4>
+              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4 text-white">Products</h4>
               <ul className="space-y-2 sm:space-y-2.5">
-                {["MobileHub", "Parcel Management", "Enterprise", "Pricing"].map((item) => (
-                  <li key={item}>
-                    <a
-                      href="#"
+                {allProducts.map((product) => (
+                  <li key={product.id}>
+                    <button
+                      onClick={() => {
+                        const refMap = {
+                          mobilehub: mobileHubRef,
+                          parcel: parcelRef,
+                          solar: solarRef,
+                          kirana: kiranaRef,
+                          manufacturing: manufacturingRef,
+                          schoolhub: schoolHubRef,
+                        };
+                        if (refMap[product.id]) {
+                          scrollToSection(refMap[product.id]);
+                        }
+                      }}
                       className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors"
                     >
-                      {item}
-                    </a>
+                      {product.name}
+                    </button>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Company - Added Packages link */}
             <div>
-              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4">Company</h4>
+              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4 text-white">Company</h4>
               <ul className="space-y-2 sm:space-y-2.5">
-                <li>
-                  <Link
-                    to="/"
-                    className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors"
-                  >
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/about"
-                    className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors"
-                  >
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/services"
-                    className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors"
-                  >
-                    Services
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/packages"
-                    className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors"
-                  >
-                    Packages
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/products"
-                    className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors"
-                  >
-                    Products
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/contact"
-                    className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors"
-                  >
-                    Contact
-                  </Link>
-                </li>
+                <li><Link to="/" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors">Home</Link></li>
+                <li><Link to="/about" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors">About</Link></li>
+                <li><Link to="/services" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors">Services</Link></li>
+                <li><Link to="/packages" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors">Packages</Link></li>
+                <li><Link to="/products" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors">Products</Link></li>
+                <li><Link to="/contact" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors">Contact</Link></li>
               </ul>
             </div>
 
-            {/* Contact */}
             <div>
-              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4">Contact</h4>
+              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4 text-white">Contact</h4>
               <ul className="space-y-3 sm:space-y-4">
                 <li className="flex items-start gap-2 sm:gap-3">
                   <div className="flex-shrink-0 mt-1">
-                    <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
+                    <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-white/60" />
                   </div>
-                  <Link
-                    to="/contact"
-                    className="text-xs sm:text-sm text-white/60 hover:text-purple-400 transition-colors break-all"
-                  >
+                  <Link to="/contact" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors break-all">
                     veronic.infotech@gmail.com
                   </Link>
                 </li>
                 <li className="flex items-start gap-2 sm:gap-3">
                   <div className="flex-shrink-0 mt-1">
-                    <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
+                    <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-white/60" />
                   </div>
-                  <Link
-                    to="/contact"
-                    className="text-xs sm:text-sm text-white/60 hover:text-purple-400 transition-colors"
-                  >
+                  <Link to="/contact" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors">
                     +91 95106 53051
                   </Link>
                 </li>
                 <li className="flex items-start gap-2 sm:gap-3">
                   <div className="flex-shrink-0 mt-1">
-                    <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
+                    <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-white/60" />
                   </div>
-                  <Link
-                    to="/contact"
-                    className="text-xs sm:text-sm text-white/60 hover:text-purple-400 transition-colors leading-relaxed"
-                  >
-                    Rao InfoTech, University Road, Behind Shilpan Onyx, Rajkot,
-                    Gujarat 360005
+                  <Link to="/contact" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors leading-relaxed">
+                    Rao InfoTech, University Road, Behind Shilpan Onyx, Rajkot, Gujarat 360005
                   </Link>
                 </li>
               </ul>
             </div>
           </div>
 
-          {/* Copyright */}
           <div className="pt-6 sm:pt-8 border-t border-white/10 text-center">
             <p className="text-xs sm:text-sm text-white/40">
-              © 2026 veronic. All rights reserved. | Built with innovation for
-              the future
+              © 2026 veronic. All rights reserved. | Built with innovation for the future
             </p>
           </div>
         </div>
       </footer>
 
-      {/* Custom CSS for diagonal clips */}
       <style jsx>{`
         .clip-diagonal {
           clip-path: polygon(0 0, 100% 0, 0 100%);

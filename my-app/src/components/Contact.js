@@ -1,30 +1,27 @@
 import React, { useState, useEffect, useRef } from "react";
+import Footer from "./Footer";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
+import {
+  Mail,
+  Phone,
+  MapPin,
   Send,
   ArrowRight,
   Sparkles,
   Github,
-  Twitter,
   Linkedin,
   Instagram,
-  CheckCircle,
-  AlertCircle,
-  Download
+  CheckCircle
 } from "lucide-react";
 
 import lolo1 from "../images/lolo1.png";
 
 const Contact = () => {
   const location = useLocation();
-  const [prevScrollPos, setPrevScrollPos] = useState(0);
-  const [visible, setVisible] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [formStatus, setFormStatus] = useState('idle'); // idle, submitting, success, error
+  const [visible, setVisible] = useState(true);
+  const [formStatus, setFormStatus] = useState('idle');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -35,7 +32,7 @@ const Contact = () => {
   // Refs
   const mobileMenuRef = useRef(null);
   const navbarRef = useRef(null);
-  
+
   const { scrollYProgress } = useScroll();
   const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
@@ -43,8 +40,8 @@ const Contact = () => {
   // Close mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && 
-          !event.target.closest('.menu-button')) {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) &&
+        !event.target.closest('.menu-button')) {
         setIsMenuOpen(false);
       }
     };
@@ -65,24 +62,37 @@ const Contact = () => {
     };
   }, [isMenuOpen]);
 
-  // Handle scroll for navbar - simplified
+  // Handle scroll for navbar - PERFECT hide on scroll down, show on scroll up
   useEffect(() => {
+    let hideTimeout;
+    let lastScrollY = window.scrollY;
+    
     const handleScroll = () => {
-      const currentScrollPos = window.scrollY;
-      setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
-      setPrevScrollPos(currentScrollPos);
+      const currentScrollY = window.scrollY;
       
-      // Simple navbar background change on scroll
-      if (currentScrollPos > 50) {
+      if (hideTimeout) clearTimeout(hideTimeout);
+      
+      if (currentScrollY > 50) {
         setNavbarScrolled(true);
+        if (currentScrollY > lastScrollY) {
+          setVisible(false); // Hide on scroll down
+        } else {
+          setVisible(true); // Show on scroll up
+          hideTimeout = setTimeout(() => setVisible(false), 5000); // Hide after 5s
+        }
       } else {
         setNavbarScrolled(false);
+        setVisible(true);
       }
+      lastScrollY = currentScrollY;
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [prevScrollPos]);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (hideTimeout) clearTimeout(hideTimeout);
+    };
+  }, []);
 
   // Handle form input changes
   const handleInputChange = (e) => {
@@ -97,13 +107,11 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormStatus('submitting');
-    
-    // Simulate form submission
+
     setTimeout(() => {
       setFormStatus('success');
       setFormData({ name: '', email: '', message: '' });
-      
-      // Reset success message after 3 seconds
+
       setTimeout(() => {
         setFormStatus('idle');
       }, 3000);
@@ -116,19 +124,10 @@ const Contact = () => {
   };
 
   // Animation variants
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }
-    }
-  };
-
   const fadeInLeft = {
     hidden: { opacity: 0, x: -50 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       x: 0,
       transition: { duration: 0.6, delay: 0.2, ease: [0.21, 0.47, 0.32, 0.98] }
     }
@@ -136,8 +135,8 @@ const Contact = () => {
 
   const fadeInRight = {
     hidden: { opacity: 0, x: 50 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       x: 0,
       transition: { duration: 0.6, delay: 0.3, ease: [0.21, 0.47, 0.32, 0.98] }
     }
@@ -160,243 +159,114 @@ const Contact = () => {
       title: "Email",
       value: "veronic.infotech@gmail.com",
       link: "mailto:veronic.infotech@gmail.com",
-      color: "from-blue-500 to-cyan-500"
+      color: "from-[#1E2A39] to-[#3A4A5F]"
     },
     {
       icon: Phone,
       title: "Phone",
       value: "+91 95106 53051 , +91 95104 69165",
       link: "tel:+919510653051",
-      color: "from-purple-500 to-pink-500"
+      color: "from-[#1E2A39] to-[#3A4A5F]"
     },
     {
       icon: MapPin,
       title: "Office",
       value: "Rao InfoTech, University Road, Behind Shilpan Onyx, Rajkot, Gujarat 360005",
       link: "https://www.google.com/maps/search/Rao+InfoTech+University+Road+Rajkot",
-      color: "from-green-500 to-emerald-500"
+      color: "from-[#1E2A39] to-[#3A4A5F]"
     }
   ];
 
   const socialLinks = [
-    { icon: Github, href: "https://github.com/veronicinfotech-glitch", label: "GitHub", color: "hover:bg-gray-800" },
-    { icon: Linkedin, href: "https://www.linkedin.com/company/veronic-infotech/?viewAsMember=true", label: "LinkedIn", color: "hover:bg-blue-700" },
-    { icon: Instagram, href: "https://www.instagram.com/veronic_infotech?igsh=ZndleDdjajRxYjNq", label: "Instagram", color: "hover:bg-pink-600" }
+    { icon: Github, href: "https://github.com/veronicinfotech-glitch", label: "GitHub", color: "hover:bg-[#1E2A39]" },
+    { icon: Linkedin, href: "https://www.linkedin.com/company/veronic-infotech/?viewAsMember=true", label: "LinkedIn", color: "hover:bg-[#1E2A39]" },
+    { icon: Instagram, href: "https://www.instagram.com/veronic_infotech?igsh=ZndleDdjajRxYjNq", label: "Instagram", color: "hover:bg-[#1E2A39]" }
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden">
-      {/* Simple Background - No circles */}
-      <div className="fixed inset-0 bg-black">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(120,80,255,0.1),transparent_70%)]" />
-        <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom,rgba(255,80,200,0.1),transparent_70%)]" />
+    <div className="min-h-screen bg-[#F5F8FA] text-[#0B0F14] font-sans overflow-x-clip">
+      {/* Simple Background */}
+      <div className="fixed inset-0 bg-[#F5F8FA] pointer-events-none">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(30,42,57,0.06),transparent_70%)]" />
+        <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom,rgba(157,180,198,0.06),transparent_70%)]" />
       </div>
 
-      {/* Navbar - Simplified with animations */}
-      <motion.nav 
-        ref={navbarRef}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          visible ? 'translate-y-0' : '-translate-y-full'
-        } ${navbarScrolled ? 'bg-black/80 backdrop-blur-md border-b border-white/10' : 'bg-transparent'}`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 sm:h-20">
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 sm:gap-3 group z-50">
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                transition={{ duration: 0.2 }}
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/20"
-              >
-                <img src={lolo1} alt="logo" className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg" />
-              </motion.div>
-              <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                veronic
-              </span>
-            </Link>
+      {/* Navbar - Black background with white links initially -> White background with black links after scrolling */}
+      {/* Navbar is managed globally in App.js */}
 
-            {/* Desktop Navigation - Added Packages link */}
-            <div className="hidden md:flex items-center gap-6 lg:gap-8">
-              {[
-                { name: 'Home', to: '/' },
-                { name: 'About', to: '/about' },
-                { name: 'Services', to: '/services' },
-                { name: 'Packages', to: '/packages' },
-                { name: 'Products', to: '/products' },
-                { name: 'Contact', to: '/contact' }
-              ].map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.to}
-                  className={`relative px-2 py-1 text-sm lg:text-base font-medium transition-colors whitespace-nowrap ${
-                    location.pathname === item.to ? 'text-white' : 'text-white/60 hover:text-white'
-                  }`}
-                >
-                  {item.name}
-                  {location.pathname === item.to && (
-                    <motion.div
-                      layoutId="activeNav"
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500"
-                    />
-                  )}
-                </Link>
-              ))}
-            </div>
-
-            {/* Desktop CTA */}
-            <Link to="/book-demo" className="hidden md:block">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-5 lg:px-6 py-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium text-sm lg:text-base shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 transition-shadow"
-              >
-                Book Demo
-                <ArrowRight className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
-              </motion.button>
-            </Link>
-
-            {/* Mobile Menu Button - Three Lines */}
-            <motion.button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="menu-button md:hidden relative w-10 h-10 flex flex-col items-center justify-center gap-1.5 rounded-lg hover:bg-white/5 transition-colors z-50"
-              aria-label="Toggle menu"
-              whileTap={{ scale: 0.95 }}
-            >
-              <span className={`w-6 h-0.5 bg-white transform transition-all duration-300 ${
-                isMenuOpen ? 'rotate-45 translate-y-2' : ''
-              }`} />
-              <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${
-                isMenuOpen ? 'opacity-0' : ''
-              }`} />
-              <span className={`w-6 h-0.5 bg-white transform transition-all duration-300 ${
-                isMenuOpen ? '-rotate-45 -translate-y-2' : ''
-              }`} />
-            </motion.button>
-          </div>
+      {/* Hero Section - Simple Clean Layout with Unique Prismatic Indigo & Violet Color Theme */}
+      <section className="relative min-h-[40vh] sm:min-h-[50vh] flex items-center justify-center overflow-hidden pt-20 pb-16 bg-[#0B0F14] text-white">
+        {/* Unique Ambient Color Glows for Contact Page */}
+        <div className="absolute inset-0 pointer-events-none">
+          <motion.div
+            animate={{ scale: [1, 1.25, 1], opacity: [0.15, 0.35, 0.15] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-[140px]"
+          />
+          <motion.div
+            animate={{ scale: [1.2, 1, 1.2], opacity: [0.1, 0.3, 0.1] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-violet-500/20 rounded-full blur-[140px]"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#6366f115_1px,transparent_1px),linear-gradient(to_bottom,#6366f115_1px,transparent_1px)] bg-[size:4rem_4rem]" />
         </div>
 
-        {/* Mobile Menu Overlay - Added Packages link */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <>
-              {/* Backdrop */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="fixed inset-0 bg-black/60 backdrop-blur-sm md:hidden"
-                onClick={() => setIsMenuOpen(false)}
-              />
-              
-              {/* Menu Content */}
-              <motion.div
-                ref={mobileMenuRef}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="absolute top-16 left-0 right-0 mx-4 mt-2 md:hidden bg-gradient-to-b from-gray-900 to-black border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
-              >
-                <div className="p-6 space-y-4">
-                  {[
-                    { name: 'Home', to: '/' },
-                    { name: 'About', to: '/about' },
-                    { name: 'Services', to: '/services' },
-                    { name: 'Packages', to: '/packages' },
-                    { name: 'Products', to: '/products' },
-                    { name: 'Contact', to: '/contact' }
-                  ].map((item, index) => (
-                    <motion.div
-                      key={item.name}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                    >
-                      <Link
-                        to={item.to}
-                        className="block py-3 px-4 text-base text-white/90 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-all duration-300"
-                        onClick={handleLinkClick}
-                      >
-                        {item.name}
-                      </Link>
-                    </motion.div>
-                  ))}
-                  
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="pt-2"
-                  >
-                    <Link to="/book-demo" onClick={handleLinkClick}>
-                      <button className="w-full py-4 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300">
-                        Book Demo
-                      </button>
-                    </Link>
-                  </motion.div>
-                </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-      </motion.nav>
-
-      {/* Main Content */}
-      <main className="relative pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-20 min-h-screen flex items-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full">
-          
-          {/* Header Section */}
+        <motion.div
+          style={{ scale: heroScale, opacity: heroOpacity }}
+          className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 text-center"
+        >
           <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={fadeInUp}
-            className="text-center mb-12 sm:mb-16"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-indigo-500/10 backdrop-blur-md border border-indigo-500/30 mb-6 shadow-lg shadow-indigo-500/10"
           >
-            <motion.div
-              variants={fadeInUp}
-              className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 mb-4 sm:mb-6"
-            >
-              <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-purple-400" />
-              <span className="text-xs sm:text-sm font-medium">Get in Touch</span>
-            </motion.div>
-
-            <motion.h1 
-              variants={fadeInUp}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 sm:mb-4 px-2"
-            >
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
-                Contact Us
-              </span>
-            </motion.h1>
-
-            <motion.p 
-              variants={fadeInUp}
-              className="text-base sm:text-lg md:text-xl text-white/60 max-w-2xl mx-auto px-4"
-            >
-              Let's build something amazing together.
-            </motion.p>
+            <Sparkles className="w-4 h-4 text-indigo-400 animate-pulse" />
+            <span className="text-xs sm:text-sm font-mono tracking-wider uppercase text-indigo-300 font-bold">Get in Touch</span>
           </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight font-space mb-6 hover:opacity-90 transition-opacity duration-300 select-none"
+          >
+            <span className="text-white font-space">Contact</span>
+            <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-500 bg-clip-text text-transparent block sm:inline sm:ml-4 font-space">Us</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="text-lg sm:text-xl md:text-2xl font-jakarta text-[#9DB4C6] max-w-3xl mx-auto px-4 leading-relaxed"
+          >
+            Let's build something amazing together. Reach out for consultations, proposals, and enterprise partnerships.
+          </motion.p>
+        </motion.div>
+      </section>
+
+      {/* Contact Content */}
+      <main className="relative py-16 sm:py-20 md:py-24 lg:py-32 px-4 sm:px-6 bg-[#F5F8FA]">
+        <div className="max-w-7xl mx-auto">
 
           {/* Split Screen Contact Section */}
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-20 items-start">
-            
+
             {/* Left Side - Contact Information */}
             <motion.div
               variants={staggerContainer}
               initial="hidden"
-              animate="visible"
+              whileInView="visible"
+              viewport={{ once: true }}
               className="space-y-6 sm:space-y-8 lg:space-y-10"
             >
               {/* Intro Text */}
-              <motion.p 
+              <motion.p
                 variants={fadeInLeft}
-                className="text-sm sm:text-base lg:text-lg text-white/70 leading-relaxed px-2 sm:px-0"
+                className="text-sm sm:text-base lg:text-lg text-[#0B0F14]/70 leading-relaxed px-2 sm:px-0"
               >
-                Have a project in mind? We'd love to hear about it. 
+                Have a project in mind? We'd love to hear about it.
                 Drop us a message and we'll get back to you within 24 hours.
               </motion.p>
 
@@ -412,14 +282,14 @@ const Contact = () => {
                       rel="noopener noreferrer"
                       variants={fadeInLeft}
                       whileHover={{ x: 5, scale: 1.02 }}
-                      className="group flex items-center gap-3 sm:gap-4 lg:gap-5 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-purple-500/30 transition-all"
+                      className="group flex items-center gap-3 sm:gap-4 lg:gap-5 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white border border-[#9DB4C6]/20 shadow-sm hover:shadow-md transition-all"
                     >
                       <div className={`w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-lg sm:rounded-xl bg-gradient-to-br ${item.color} p-2 sm:p-2.5 lg:p-3 group-hover:scale-110 transition-transform flex-shrink-0`}>
                         <Icon className="w-full h-full text-white" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <div className="text-xs sm:text-sm text-white/40 mb-0.5 sm:mb-1">{item.title}</div>
-                        <div className="text-sm sm:text-base lg:text-lg font-medium text-white group-hover:text-purple-400 transition-colors break-words">
+                        <div className="text-xs sm:text-sm text-[#0B0F14]/40 mb-0.5 sm:mb-1">{item.title}</div>
+                        <div className="text-sm sm:text-base lg:text-lg font-medium text-[#0B0F14] group-hover:text-[#1E2A39] transition-colors break-words">
                           {item.value}
                         </div>
                       </div>
@@ -430,7 +300,7 @@ const Contact = () => {
 
               {/* Social Media Links */}
               <motion.div variants={fadeInLeft} className="pt-2 sm:pt-4">
-                <h3 className="text-xs sm:text-sm font-medium text-white/40 mb-3 sm:mb-4 tracking-wider px-2 sm:px-0">FOLLOW US</h3>
+                <h3 className="text-xs sm:text-sm font-medium text-[#0B0F14]/40 mb-3 sm:mb-4 tracking-wider px-2 sm:px-0">FOLLOW US</h3>
                 <div className="flex gap-3 sm:gap-4 px-2 sm:px-0">
                   {socialLinks.map((social, index) => {
                     const Icon = social.icon;
@@ -441,10 +311,10 @@ const Contact = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         whileHover={{ y: -5, scale: 1.1 }}
-                        className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:border-purple-500/50 transition-all ${social.color}`}
+                        className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border border-[#9DB4C6]/20 flex items-center justify-center hover:border-[#1E2A39] transition-all text-[#0B0F14] hover:text-white ${social.color}`}
                         aria-label={social.label}
                       >
-                        <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                        <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                       </motion.a>
                     );
                   })}
@@ -453,20 +323,20 @@ const Contact = () => {
 
               {/* Office Hours */}
               <motion.div variants={fadeInLeft} className="pt-2 sm:pt-4">
-                <div className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
-                  <h3 className="text-xs sm:text-sm font-medium text-white/40 mb-2 sm:mb-3 tracking-wider">OFFICE HOURS</h3>
-                  <div className="space-y-1.5 sm:space-y-2 text-white/80 text-xs sm:text-sm lg:text-base">
+                <div className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-white border border-[#9DB4C6]/20 shadow-sm">
+                  <h3 className="text-xs sm:text-sm font-medium text-[#0B0F14]/40 mb-2 sm:mb-3 tracking-wider">OFFICE HOURS</h3>
+                  <div className="space-y-1.5 sm:space-y-2 text-[#0B0F14]/80 text-xs sm:text-sm lg:text-base">
                     <div className="flex justify-between">
                       <span>Monday - Friday</span>
-                      <span className="text-purple-400">9:00 - 18:00</span>
+                      <span className="text-[#1E2A39] font-medium">9:00 - 18:00</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Saturday</span>
-                      <span className="text-purple-400">10:00 - 14:00</span>
+                      <span className="text-[#1E2A39] font-medium">10:00 - 14:00</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Sunday</span>
-                      <span className="text-purple-400">Closed</span>
+                      <span className="text-[#1E2A39] font-medium">Closed</span>
                     </div>
                   </div>
                 </div>
@@ -477,26 +347,27 @@ const Contact = () => {
             <motion.div
               variants={fadeInRight}
               initial="hidden"
-              animate="visible"
+              whileInView="visible"
+              viewport={{ once: true }}
               className="relative mt-6 lg:mt-0"
             >
               {/* Form Container */}
               <div className="relative">
                 {/* Background Glow */}
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl sm:rounded-3xl blur-3xl" />
-                
+                <div className="absolute inset-0 bg-gradient-to-r from-[#1E2A39]/10 to-[#3A4A5F]/10 rounded-2xl sm:rounded-3xl blur-3xl" />
+
                 {/* Form */}
-                <form 
+                <form
                   onSubmit={handleSubmit}
-                  className="relative p-5 sm:p-6 lg:p-8 rounded-2xl sm:rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10"
+                  className="relative p-5 sm:p-6 lg:p-8 rounded-2xl sm:rounded-3xl bg-white border border-[#9DB4C6]/20 shadow-sm"
                 >
-                  <h2 className="text-xl sm:text-2xl font-bold mb-5 sm:mb-6 lg:mb-8 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  <h2 className="text-xl sm:text-2xl font-bold mb-5 sm:mb-6 lg:mb-8 text-[#1E2A39] font-space hover:opacity-90 transition-opacity duration-300 select-none">
                     Send a Message
                   </h2>
 
                   {/* Name Input */}
                   <div className="mb-4 sm:mb-5 lg:mb-6">
-                    <label htmlFor="name" className="block text-xs sm:text-sm font-medium text-white/60 mb-1.5 sm:mb-2">
+                    <label htmlFor="name" className="block text-xs sm:text-sm font-medium text-[#0B0F14]/60 mb-1.5 sm:mb-2">
                       Your Name
                     </label>
                     <input
@@ -506,14 +377,14 @@ const Contact = () => {
                       value={formData.name}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl focus:border-purple-500/50 focus:outline-none focus:ring-1 focus:ring-purple-500/50 transition-all text-white placeholder-white/30 text-sm sm:text-base"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-[#F5F8FA] border border-[#9DB4C6]/30 rounded-lg sm:rounded-xl focus:border-[#1E2A39] focus:outline-none focus:ring-1 focus:ring-[#1E2A39] transition-all text-[#0B0F14] placeholder-[#0B0F14]/30 text-sm sm:text-base"
                       placeholder="John Doe"
                     />
                   </div>
 
                   {/* Email Input */}
                   <div className="mb-4 sm:mb-5 lg:mb-6">
-                    <label htmlFor="email" className="block text-xs sm:text-sm font-medium text-white/60 mb-1.5 sm:mb-2">
+                    <label htmlFor="email" className="block text-xs sm:text-sm font-medium text-[#0B0F14]/60 mb-1.5 sm:mb-2">
                       Email Address
                     </label>
                     <input
@@ -523,14 +394,14 @@ const Contact = () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl focus:border-purple-500/50 focus:outline-none focus:ring-1 focus:ring-purple-500/50 transition-all text-white placeholder-white/30 text-sm sm:text-base"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-[#F5F8FA] border border-[#9DB4C6]/30 rounded-lg sm:rounded-xl focus:border-[#1E2A39] focus:outline-none focus:ring-1 focus:ring-[#1E2A39] transition-all text-[#0B0F14] placeholder-[#0B0F14]/30 text-sm sm:text-base"
                       placeholder="hello@veronic.com"
                     />
                   </div>
 
                   {/* Message Textarea */}
                   <div className="mb-5 sm:mb-6 lg:mb-8">
-                    <label htmlFor="message" className="block text-xs sm:text-sm font-medium text-white/60 mb-1.5 sm:mb-2">
+                    <label htmlFor="message" className="block text-xs sm:text-sm font-medium text-[#0B0F14]/60 mb-1.5 sm:mb-2">
                       Your Message
                     </label>
                     <textarea
@@ -540,7 +411,7 @@ const Contact = () => {
                       onChange={handleInputChange}
                       required
                       rows="5"
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl focus:border-purple-500/50 focus:outline-none focus:ring-1 focus:ring-purple-500/50 transition-all text-white placeholder-white/30 text-sm sm:text-base resize-none"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-[#F5F8FA] border border-[#9DB4C6]/30 rounded-lg sm:rounded-xl focus:border-[#1E2A39] focus:outline-none focus:ring-1 focus:ring-[#1E2A39] transition-all text-[#0B0F14] placeholder-[#0B0F14]/30 text-sm sm:text-base resize-none"
                       placeholder="Tell us about your project..."
                     />
                   </div>
@@ -551,17 +422,16 @@ const Contact = () => {
                     disabled={formStatus === 'submitting' || formStatus === 'success'}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`w-full py-3 sm:py-4 rounded-lg sm:rounded-xl font-semibold flex items-center justify-center gap-2 transition-all text-sm sm:text-base ${
-                      formStatus === 'success'
+                    className={`w-full py-3 sm:py-4 rounded-lg sm:rounded-xl font-semibold flex items-center justify-center gap-2 transition-all text-sm sm:text-base ${formStatus === 'success'
                         ? 'bg-green-500 text-white'
                         : formStatus === 'submitting'
-                        ? 'bg-purple-500/50 text-white cursor-not-allowed'
-                        : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:shadow-lg hover:shadow-purple-500/25'
-                    }`}
+                          ? 'bg-[#1E2A39]/50 text-white cursor-not-allowed'
+                          : 'bg-[#1E2A39] text-[#F5F8FA] hover:shadow-lg hover:shadow-[#1E2A39]/25'
+                      }`}
                   >
                     {formStatus === 'submitting' ? (
                       <>
-                        <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-[#F5F8FA]/30 border-t-[#F5F8FA] rounded-full animate-spin" />
                         <span>Sending...</span>
                       </>
                     ) : formStatus === 'success' ? (
@@ -578,7 +448,7 @@ const Contact = () => {
                   </motion.button>
 
                   {/* Form Note */}
-                  <p className="text-xs text-white/30 text-center mt-4 sm:mt-5 lg:mt-6">
+                  <p className="text-xs text-[#0B0F14]/30 text-center mt-4 sm:mt-5 lg:mt-6">
                     We'll never share your information with anyone else.
                   </p>
                 </form>
@@ -588,17 +458,19 @@ const Contact = () => {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="relative py-12 sm:py-16 border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      {/* Footer - Black Background */}
+      <Footer />
+      <div style={{ display: 'none' }}><footer className="relative py-12 sm:py-16 px-4 sm:px-6 bg-black">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0B0F14] to-black" />
+        <div className="relative z-10 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-8 sm:mb-12">
             {/* Company Info */}
             <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
-                  <img src={lolo1} alt="logo" className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg" />
+                <div className="flex items-center justify-center">
+                  <img src={lolo1} alt="logo" className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-lg object-contain" />
                 </div>
-                <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                <span className="text-lg sm:text-xl font-bold text-white">
                   veronic
                 </span>
               </div>
@@ -622,7 +494,7 @@ const Contact = () => {
                       className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors group"
                       aria-label={social.label}
                     >
-                      <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white/60 group-hover:text-purple-400 transition-colors" />
+                      <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white/60 group-hover:text-white transition-colors" />
                     </a>
                   );
                 })}
@@ -631,7 +503,7 @@ const Contact = () => {
 
             {/* Solutions */}
             <div>
-              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4">Solutions</h4>
+              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4 text-white">Solutions</h4>
               <ul className="space-y-2 sm:space-y-2.5">
                 {['Cloud Services', 'Cybersecurity', 'AI & Automation', 'Data Analytics'].map((item) => (
                   <li key={item}>
@@ -643,9 +515,9 @@ const Contact = () => {
               </ul>
             </div>
 
-            {/* Company - Added Packages link */}
+            {/* Company */}
             <div>
-              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4">Company</h4>
+              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4 text-white">Company</h4>
               <ul className="space-y-2 sm:space-y-2.5">
                 <li>
                   <Link to="/" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors">Home</Link>
@@ -670,29 +542,29 @@ const Contact = () => {
 
             {/* Contact */}
             <div>
-              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4">Contact</h4>
+              <h4 className="text-sm sm:text-base lg:text-lg font-bold mb-3 sm:mb-4 text-white">Contact</h4>
               <ul className="space-y-3 sm:space-y-4">
                 <li className="flex items-start gap-2 sm:gap-3">
                   <div className="flex-shrink-0 mt-1">
-                    <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
+                    <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-white/60" />
                   </div>
-                  <Link to="/contact" className="text-xs sm:text-sm text-white/60 hover:text-purple-400 transition-colors break-all">
+                  <Link to="/contact" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors break-all">
                     veronic.infotech@gmail.com
                   </Link>
                 </li>
                 <li className="flex items-start gap-2 sm:gap-3">
                   <div className="flex-shrink-0 mt-1">
-                    <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
+                    <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-white/60" />
                   </div>
-                  <Link to="/contact" className="text-xs sm:text-sm text-white/60 hover:text-purple-400 transition-colors">
+                  <Link to="/contact" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors">
                     +91 95106 53051
                   </Link>
                 </li>
                 <li className="flex items-start gap-2 sm:gap-3">
                   <div className="flex-shrink-0 mt-1">
-                    <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
+                    <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-white/60" />
                   </div>
-                  <Link to="/contact" className="text-xs sm:text-sm text-white/60 hover:text-purple-400 transition-colors leading-relaxed">
+                  <Link to="/contact" className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors leading-relaxed">
                     Rao InfoTech, University Road, Behind Shilpan Onyx, Rajkot, Gujarat 360005
                   </Link>
                 </li>
@@ -707,7 +579,7 @@ const Contact = () => {
             </p>
           </div>
         </div>
-      </footer>
+      </footer></div>
     </div>
   );
 };

@@ -2,16 +2,115 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: "Black Ops One", system-ui;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: "Black Ops One", system-ui;
+}
+
+/* Enforce perfect font rendering across all common text elements */
+body, h1, h2, h3, h4, h5, h6, p, span, div, a, li, button {
+  font-family: "Black Ops One", system-ui !important;
+  font-weight: 400 !important;
+}
+
+.black-ops-one-regular {
+  font-family: "Black Ops One", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@keyframes gradient-border {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.card-gradient {
+  border-radius: 16px;
+  background: linear-gradient(130deg, #ff7a18, #ff3d77, #7a5cff, #00c2ff, #ff7a18, #ff3d77);
+  background-size: 300% 300%;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+  animation: gradient-border 4s ease infinite;
+}
+
+@keyframes pastel-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.glass-popular-animated {
+  background: linear-gradient(
+    130deg, 
+    #ffd2a6, 
+    #ffbaba, 
+    #ffe79a, 
+    #ffd2a6
+  );
+  background-size: 300% 300%;
+  animation: pastel-shift 4s linear infinite;
+}
+
+.glass-professional-animated {
+  background: linear-gradient(
+    130deg, 
+    #a6d2ff, 
+    #cfa6ff, 
+    #9affdb, 
+    #a6d2ff
+  );
+  background-size: 300% 300%;
+  animation: pastel-shift 4s linear infinite;
+}
+
+/* Make Swiper continuously scroll linearly like a marquee */
+.instagram-swiper .swiper-wrapper {
+  transition-timing-function: linear !important;
+}
+
+
+
+/* =========================================================
+   DISABLE HOVER EFFECTS GLOBALLY (Per User Request)
+   ========================================================= */
+@media (hover: hover) {
+  /* Disable translation and scaling on hover for all Tailwind classes */
+  [class*="hover:-translate-"],
+  [class*="hover:translate-"],
+  [class*="hover:scale"],
+  [class*="hover:rotate"],
+  [class*="group-hover:scale"],
+  [class*="group-hover:-translate-"],
+  [class*="group-hover:translate-"],
+  [class*="group-hover:rotate"],
+  [class*="group-hover:opacity"] {
+    transform: none !important;
+  }
+
+  /* Disable hover shadows */
+  [class*="hover:shadow"],
+  [class*="group-hover:shadow"] {
+    box-shadow: none !important;
+  }
+}
+
+/* =========================================================
+   DISABLE ALL FADE EFFECTS GLOBALLY (Per User Request)
+   ========================================================= */
+[style*="opacity: 0;"],
+[style*="opacity: 0 "],
+[style$="opacity: 0"] {
+  opacity: 1 !important;
+  transform: none !important;
 }
