@@ -43,7 +43,7 @@ import lolo1 from "../images/lolo1.png";
 import app from "../images/application_development.png";
 import dm from "../images/social_media.png";
 import custom from "../images/Custom_Software.png";
-import SEO from "../images/SEO.png";
+import SEO from "../images/seo.png";
 import webDev from "../images/Website_Development.png";
 import mobileApp from "../images/application_development.png";
 
