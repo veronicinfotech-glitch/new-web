@@ -118,19 +118,6 @@ import heroBgImage from "../images/s1.png";
 import handshakeVideo from "../video/v4.mp4";
 import whyImage from "../images/whyveronicus.png";
 
-// ========================================
-// INSTAGRAM API CONFIGURATION
-// ========================================
-
-// Option 1: Instagram Graph API (Recommended for production)
-// You need to set up a Facebook App and get an access token
-const INSTAGRAM_API_URL = `https://graph.facebook.com/v18.0/me/media?fields=id,caption,media_url,permalink,timestamp,like_count,comments_count,media_type,username,thumbnail_url&limit=20`;
-
-// Option 2: Instagram Basic Display API
-// const INSTAGRAM_API_URL = `https://graph.instagram.com/me/media?fields=id,caption,media_url,permalink,timestamp,like_count,comments_count,username&limit=20`;
-
-// Option 3: Using a proxy service (for development)
-// const INSTAGRAM_API_URL = '/api/instagram/posts';
 
 // ========================================
 // API HELPER FUNCTIONS
@@ -156,173 +143,6 @@ const getTimeAgo = (dateString) => {
   }
 };
 
-// Live Instagram Post URLs using react-social-media-embed
-
-const LIVE_INSTAGRAM_POSTS = [
-  {
-    id: "DaxcnQKCyGf",
-    image: "/instagram/DaxcnQKCyGf.jpg",
-    url: "https://www.instagram.com/p/DaxcnQKCyGf/",
-    caption: "Great marketing doesn't end with a click. It begins with the entire customer journey.",
-    likes: 9,
-    comments: 2,
-    username: "veronic_infotech"
-  },
-  {
-    id: "Daxch3TCVrw",
-    image: "/instagram/Daxch3TCVrw.jpg",
-    url: "https://www.instagram.com/p/Daxch3TCVrw/",
-    caption: "Great content starts with great questions. Before we design, write, or build—we understand your business.",
-    likes: 6,
-    comments: 0,
-    username: "veronic_infotech"
-  },
-  {
-    id: "DaxcZU8Cb1r",
-    image: "/instagram/DaxcZU8Cb1r.jpg",
-    url: "https://www.instagram.com/p/DaxcZU8Cb1r/",
-    caption: "Ready to grow? We're ready to build. Every successful business starts with a vision.",
-    likes: 11,
-    comments: 0,
-    username: "veronic_infotech"
-  },
-  {
-    id: "DacfAbPSpn7",
-    image: "/instagram/DacfAbPSpn7.jpg",
-    url: "https://www.instagram.com/p/DacfAbPSpn7/",
-    caption: "Your business shouldn't run on paperwork. It should run on automation.",
-    likes: 10,
-    comments: 0,
-    username: "veronic_infotech"
-  },
-  {
-    id: "Dace4gPysXR",
-    image: "/instagram/Dace4gPysXR.jpg",
-    url: "https://www.instagram.com/p/Dace4gPysXR/",
-    caption: "Stop playing small. Your strategy deserves an upgrade.",
-    likes: 9,
-    comments: 0,
-    username: "veronic_infotech"
-  },
-  {
-    id: "Dacew9tya6n",
-    image: "/instagram/Dacew9tya6n.jpg",
-    url: "https://www.instagram.com/p/Dacew9tya6n/",
-    caption: "Automation isn't about doing more. It's about doing less manually.",
-    likes: 11,
-    comments: 0,
-    username: "veronic_infotech"
-  },
-  {
-    id: "DaXxPzqys4D",
-    image: "/instagram/DaXxPzqys4D.jpg",
-    url: "https://www.instagram.com/p/DaXxPzqys4D/",
-    caption: "We don't build software. We build business systems.",
-    likes: 9,
-    comments: 0,
-    username: "veronic_infotech"
-  },
-  {
-    id: "DaXxJZayN2x",
-    image: "/instagram/DaXxJZayN2x.jpg",
-    url: "https://www.instagram.com/p/DaXxJZayN2x/",
-    caption: "We don't just take projects. We take responsibility.",
-    likes: 10,
-    comments: 0,
-    username: "veronic_infotech"
-  },
-  {
-    id: "DaXxCQzy338",
-    image: "/instagram/DaXxCQzy338.jpg",
-    url: "https://www.instagram.com/p/DaXxCQzy338/",
-    caption: "Your vision deserves more than software. It deserves a complete business system.",
-    likes: 10,
-    comments: 0,
-    username: "veronic_infotech"
-  },
-  {
-    id: "DaU4HdjyyiZ",
-    image: "/instagram/DaU4HdjyyiZ.jpg",
-    url: "https://www.instagram.com/p/DaU4HdjyyiZ/",
-    caption: "We don't just build websites. We build businesses online.",
-    likes: 9,
-    comments: 0,
-    username: "veronic_infotech"
-  },
-  {
-    id: "DaU3_5eSp8z",
-    image: "/instagram/DaU3_5eSp8z.jpg",
-    url: "https://www.instagram.com/p/DaU3_5eSp8z/",
-    caption: "Your business works hard. Your website should too.",
-    likes: 10,
-    comments: 0,
-    username: "veronic_infotech"
-  },
-  {
-    id: "DaU33nayT26",
-    image: "/instagram/DaU33nayT26.jpg",
-    url: "https://www.instagram.com/p/DaU33nayT26/",
-    caption: "You have less than 5 seconds. Make them count.",
-    likes: 8,
-    comments: 0,
-    username: "veronic_infotech"
-  },
-  // Duplicated for seamless infinite carousel loop
-  {
-    id: "DaxcnQKCyGf_2",
-    image: "/instagram/DaxcnQKCyGf.jpg",
-    url: "https://www.instagram.com/p/DaxcnQKCyGf/",
-    caption: "Great marketing doesn't end with a click. It begins with the entire customer journey.",
-    likes: 9,
-    comments: 2,
-    username: "veronic_infotech"
-  },
-  {
-    id: "Daxch3TCVrw_2",
-    image: "/instagram/Daxch3TCVrw.jpg",
-    url: "https://www.instagram.com/p/Daxch3TCVrw/",
-    caption: "Great content starts with great questions. Before we design, write, or build—we understand your business.",
-    likes: 6,
-    comments: 0,
-    username: "veronic_infotech"
-  },
-  {
-    id: "DaxcZU8Cb1r_2",
-    image: "/instagram/DaxcZU8Cb1r.jpg",
-    url: "https://www.instagram.com/p/DaxcZU8Cb1r/",
-    caption: "Ready to grow? We're ready to build. Every successful business starts with a vision.",
-    likes: 11,
-    comments: 0,
-    username: "veronic_infotech"
-  },
-  {
-    id: "DacfAbPSpn7_2",
-    image: "/instagram/DacfAbPSpn7.jpg",
-    url: "https://www.instagram.com/p/DacfAbPSpn7/",
-    caption: "Your business shouldn't run on paperwork. It should run on automation.",
-    likes: 10,
-    comments: 0,
-    username: "veronic_infotech"
-  },
-  {
-    id: "Dace4gPysXR_2",
-    image: "/instagram/Dace4gPysXR.jpg",
-    url: "https://www.instagram.com/p/Dace4gPysXR/",
-    caption: "Stop playing small. Your strategy deserves an upgrade.",
-    likes: 9,
-    comments: 0,
-    username: "veronic_infotech"
-  },
-  {
-    id: "Dacew9tya6n_2",
-    image: "/instagram/Dacew9tya6n.jpg",
-    url: "https://www.instagram.com/p/Dacew9tya6n/",
-    caption: "Automation isn't about doing more. It's about doing less manually.",
-    likes: 11,
-    comments: 0,
-    username: "veronic_infotech"
-  }
-];
 
 // ========================================
 // CONFIGURATION DATA
@@ -749,7 +569,8 @@ function Home() {
   // ========================================
   // INSTAGRAM API STATE
   // ========================================
-  const [instagramPosts, setInstagramPosts] = useState(LIVE_INSTAGRAM_POSTS);
+  // Posts start empty — populated by instagramService.js calling the backend
+  const [instagramPosts, setInstagramPosts] = useState([]);
   const [instagramProfile, setInstagramProfile] = useState({
     username: 'veronic_infotech',
     name: 'Veronic',
@@ -767,7 +588,8 @@ function Home() {
       setInstagramError(null);
 
       const response = await getInstagramFeed();
-      const media = response.media && response.media.length > 0 ? response.media : LIVE_INSTAGRAM_POSTS;
+      // Use live API data; if empty the UI shows the graceful fallback state
+      const media = response.media && response.media.length > 0 ? response.media : [];
 
       setInstagramProfile(response.profile || {});
       setInstagramPosts(media);

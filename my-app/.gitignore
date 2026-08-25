@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Instagram API server secrets — NEVER commit this file
+.env.server

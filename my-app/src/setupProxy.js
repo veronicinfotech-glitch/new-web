@@ -1,32 +1,35 @@
-const https = require('https');
+/**
+ * setupProxy.js
+ * CRA development proxy configuration.
+ *
+ * Forwards /api/instagram requests to the local Express backend
+ * running on port 3001 (server/index.js).
+ *
+ * This file is ONLY used during `npm start` (development).
+ * In production, configure your web server (Nginx, Apache, etc.)
+ * to proxy /api/* to your backend service.
+ */
 
-module.exports = function(app) {
-  app.get('/api/instagram/live', (req, res) => {
-    const options = {
-      hostname: 'www.instagram.com',
-      path: '/api/v1/users/web_profile_info/?username=veronic_infotech',
-      headers: {
-        'x-ig-app-id': '936619743392459',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
-        'Accept': '*/*'
-      }
-    };
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
-    https.get(options, (igRes) => {
-      let data = '';
-      igRes.on('data', chunk => {
-        data += chunk;
-      });
-      igRes.on('end', () => {
-        try {
-          // Parse and forward the JSON data directly to the frontend
-          res.status(igRes.statusCode).json(JSON.parse(data));
-        } catch(e) {
-          res.status(500).json({ error: "Failed to parse Instagram data" });
-        }
-      });
-    }).on('error', (e) => {
-      res.status(500).json({ error: e.message });
-    });
-  });
+module.exports = function (app) {
+  // Proxy all /api/* requests → Express backend (port 3001)
+  app.use(
+    '/api',
+    createProxyMiddleware({
+      target: 'http://localhost:3001',
+      changeOrigin: true,
+      logLevel: 'silent',
+      onError: (err, req, res) => {
+        console.warn(
+          '[Proxy] Backend not reachable. Start the server with: npm run server\n',
+          err.message
+        );
+        res.status(503).json({
+          success: false,
+          error: 'Backend server is not running. Start it with: npm run server',
+        });
+      },
+    })
+  );
 };

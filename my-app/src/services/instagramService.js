@@ -1,111 +1,125 @@
+/**
+ * instagramService.js
+ * Frontend service layer for Instagram data.
+ *
+ * Architecture:
+ *   Home.js → instagramService.js → /api/instagram → server/index.js → Meta Graph API
+ *
+ * This file NEVER contains the Meta access token.
+ * All Meta API calls happen server-side (server/index.js).
+ */
+
 const INSTAGRAM_ENDPOINT = '/api/instagram';
 
-const profileFallback = {
+/**
+ * Minimum number of slides for the Swiper loop to work smoothly.
+ * If the API returns fewer posts, we duplicate them client-side
+ * to ensure a seamless carousel. The backend data itself is never polluted.
+ */
+const MIN_SLIDES_FOR_LOOP = 12;
+
+/**
+ * Static fallback profile shown when the API is unavailable.
+ * Does NOT contain fake follower/post counts — those fields are
+ * intentionally omitted so the UI shows nothing rather than fake numbers.
+ */
+const PROFILE_FALLBACK = {
   username: 'veronic_infotech',
-  profilePicture: '', // Leave empty so UI uses local logo asset instead of unsplash
+  name: 'Veronic Infotech',
+  profilePicture: '',
   biography: 'Business-Driven IT & Business Software Solutions 🚀',
-  name: 'Veronic'
 };
 
+/**
+ * Fetch Instagram profile and posts from the secure backend API.
+ *
+ * Returns:
+ * {
+ *   profile: { username, name, profilePicture, biography, followers, following, posts },
+ *   media:   [ { id, image, url, caption, likes, comments, username, date, media_type } ],
+ *   lastUpdated: ISO string,
+ *   fromCache: boolean,
+ * }
+ *
+ * Throws if the backend is unreachable or returns a non-OK status.
+ */
 export async function getInstagramFeed() {
+  let raw;
+
   try {
-    // Attempting a live fetch via RSS2JSON proxy for free public scraping without an API key
-    // We use a known free proxy or fallback to our simulated data if it fails due to CORS/Rate limits
-    const rss2jsonUrl = 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Frsshub.app%2Finstagram%2Fuser%2Fveronic_infotech';
-    
-    let media = [];
-    let fromCache = false;
-    
-    try {
-      const liveResponse = await fetch('/api/instagram/live');
-      if (liveResponse.ok) {
-        const igData = await liveResponse.json();
-        const user = igData?.data?.user;
-        
-        if (user && user.edge_owner_to_timeline_media?.edges) {
-          // Capture the REAL profile data dynamically!
-          profileFallback.profilePicture = user.profile_pic_url_hd || user.profile_pic_url;
-          profileFallback.followers = user.edge_followed_by?.count || 52;
-          profileFallback.following = user.edge_follow?.count || 10;
-          profileFallback.posts = user.edge_owner_to_timeline_media?.count || 24;
-          profileFallback.name = user.full_name || 'Veronic';
+    const response = await fetch(INSTAGRAM_ENDPOINT, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+      // Rely on backend cache — always ask for fresh data from the backend's perspective
+      // The backend itself caches for 15 minutes, so this is not wasteful.
+      cache: 'no-store',
+    });
 
-          media = user.edge_owner_to_timeline_media.edges.map((edge, index) => {
-            const node = edge.node;
-            return {
-              id: node.id || index,
-              image: node.display_url,
-              caption: node.edge_media_to_caption?.edges[0]?.node?.text || '',
-              likes: node.edge_media_preview_like?.count || 0, // Real Likes!
-              comments: node.edge_media_to_comment?.count || 0, // Real Comments!
-              username: 'veronic_infotech',
-              mediaType: node.is_video ? 'VIDEO' : 'IMAGE',
-              permalink: `https://www.instagram.com/p/${node.shortcode}/`
-            };
-          });
-        }
-      }
-    } catch (e) {
-      console.warn("Live API proxy failed. Using smart fallback.", e);
+    if (!response.ok) {
+      const errorBody = await response.json().catch(() => ({}));
+      throw new Error(
+        errorBody.error ||
+        `Instagram API responded with ${response.status}`
+      );
     }
 
-    // Fallback to local data if live API fails
-    if (media.length === 0) {
-      fromCache = true;
-      const dataResponse = await fetch('/instagram/data.json', { cache: 'no-store' });
-      if (dataResponse.ok) {
-        const rawMedia = await dataResponse.json();
-        media = rawMedia.map((post, index) => ({
-          id: post.id || index,
-          image: post.image || '',
-          caption: post.caption || '',
-          likes: post.likes || 0,
-          comments: post.comments || 0,
-          username: post.username || 'veronic_infotech',
-          mediaType: post.media_type || 'IMAGE',
-          permalink: post.url || `https://www.instagram.com/p/${post.id}/`
-        }));
-      }
-    }
-
-    // If we have fewer than 15 posts, duplicate them so the continuous marquee doesn't have white gaps.
-    // Otherwise, show ALL live posts perfectly to auto increment!
-    if (media.length > 0 && media.length < 15) {
-      let newMedia = [...media];
-      let iteration = 1;
-      while (newMedia.length < 15) {
-        newMedia = newMedia.concat(media.map(m => ({...m, id: m.id + '_' + iteration})));
-        iteration++;
-      }
-      media = newMedia;
-    }
-
-    // Attempt to fetch profile info if available
-    let rawProfile = {};
-    try {
-      const profileResponse = await fetch('/instagram/profile.json', { cache: 'no-store' });
-      if (profileResponse.ok) {
-        rawProfile = await profileResponse.json();
-      }
-    } catch (e) {}
-
-    const normalizedProfile = {
-      username: 'veronic_infotech',
-      name: rawProfile.full_name || profileFallback.name,
-      profilePicture: rawProfile.profile_pic || profileFallback.profilePicture,
-      biography: profileFallback.biography,
-      posts: rawProfile.posts || profileFallback.posts || 24,
-      followers: rawProfile.followers || profileFallback.followers || 52,
-      following: rawProfile.following || profileFallback.following || 10
-    };
-
-    return {
-      profile: normalizedProfile,
-      media,
-      lastUpdated: new Date().toISOString(),
-      fromCache: fromCache
-    };
-  } catch (error) {
-    throw new Error('Failed to fetch Instagram data');
+    raw = await response.json();
+  } catch (err) {
+    throw new Error(`Failed to reach Instagram backend: ${err.message}`);
   }
+
+  if (!raw.success || !raw.data) {
+    throw new Error(raw.error || 'Instagram backend returned an unexpected response.');
+  }
+
+  const { profile: rawProfile, posts: rawPosts } = raw.data;
+
+  // ── Normalize profile ────────────────────────────────────────────────────────
+  const profile = {
+    username: rawProfile?.username || PROFILE_FALLBACK.username,
+    name: rawProfile?.name || PROFILE_FALLBACK.name,
+    profilePicture: rawProfile?.profilePicture || PROFILE_FALLBACK.profilePicture,
+    biography: rawProfile?.biography || PROFILE_FALLBACK.biography,
+    followers: rawProfile?.followers,
+    following: rawProfile?.following,
+    posts: rawProfile?.posts,
+  };
+
+  // ── Normalize posts ──────────────────────────────────────────────────────────
+  // Backend already returns the correct shape, but we validate here defensively.
+  let media = (rawPosts || []).map((post, index) => ({
+    id: post.id || String(index),
+    image: post.image || '',
+    url: post.url || `https://www.instagram.com/${profile.username}/`,
+    caption: post.caption || '',
+    likes: typeof post.likes === 'number' ? post.likes : undefined,
+    comments: typeof post.comments === 'number' ? post.comments : undefined,
+    username: post.username || profile.username,
+    date: post.date || null,
+    media_type: post.media_type || 'IMAGE',
+  }));
+
+  // ── Swiper loop padding ──────────────────────────────────────────────────────
+  // Swiper's loop={true} needs at least twice the visible slides to loop smoothly.
+  // If the API returns fewer than MIN_SLIDES_FOR_LOOP unique posts, we duplicate
+  // them with suffixed IDs so React keys stay unique. The real post data is unchanged.
+  if (media.length > 0 && media.length < MIN_SLIDES_FOR_LOOP) {
+    const original = [...media];
+    let iteration = 1;
+    while (media.length < MIN_SLIDES_FOR_LOOP) {
+      // eslint-disable-next-line no-loop-func
+      const suffix = iteration;
+      media = media.concat(
+        original.map((m) => ({ ...m, id: `${m.id}_loop${suffix}` }))
+      );
+      iteration++;
+    }
+  }
+
+  return {
+    profile,
+    media,
+    lastUpdated: raw.lastUpdated || new Date().toISOString(),
+    fromCache: raw.cached || false,
+  };
 }
