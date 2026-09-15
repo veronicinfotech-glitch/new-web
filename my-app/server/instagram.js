@@ -3,7 +3,7 @@
  * Server-side module for the Meta "Instagram API with Instagram Login".
  *
  * This file runs ONLY on the backend (Node.js/Express).
- * The INSTAGRAM_ACCESS_TOKEN is NEVER sent to the browser.
+ * The INSTAGRAM_ACCESS_TOKEN is NEVER sent to the browser or logged in plain text.
  *
  * API used: Instagram API with Instagram Login
  * Base URL: https://graph.instagram.com  (NOT graph.facebook.com)
@@ -19,6 +19,10 @@ const fetch = require('node-fetch');
 // "Instagram API with Instagram Login" flow.
 const GRAPH_API_VERSION = 'v22.0';
 const GRAPH_BASE = `https://graph.instagram.com/${GRAPH_API_VERSION}`;
+
+function sanitizeUrl(url) {
+  return url.replace(/access_token=[^&]+/g, 'access_token=[REDACTED]');
+}
 
 /**
  * Fetch the authenticated user's Instagram profile.
@@ -43,16 +47,32 @@ async function fetchProfile(accessToken) {
 
   // /me resolves to the account that owns the token — no numeric user ID needed.
   const url = `${GRAPH_BASE}/me?fields=${fields}&access_token=${accessToken}`;
+  const safeUrl = sanitizeUrl(url);
+
+  console.log(`[Instagram Diagnostics] Calling Profile Endpoint: ${safeUrl}`);
 
   const response = await fetch(url);
-  const data = await response.json();
+  const rawText = await response.text();
+
+  console.log(`[Instagram Diagnostics] Profile Response Status: ${response.status} ${response.statusText}`);
+
+  let data;
+  try {
+    data = JSON.parse(rawText);
+  } catch (parseErr) {
+    console.error(`[Instagram Diagnostics] Profile Response was not JSON:`, rawText);
+    throw new Error(`Profile endpoint returned non-JSON response (HTTP ${response.status})`);
+  }
 
   if (!response.ok || data.error) {
+    console.error(`[Instagram Diagnostics] Meta Profile API Error Body:`, JSON.stringify(data, null, 2));
     const msg = data.error
-      ? `[${data.error.code}] ${data.error.message}`
+      ? `[${data.error.code}${data.error.error_subcode ? ':' + data.error.error_subcode : ''}] ${data.error.message} (${data.error.type || 'Error'})`
       : `HTTP ${response.status}`;
     throw new Error(`Instagram profile API error: ${msg}`);
   }
+
+  console.log(`[Instagram Diagnostics] Profile fetched successfully for username: ${data.username}`);
 
   return {
     username: data.username || 'veronic_infotech',
@@ -95,18 +115,34 @@ async function fetchMedia(accessToken, limit = 20) {
   ].join(',');
 
   const url = `${GRAPH_BASE}/me/media?fields=${fields}&limit=${limit}&access_token=${accessToken}`;
+  const safeUrl = sanitizeUrl(url);
+
+  console.log(`[Instagram Diagnostics] Calling Media Endpoint: ${safeUrl}`);
 
   const response = await fetch(url);
-  const data = await response.json();
+  const rawText = await response.text();
+
+  console.log(`[Instagram Diagnostics] Media Response Status: ${response.status} ${response.statusText}`);
+
+  let data;
+  try {
+    data = JSON.parse(rawText);
+  } catch (parseErr) {
+    console.error(`[Instagram Diagnostics] Media Response was not JSON:`, rawText);
+    throw new Error(`Media endpoint returned non-JSON response (HTTP ${response.status})`);
+  }
 
   if (!response.ok || data.error) {
+    console.error(`[Instagram Diagnostics] Meta Media API Error Body:`, JSON.stringify(data, null, 2));
     const msg = data.error
-      ? `[${data.error.code}] ${data.error.message}`
+      ? `[${data.error.code}${data.error.error_subcode ? ':' + data.error.error_subcode : ''}] ${data.error.message} (${data.error.type || 'Error'})`
       : `HTTP ${response.status}`;
     throw new Error(`Instagram media API error: ${msg}`);
   }
 
   const rawPosts = data.data || [];
+
+  console.log(`[Instagram Diagnostics] Media fetched successfully: ${rawPosts.length} posts found.`);
 
   const posts = rawPosts.map((post) => {
     // For VIDEO posts, thumbnail_url is the still image shown in the feed.
@@ -143,6 +179,9 @@ async function fetchMedia(accessToken, limit = 20) {
  * Returns { profile, posts } or throws on API failure.
  */
 async function fetchInstagramData(accessToken, mediaLimit = 20) {
+  console.log('[Instagram Diagnostics] Step 1: Fetching profile...');
+  console.log('[Instagram Diagnostics] Step 2: Fetching media posts...');
+
   const [profile, posts] = await Promise.all([
     fetchProfile(accessToken),
     fetchMedia(accessToken, mediaLimit),
@@ -151,4 +190,4 @@ async function fetchInstagramData(accessToken, mediaLimit = 20) {
   return { profile, posts };
 }
 
-module.exports = { fetchInstagramData };
+module.exports = { fetchInstagramData, fetchProfile, fetchMedia };

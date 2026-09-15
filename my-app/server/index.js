@@ -22,7 +22,18 @@
 
 // Load .env.server if present (for local development)
 const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '..', '.env.server') });
+const fs = require('fs');
+
+const envPath = path.resolve(__dirname, '..', '.env.server');
+const envExists = fs.existsSync(envPath);
+require('dotenv').config({ path: envPath });
+
+console.log('[Server Startup Diagnostics]');
+console.log(`- .env.server path: ${envPath}`);
+console.log(`- .env.server file exists: ${envExists}`);
+console.log(`- Detected INSTAGRAM_ACCESS_TOKEN: ${!!process.env.INSTAGRAM_ACCESS_TOKEN}`);
+console.log(`- Detected INSTAGRAM_USER_ID: ${!!process.env.INSTAGRAM_USER_ID}`);
+console.log(`- Detected PORT: ${process.env.PORT || 3001}`);
 
 const express = require('express');
 const { fetchInstagramData } = require('./instagram');
@@ -67,8 +78,11 @@ app.use((req, res, next) => {
 
 // ─── /api/instagram ───────────────────────────────────────────────────────────
 app.get('/api/instagram', async (req, res) => {
+  // Allow bypassing cache with ?nocache=1 for debugging
+  const bypassCache = req.query.nocache === '1';
+
   // Return cached data if still fresh
-  if (isCacheValid()) {
+  if (!bypassCache && isCacheValid()) {
     return res.json({
       success: true,
       data: cache.data,
@@ -116,8 +130,8 @@ app.get('/api/instagram', async (req, res) => {
     });
 
   } catch (error) {
-    // Log the error server-side but never expose the token or internals to the browser
-    console.error('[Instagram] Meta Graph API error:', error.message);
+    // Log the error server-side with details but never expose the token or internals to the browser
+    console.error('[Instagram] Backend failure caught:', error.message);
 
     // If we have stale cached data, return it as a fallback with a warning
     if (cache.data) {
@@ -134,6 +148,7 @@ app.get('/api/instagram', async (req, res) => {
     return res.status(502).json({
       success: false,
       error: 'Failed to fetch Instagram data. Please try again later.',
+      diagnosticMessage: error.message,
     });
   }
 });

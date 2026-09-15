@@ -13,22 +13,25 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = function (app) {
-  // Proxy all /api/* requests → Express backend (port 3001)
+  // http-proxy-middleware v4: mounting on '/api' strips the prefix.
+  // Mount on '/' with a filter so /api/* is forwarded with the full path intact.
   app.use(
-    '/api',
     createProxyMiddleware({
       target: 'http://localhost:3001',
       changeOrigin: true,
-      logLevel: 'silent',
-      onError: (err, req, res) => {
-        console.warn(
-          '[Proxy] Backend not reachable. Start the server with: npm run server\n',
-          err.message
-        );
-        res.status(503).json({
-          success: false,
-          error: 'Backend server is not running. Start it with: npm run server',
-        });
+      pathFilter: '/api',
+      on: {
+        error: (err, req, res) => {
+          console.warn(
+            '[Proxy] Backend not reachable. Start the server with: npm run server\n',
+            err.message
+          );
+          res.writeHead(503, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({
+            success: false,
+            error: 'Backend server is not running. Start it with: npm run server',
+          }));
+        },
       },
     })
   );

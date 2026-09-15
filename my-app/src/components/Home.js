@@ -578,7 +578,7 @@ function Home() {
     followers: 52,
     following: 10
   });
-  const [instagramLoading, setInstagramLoading] = useState(false);
+  const [instagramLoading, setInstagramLoading] = useState(true);
   const [instagramError, setInstagramError] = useState(null);
   const [instagramLastUpdated, setInstagramLastUpdated] = useState(null);
   const [instagramFromCache, setInstagramFromCache] = useState(false);
@@ -1816,17 +1816,46 @@ function Home() {
                 </div>
               </div>
             ) : instagramPosts.length === 0 ? (
-              // Graceful Fallback if API fails or is unconfigured
-              <div className="flex flex-col items-center justify-center min-h-[300px] text-center px-4">
-                <Instagram className="w-16 h-16 text-gray-400 mb-4 opacity-50" />
-                <h3 className="text-xl font-bold text-[#0B0F14] mb-2 font-space">Follow @veronic_infotech on Instagram</h3>
-                <p className="text-[#0B0F14]/60 mb-6 max-w-md">Stay updated with our latest projects and insights directly on our official page.</p>
-                <button
-                  onClick={() => window.open('https://www.instagram.com/veronic_infotech', '_blank', 'noopener,noreferrer')}
-                  className="px-8 py-3 bg-gradient-to-r from-[#833AB4] via-[#E1306C] to-[#F56040] text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+              // Live stats display when posts are unavailable but profile data may exist
+              <div className="flex flex-col items-center justify-center min-h-[300px] text-center px-4 gap-8">
+                {/* Live account stats */}
+                <div className="flex items-center justify-center gap-8 sm:gap-12">
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="text-3xl sm:text-4xl font-black text-[#0B0F14] font-space tabular-nums">
+                      {instagramProfile?.posts !== null && instagramProfile?.posts !== undefined
+                        ? instagramProfile.posts.toLocaleString()
+                        : '—'}
+                    </span>
+                    <span className="text-xs sm:text-sm font-semibold text-[#0B0F14]/50 uppercase tracking-widest">Posts</span>
+                  </div>
+                  <div className="w-px h-12 bg-[#0B0F14]/10" />
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="text-3xl sm:text-4xl font-black text-[#E1306C] font-space tabular-nums">
+                      {instagramProfile?.followers !== null && instagramProfile?.followers !== undefined
+                        ? instagramProfile.followers.toLocaleString()
+                        : '—'}
+                    </span>
+                    <span className="text-xs sm:text-sm font-semibold text-[#0B0F14]/50 uppercase tracking-widest">Followers</span>
+                  </div>
+                  <div className="w-px h-12 bg-[#0B0F14]/10" />
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="text-3xl sm:text-4xl font-black text-[#0B0F14] font-space tabular-nums">
+                      {instagramProfile?.following !== null && instagramProfile?.following !== undefined
+                        ? instagramProfile.following.toLocaleString()
+                        : '—'}
+                    </span>
+                    <span className="text-xs sm:text-sm font-semibold text-[#0B0F14]/50 uppercase tracking-widest">Following</span>
+                  </div>
+                </div>
+                <a
+                  href="https://www.instagram.com/veronic_infotech"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-[#833AB4] via-[#E1306C] to-[#F56040] text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105 text-sm"
                 >
-                  View Profile
-                </button>
+                  <Instagram className="w-4 h-4" />
+                  @veronic_infotech
+                </a>
               </div>
             ) : (
               <>
