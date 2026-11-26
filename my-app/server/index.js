@@ -61,11 +61,13 @@ app.use((req, res, next) => {
   const allowedOrigins = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
+    'http://localhost:3005',
+    'http://127.0.0.1:3005',
     // Add your production domain here if needed:
     // 'https://www.veronic.in'
   ];
   const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
+  if (origin && (allowedOrigins.includes(origin) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin))) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
