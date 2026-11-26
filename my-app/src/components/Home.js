@@ -1742,12 +1742,12 @@ function Home() {
             loopAdditionalSlides={6}
             speed={850}
             coverflowEffect={{
-              rotate: 35, // 3D perspective angle matching reference image
-              stretch: 45, // Overlap cards smoothly in an arc
-              depth: 170, // 3D depth perspective
+              rotate: 14, // Gentle angle so left & right cards stay fully visible and readable
+              stretch: -5, // Smooth overlapping cards fanning inward
+              depth: 95, // Balanced depth perspective so side cards don't shrink away
               modifier: 1,
-              scale: 0.84, // Gradual scale down for side cards
-              slideShadows: false, // NO dark color overlays! Pure cards only
+              scale: 0.88, // Clear proportional scale for side cards
+              slideShadows: false, // Pure crisp cards without dark overlays
             }}
             autoplay={{
               delay: 2400,
@@ -1772,7 +1772,7 @@ function Home() {
               >
                 <div
                   onClick={() => window.open(post.url || 'https://www.instagram.com/veronic_infotech', '_blank', 'noopener,noreferrer')}
-                  className="w-full aspect-[3/4] rounded-[28px] sm:rounded-[36px] overflow-hidden bg-[#080B10] shadow-[0_20px_50px_rgba(0,0,0,0.32)] relative cursor-pointer border border-black/10 transition-transform duration-500 hover:shadow-[0_25px_60px_rgba(0,0,0,0.45)]"
+                  className="w-full aspect-[3/4] rounded-[28px] sm:rounded-[36px] overflow-hidden bg-white shadow-[0_16px_40px_rgba(0,0,0,0.18)] relative cursor-pointer border border-slate-200/80 transition-transform duration-500 hover:shadow-[0_25px_60px_rgba(0,0,0,0.45)]"
                 >
                   {post.image ? (
                     <img

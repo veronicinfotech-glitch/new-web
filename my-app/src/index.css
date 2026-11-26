@@ -156,10 +156,17 @@ h3, .h3, [class*="h3-font"], .font-h3, .font-figerona {
 
 /* Instagram 3D Coverflow Curved Carousel */
 .instagram-3d-swiper {
-  perspective: 1200px;
+  perspective: 1400px;
   overflow: visible !important;
 }
 
 .instagram-3d-swiper .swiper-slide {
   transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1) !important;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.instagram-3d-swiper .swiper-slide-shadow-left,
+.instagram-3d-swiper .swiper-slide-shadow-right {
+  display: none !important;
 }
