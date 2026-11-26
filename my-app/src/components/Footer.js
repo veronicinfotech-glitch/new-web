@@ -65,7 +65,7 @@ const Footer = () => {
           <div>
             <h4 className="text-base sm:text-lg lg:text-xl font-bold mb-4 sm:mb-6 text-white font-space tracking-wide">Products</h4>
             <ul className="space-y-3 sm:space-y-4">
-              {['SchoolHub ERP', 'Parcel Management', 'Solar Sales OS', 'Smart Kirana', 'Manufacturing OS'].map((item) => (
+              {['Stockly', 'Dropbox', 'Solar Sales OS', 'Smart Kirana', 'Manufacturing OS', 'Siddhanta', 'Arohana ERP', 'TRINETRA'].map((item) => (
                 <li key={item}>
                   <Link to="/products" className="block text-sm sm:text-base text-white/60 hover:text-[#9DB4C6] hover:translate-x-1 transition-all duration-300">
                     {item}

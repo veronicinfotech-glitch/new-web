@@ -8,6 +8,9 @@ import {
 import { Link, useLocation } from "react-router-dom";
 import {
   Smartphone,
+  Cctv,
+  Utensils,
+  ChefHat,
   Package,
   ArrowRight,
   Sparkles,
@@ -88,11 +91,13 @@ import {
 } from "lucide-react";
 
 import lolo1 from "../images/lolo1.png";
-import hub from "../images/hub.png";
-import parcel from "../images/parcel.png";
+import hub from "../images/stockly.png";
+import parcel from "../images/dropbox.png";
 import solar_os from "../images/solar_os.png";
 import retail_solution from "../images/Retail_Solution.png";
-import shcool from "../images/shcool.png";
+import siddhantaImg from "../images/siddhanta.png";
+import arohnaImg from "../images/arohna.png";
+import trinetraImg from "../images/trinetra.png";
 import industrial_solution from "../images/Industrial_Solution.png";
 
 const ProductPage = () => {
@@ -108,6 +113,8 @@ const ProductPage = () => {
   const kiranaRef = useRef(null);
   const manufacturingRef = useRef(null);
   const schoolHubRef = useRef(null);
+  const arohanaRef = useRef(null);
+  const trinetraRef = useRef(null);
   const techRef = useRef(null);
   const benefitsRef = useRef(null);
   const productsRef = useRef(null);
@@ -118,16 +125,16 @@ const ProductPage = () => {
   const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
-  // All Products Data - 6 Products
+  // All Products Data - 8 Products
   const allProducts = [
     {
-      id: "mobilehub",
-      name: "MobileHub",
+      id: "stockly",
+      name: "Stockly",
       icon: Smartphone,
       color: "from-[#1E2A39] to-[#3A4A5F]",
       bgColor: "#1E2A39",
       lightColor: "from-[#1E2A39] to-[#9DB4C6]",
-      description: "Complete mobile device management platform for enterprises with real-time monitoring and advanced security.",
+      description: "Complete inventory and stock management platform for enterprises with real-time monitoring and advanced security.",
       image: hub,
       features: [
         { title: "Smart Device Management", description: "Centralized control for all mobile devices with real-time monitoring.", icon: Smartphone },
@@ -141,7 +148,7 @@ const ProductPage = () => {
     },
     {
       id: "parcel",
-      name: "Parcel Management",
+      name: "Dropbox",
       icon: Package,
       color: "from-[#1E2A39] to-[#9DB4C6]",
       bgColor: "#1E2A39",
@@ -217,13 +224,13 @@ const ProductPage = () => {
     },
     {
       id: "schoolhub",
-      name: "SchoolHub ERP",
+      name: "Siddhanta",
       icon: GraduationCap,
       color: "from-[#1E2A39] to-[#EC4899]",
       bgColor: "#1E2A39",
       lightColor: "from-[#1E2A39] to-[#F9A8D4]",
       description: "Centralized web-based platform that digitizes and automates every aspect of school operations - from admissions to examinations, fees, and parent communication.",
-      image: shcool,
+      image: siddhantaImg,
       features: [
         { title: "Academic Management", description: "Complete student lifecycle from admission to examination, results, and promotion.", icon: BookOpen },
         { title: "Role-Based Dashboards", description: "7 user roles with personalized dashboards - Admin, Principal, Teacher, Student, Parent, Accountant.", icon: UsersRound },
@@ -233,6 +240,86 @@ const ProductPage = () => {
       price: "$699/month",
       downloadLink: "/PDF/SchoolHub-ERP-Proposal.pdf",
       tag: "Education Solution"
+    },
+    {
+      id: "arohana",
+      name: "Arohana ERP",
+      icon: Utensils,
+      color: "from-[#1E2A39] to-[#E11D48]",
+      bgColor: "#1E2A39",
+      lightColor: "from-[#1E2A39] to-[#FDA4AF]",
+      description: "Unified, full-stack Restaurant Management ERP designed for end-to-end dining room, kitchen, and billing operations with real-time multi-device synchronization.",
+      image: arohnaImg,
+      features: [
+        {
+          title: "Touch POS & Ordering",
+          description: "Visual floor table layout with live status (Vacant, Occupied, Billed, Served), quick touch order taking, and instant KOT generation.",
+          icon: CreditCard
+        },
+        {
+          title: "Kitchen Display System (KDS)",
+          description: "Live multi-lane digital board for chefs (New ➔ Accepted ➔ Cooking ➔ Ready) with voice alerts and waiter notifications when plated.",
+          icon: ChefHat
+        },
+        {
+          title: "Billing, Payments & Approvals",
+          description: "Closed-loop bill generation, discounts, split payments, receipt printing, and Manager signature authorization workflows.",
+          icon: Receipt
+        },
+        {
+          title: "Inventory & Recipe Management",
+          description: "Recipe-level raw material stock deductions, real-time stock alerts, supplier purchase tracking, and waste logging.",
+          icon: Package
+        },
+        {
+          title: "Executive Analytics & Reporting",
+          description: "Daily sales reports, GST/tax summaries, best-selling menu items, and comprehensive audit logs.",
+          icon: TrendingUp
+        }
+      ],
+      price: "$449/month",
+      downloadLink: "/PDF/Arohana-ERP-Proposal.pdf",
+      tag: "Restaurant Solution"
+    },
+    {
+      id: "trinetra",
+      name: "TRINETRA",
+      icon: Cctv,
+      color: "from-[#1E2A39] to-[#0EA5E9]",
+      bgColor: "#1E2A39",
+      lightColor: "from-[#1E2A39] to-[#38BDF8]",
+      description: "TRINETRA is a modern, real-time CCTV surveillance and security monitoring system designed for centralized monitoring, intelligent motion detection, and enhanced security management.",
+      image: trinetraImg,
+      features: [
+        {
+          title: "Live Camera Monitoring",
+          description: "Real-time CCTV footage streaming from multiple connected cameras simultaneously.",
+          icon: Cctv
+        },
+        {
+          title: "Multiple Camera Dashboard",
+          description: "Centralized overview of camera connectivity, system armed status, and real-time alerts.",
+          icon: Monitor
+        },
+        {
+          title: "Intelligent Motion Detection",
+          description: "Instant motion detection within configured surveillance zones with automated audio & visual alerts.",
+          icon: Activity
+        },
+        {
+          title: "Custom Detection Zones",
+          description: "Create, edit, and manage polygon-based detection areas to control monitored sectors.",
+          icon: Hexagon
+        },
+        {
+          title: "Security Event History & Sync",
+          description: "Comprehensive event history with timestamps, live multi-device synchronization, and armed security controls.",
+          icon: ShieldCheck
+        }
+      ],
+      price: "$599/month",
+      downloadLink: "/PDF/TRINETRA-Proposal.pdf",
+      tag: "Surveillance & Security Solution"
     }
   ];
 
@@ -353,12 +440,16 @@ const ProductPage = () => {
     const handleScroll = () => {
       const sections = [
         { id: "hero", ref: heroRef },
-        { id: "mobilehub", ref: mobileHubRef },
+        { id: "stockly", ref: mobileHubRef },
+        { id: "dropbox", ref: parcelRef },
         { id: "parcel", ref: parcelRef },
         { id: "solar", ref: solarRef },
         { id: "kirana", ref: kiranaRef },
         { id: "manufacturing", ref: manufacturingRef },
+        { id: "siddhanta", ref: schoolHubRef },
         { id: "schoolhub", ref: schoolHubRef },
+        { id: "arohana", ref: arohanaRef },
+        { id: "trinetra", ref: trinetraRef },
         { id: "tech", ref: techRef },
         { id: "benefits", ref: benefitsRef },
         { id: "cta", ref: ctaRef },
@@ -487,15 +578,17 @@ const ProductPage = () => {
         </motion.div>
       </section>
 
-      {/* ALL PRODUCTS - 6 Products */}
+      {/* ALL PRODUCTS - 8 Products */}
       {allProducts.map((product, index) => {
         const Icon = product.icon;
-        const isMobileHub = product.id === "mobilehub";
-        const isParcel = product.id === "parcel";
+        const isMobileHub = product.id === "stockly" || product.id === "mobilehub";
+        const isParcel = product.id === "dropbox" || product.id === "parcel";
         const isSolar = product.id === "solar";
         const isKirana = product.id === "kirana";
         const isManufacturing = product.id === "manufacturing";
-        const isSchoolHub = product.id === "schoolhub";
+        const isSchoolHub = product.id === "siddhanta" || product.id === "schoolhub";
+        const isArohana = product.id === "arohana";
+        const isTrinetra = product.id === "trinetra";
         
         let sectionRef = null;
         if (isMobileHub) sectionRef = mobileHubRef;
@@ -504,6 +597,8 @@ const ProductPage = () => {
         else if (isKirana) sectionRef = kiranaRef;
         else if (isManufacturing) sectionRef = manufacturingRef;
         else if (isSchoolHub) sectionRef = schoolHubRef;
+        else if (isArohana) sectionRef = arohanaRef;
+        else if (isTrinetra) sectionRef = trinetraRef;
         
         return (
           <section
@@ -521,8 +616,9 @@ const ProductPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
-                className="text-center mb-12 sm:mb-16 lg:mb-20"
+                className="text-center mb-10 sm:mb-14 lg:mb-16 flex flex-col items-center"
               >
+                
                 <div className={`inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#1E2A39]/10 border border-[#1E2A39]/20 mb-4 sm:mb-6`}>
                   <Icon className={`w-3 h-3 sm:w-4 sm:h-4 text-[#1E2A39]`} />
                   <span className={`text-xs sm:text-sm text-[#1E2A39]`}>
@@ -549,9 +645,10 @@ const ProductPage = () => {
                     <img 
                       src={product.image}
                       alt={product.name}
-                      className="w-full max-w-lg mx-auto h-auto object-contain rounded-lg shadow-xl"
+                      className="w-full max-w-lg mx-auto h-auto object-contain rounded-2xl shadow-xl border border-gray-200/40"
                       loading="lazy"
                     />
+                    
                   </div>
                 </motion.div>
 
@@ -920,11 +1017,16 @@ const ProductPage = () => {
                       onClick={() => {
                         const refMap = {
                           mobilehub: mobileHubRef,
+                          stockly: mobileHubRef,
                           parcel: parcelRef,
+                          dropbox: parcelRef,
                           solar: solarRef,
                           kirana: kiranaRef,
                           manufacturing: manufacturingRef,
                           schoolhub: schoolHubRef,
+                          siddhanta: schoolHubRef,
+                          arohana: arohanaRef,
+                          trinetra: trinetraRef,
                         };
                         if (refMap[product.id]) {
                           scrollToSection(refMap[product.id]);

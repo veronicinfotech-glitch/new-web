@@ -58,12 +58,10 @@ import s3 from "../images/s3.png";
 import s4 from "../images/s4.png";
 import s5 from "../images/s5.png";
 import s6 from "../images/s6.png";
-import sujalImg from "../images/sujal.png";
 import harshilImg from "../images/HARSHIL_DANIDHARIYA.png";
 import vijayImg from "../images/vijay.png";
 import vivekImg from "../images/Vivek_khokhar.png";
 import divyeshImg from "../images/Divyesh_Ahir.png";
-import chiragImg from "../images/Chirag_Vasani.png";
 import vanshImg from "../images/Vansh_Gohel.png";
 
 const About = () => {
@@ -100,21 +98,7 @@ const About = () => {
       glow: "hover:shadow-cyan-500/40 hover:border-cyan-400",
       experience: "3+ Years"
     },
-    {
-      id: 2,
-      name: "Chirag Vasani",
-      role: "Senior Software & ERP Developer",
-      description: "Spearheading high-performance custom ERP architectures, AI-driven automation pipelines, complex database topologies, and full-stack enterprise solutions.",
-      image: chiragImg,
-      linkedin: "https://www.linkedin.com/in/chiragvasani/",
-      whatsapp: "https://wa.me/919510653051",
-      email: "vasanichirag6665@gmail.com",
-      isCEO: false,
-      color: "#8B5CF6",
-      glow: "hover:shadow-purple-500/40 hover:border-purple-400",
-      experience: "2+ Years"
-    },
-    {
+        {
       id: 3,
       name: "Vijay Odedra",
       role: "Lead Web Engineer & Full-Stack Architect",
@@ -156,21 +140,7 @@ const About = () => {
       glow: "hover:shadow-pink-500/40 hover:border-pink-400",
       experience: "2+ Years"
     },
-    {
-      id: 6,
-      name: "Sujal Rathod",
-      role: "Lead UI/UX Designer & Brand Specialist",
-      description: "Crafting mesmerizing human-centric user experiences, intuitive interface prototypes in Figma, deep user research, and cohesive digital brand identities.",
-      image: sujalImg,
-      linkedin: "https://www.linkedin.com/in/sujal-rathod-6b5773370?utm_source=share_via&utm_content=profile&utm_medium=member_android",
-      whatsapp: "https://wa.me/918980230117",
-      email: "sujalsinh033@gmail.com",
-      isCEO: false,
-      color: "#3B82F6",
-      glow: "hover:shadow-blue-500/40 hover:border-blue-400",
-      experience: "2+ Years"
-    },
-    {
+        {
       id: 8,
       name: "Divyesh Bandhiya",
       role: "Creative Director & Client Communication Executive",

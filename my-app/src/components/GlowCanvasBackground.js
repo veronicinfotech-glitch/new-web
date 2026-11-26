@@ -10,6 +10,10 @@ const GlowCanvasBackground = () => {
 
         const loadScript = (src) => {
             return new Promise((resolve, reject) => {
+                if (document.querySelector(`script[src="${src}"]`)) {
+                    resolve();
+                    return;
+                }
                 const script = document.createElement('script');
                 script.src = src;
                 script.onload = resolve;
@@ -33,38 +37,43 @@ const GlowCanvasBackground = () => {
                 }
 
                 if (!containerRef.current) return;
-
                 const THREE = window.THREE;
                 
                 while (container.firstChild) {
                     container.removeChild(container.firstChild);
                 }
 
+                // 1. Scene Setup
                 const scene = new THREE.Scene();
-                scene.fog = new THREE.FogExp2(0x04060d, 0.0015);
+                scene.fog = new THREE.FogExp2(0x020308, 0.0015);
 
-                const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
+                const getWidth = () => container.clientWidth || window.innerWidth;
+                const getHeight = () => container.clientHeight || window.innerHeight;
+
+                const camera = new THREE.PerspectiveCamera(60, getWidth() / getHeight(), 1, 2500);
                 camera.position.z = 400;
 
-                const renderer = new THREE.WebGLRenderer({ antialias: false });
+                const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false });
                 renderer.setPixelRatio(window.devicePixelRatio);
-                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setSize(getWidth(), getHeight());
                 renderer.toneMapping = THREE.ReinhardToneMapping;
                 container.appendChild(renderer.domElement);
 
+                // 2. Post-Processing Setup
                 const renderScene = new THREE.RenderPass(scene, camera);
                 
                 const bloomPass = new THREE.UnrealBloomPass(
-                    new THREE.Vector2(window.innerWidth, window.innerHeight),
-                    2.8,
-                    0.8,
-                    0.0
+                    new THREE.Vector2(getWidth(), getHeight()),
+                    2.8,  
+                    0.8,  
+                    0.0   
                 );
 
                 const composer = new THREE.EffectComposer(renderer);
                 composer.addPass(renderScene);
                 composer.addPass(bloomPass);
 
+                // Main groups
                 const wrapperGroup = new THREE.Group(); 
                 const coreGroup = new THREE.Group();    
                 const floatGroup = new THREE.Group();   
@@ -76,29 +85,32 @@ const GlowCanvasBackground = () => {
                 scene.add(backgroundGroup);
 
                 const colorWhite = new THREE.Color(0xffffff);
-                const colorPink = new THREE.Color(0xff2a7a); 
+                const colorArticNavy = new THREE.Color(0x1E2A39); 
                 const colorBlue = new THREE.Color(0x44aaff); 
 
-                const bgParticleCount = 1000;
+                // 3. Background Constellation 
+                const bgParticleCount = 1500;
                 const bgGeometry = new THREE.BufferGeometry();
                 const bgPositions = new Float32Array(bgParticleCount * 3);
                 
                 for (let i = 0; i < bgParticleCount; i++) {
-                    bgPositions[i * 3] = (Math.random() - 0.5) * 2000;
-                    bgPositions[i * 3 + 1] = (Math.random() - 0.5) * 2000;
-                    bgPositions[i * 3 + 2] = (Math.random() - 0.5) * 1000 - 500;
+                    bgPositions[i * 3] = (Math.random() - 0.5) * 3000;
+                    bgPositions[i * 3 + 1] = (Math.random() - 0.5) * 3000;
+                    bgPositions[i * 3 + 2] = (Math.random() - 0.5) * 2000 - 500; 
                 }
                 
                 bgGeometry.setAttribute('position', new THREE.BufferAttribute(bgPositions, 3));
                 const bgMaterial = new THREE.PointsMaterial({
-                    color: 0x335588,
-                    size: 1.5,
+                    color: 0x4466aa,
+                    size: 2.0,
                     transparent: true,
-                    opacity: 0.4
+                    opacity: 0.5,
+                    blending: THREE.AdditiveBlending
                 });
                 const bgParticles = new THREE.Points(bgGeometry, bgMaterial);
                 backgroundGroup.add(bgParticles);
 
+                // 4. Shader Material
                 const shaderMaterial = new THREE.ShaderMaterial({
                     uniforms: {
                         time: { value: 0.0 }
@@ -117,10 +129,15 @@ const GlowCanvasBackground = () => {
                     `,
                     fragmentShader: `
                         varying vec3 vColor;
+                        uniform float time;
                         void main() {
                             float dist = length(gl_PointCoord - vec2(0.5));
                             if (dist > 0.5) discard;
-                            gl_FragColor = vec4(vColor * 2.5, 1.0 - (dist * 2.0));
+                            
+                            float pulse = sin(time * 3.0) * 0.2 + 0.8; 
+                            vec3 animatedColor = vColor * 2.5 * pulse;
+                            
+                            gl_FragColor = vec4(animatedColor, 1.0 - (dist * 2.0));
                         }
                     `,
                     transparent: true,
@@ -128,8 +145,9 @@ const GlowCanvasBackground = () => {
                     blending: THREE.AdditiveBlending
                 });
 
+                // 5. Core Sphere Construction
                 const radius = 130;
-                const particleCount = 2500;
+                const particleCount = 2800; 
                 const geometry = new THREE.BufferGeometry();
                 
                 const positions = new Float32Array(particleCount * 3);
@@ -157,11 +175,11 @@ const GlowCanvasBackground = () => {
                     const noiseVal = Math.sin(x * 0.05) * Math.cos(y * 0.05);
                     
                     if (noiseVal > 0.5) {
-                        mixedColor = colorPink;
-                        sizes[i] = Math.random() * 3.5 + 2.0; 
+                        mixedColor = colorArticNavy;
+                        sizes[i] = Math.random() * 4.0 + 2.0; 
                     } else if (noiseVal < -0.3) {
                         mixedColor = colorBlue;
-                        sizes[i] = Math.random() * 3.0 + 1.5;
+                        sizes[i] = Math.random() * 3.5 + 1.5;
                     } else {
                         mixedColor = colorWhite;
                         sizes[i] = Math.random() * 2.5 + 1.0;
@@ -179,14 +197,15 @@ const GlowCanvasBackground = () => {
                 const particleSystem = new THREE.Points(geometry, shaderMaterial);
                 coreGroup.add(particleSystem);
 
-                const floatParticleCount = 400;
+                // 6. Floating Orbit Particles
+                const floatParticleCount = 500;
                 const floatGeometry = new THREE.BufferGeometry();
                 const floatPositions = new Float32Array(floatParticleCount * 3);
                 const floatColors = new Float32Array(floatParticleCount * 3);
                 const floatSizes = new Float32Array(floatParticleCount);
 
                 for (let i = 0; i < floatParticleCount; i++) {
-                    const r = 160 + Math.random() * 140; 
+                    const r = 160 + Math.random() * 160; 
                     const theta = Math.random() * 2 * Math.PI;
                     const phi = Math.acos((Math.random() * 2) - 1);
 
@@ -196,13 +215,13 @@ const GlowCanvasBackground = () => {
 
                     let fCol = colorWhite.clone();
                     const randColor = Math.random();
-                    if (randColor > 0.6) fCol = colorPink;
+                    if (randColor > 0.6) fCol = colorArticNavy;
                     else if (randColor > 0.3) fCol = colorBlue;
 
                     floatColors[i * 3] = fCol.r;
                     floatColors[i * 3 + 1] = fCol.g;
                     floatColors[i * 3 + 2] = fCol.b;
-                    floatSizes[i] = Math.random() * 3.5 + 1.5;
+                    floatSizes[i] = Math.random() * 4.0 + 2.0;
                 }
 
                 floatGeometry.setAttribute('position', new THREE.BufferAttribute(floatPositions, 3));
@@ -212,10 +231,11 @@ const GlowCanvasBackground = () => {
                 const floatParticleSystem = new THREE.Points(floatGeometry, shaderMaterial);
                 floatGroup.add(floatParticleSystem);
 
+                // 7. Connecting Lines (Outer Wireframe)
                 const lineMaterial = new THREE.LineBasicMaterial({
-                    color: 0x4466aa,
+                    color: 0x5588ff,
                     transparent: true,
-                    opacity: 0.3,
+                    opacity: 0.30,
                     blending: THREE.AdditiveBlending
                 });
                 
@@ -226,32 +246,52 @@ const GlowCanvasBackground = () => {
                 );
                 coreGroup.add(wireframe);
 
+                // 8. Interaction Variables & Logic
                 let time = 0;
                 let targetScale = 1.0;
                 let currentScale = 1.0;
                 let targetRotationSpeed = 0.002;
                 let currentRotationSpeed = 0.002;
+                
+                // Harmonic Wave Transition Variables
+                let currentHarmonic = 0.0;
+                let targetHarmonic = 0.0;
 
-                const mouse = new THREE.Vector2(-9999, -9999);
-                const targetMouse = new THREE.Vector2(0, 0);
+                let shockwaveRadius = -1;
+
+                const mouse = new THREE.Vector2(2, 2);
+                const targetMouse = new THREE.Vector2(2, 2);
                 const raycaster = new THREE.Raycaster();
                 const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0); 
                 const mouse3D = new THREE.Vector3(-9999, -9999, 0);
 
                 const handleMouseMove = (event) => {
-                    targetMouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-                    targetMouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                    const rect = container.getBoundingClientRect();
+                    targetMouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+                    targetMouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
                 };
+
+                const handleMouseDown = () => {
+                    shockwaveRadius = 0; 
+                    bloomPass.strength = 6.0; 
+                };
+
                 window.addEventListener('mousemove', handleMouseMove);
+                window.addEventListener('mousedown', handleMouseDown);
 
                 const onWindowResize = () => {
-                    camera.aspect = window.innerWidth / window.innerHeight;
+                    if (!container) return;
+                    const w = getWidth();
+                    const h = getHeight();
+                    camera.aspect = w / h;
                     camera.updateProjectionMatrix();
-                    renderer.setSize(window.innerWidth, window.innerHeight);
-                    composer.setSize(window.innerWidth, window.innerHeight);
+                    renderer.setSize(w, h);
+                    composer.setSize(w, h);
                 };
-                window.addEventListener('resize', onWindowResize, false);
 
+                window.addEventListener('resize', onWindowResize);
+
+                // 9. Render Loop
                 const animate = () => {
                     animationId = requestAnimationFrame(animate);
                     time += 0.015; 
@@ -259,27 +299,48 @@ const GlowCanvasBackground = () => {
 
                     mouse.lerp(targetMouse, 0.1);
 
+                    // Hover Center Logic
                     const distFromCenter = Math.sqrt(mouse.x * mouse.x + mouse.y * mouse.y);
-                    const hoverThreshold = 0.3;
+                    const hoverThreshold = 0.3; 
 
                     if (distFromCenter < hoverThreshold) {
-                        targetScale = 4.0;
-                        targetRotationSpeed = 0.01; 
-                        bloomPass.strength = 4.0;
+                        targetScale = 3.6; // Smooth zoom
+                        targetRotationSpeed = 0.004; // Deliberate, smooth rotation
+                        
+                        // Activate the harmonic liquid wave
+                        targetHarmonic = 1.0;
+
+                        if (shockwaveRadius < 0) bloomPass.strength = 3.6; 
                     } else {
-                        targetScale = 1.0;
+                        targetScale = 1.0; 
                         targetRotationSpeed = 0.002;
-                        bloomPass.strength = 2.8;
+                        
+                        // Return to static chaotic breathing
+                        targetHarmonic = 0.0;
+
+                        if (shockwaveRadius < 0) bloomPass.strength = 2.8; 
+                    }
+
+                    // Smooth Interpolations
+                    currentScale += (targetScale - currentScale) * 0.05;
+                    currentRotationSpeed += (targetRotationSpeed - currentRotationSpeed) * 0.05;
+                    currentHarmonic += (targetHarmonic - currentHarmonic) * 0.05;
+
+                    // Shockwave Logic
+                    if (shockwaveRadius >= 0) {
+                        shockwaveRadius += 18.0; 
+                        bloomPass.strength += ((distFromCenter < hoverThreshold ? 3.6 : 2.8) - bloomPass.strength) * 0.05;
+                        if (shockwaveRadius > 800) {
+                            shockwaveRadius = -1; 
+                        }
                     }
 
                     raycaster.setFromCamera(mouse, camera);
                     raycaster.ray.intersectPlane(plane, mouse3D);
 
+                    // Parallax wrapper
                     wrapperGroup.rotation.x += (mouse.y * 0.4 - wrapperGroup.rotation.x) * 0.05;
                     wrapperGroup.rotation.y += (mouse.x * 0.4 - wrapperGroup.rotation.y) * 0.05;
-
-                    currentScale += (targetScale - currentScale) * 0.05;
-                    currentRotationSpeed += (targetRotationSpeed - currentRotationSpeed) * 0.05;
 
                     coreGroup.scale.set(currentScale, currentScale, currentScale);
                     floatGroup.scale.set(currentScale, currentScale, currentScale);
@@ -291,13 +352,16 @@ const GlowCanvasBackground = () => {
                     floatGroup.rotation.z += currentRotationSpeed * 0.4;
                     floatGroup.rotation.x -= currentRotationSpeed * 0.2;
 
-                    backgroundGroup.rotation.y -= 0.0008;
+                    // Background Starfield
+                    backgroundGroup.rotation.z += 0.0005;
+                    backgroundGroup.rotation.y -= 0.0005;
 
+                    // Particle Math Loop (The Core Magic)
                     const posAttribute = geometry.attributes.position;
                     const positionsArray = posAttribute.array;
                     
-                    const displacementStrength = currentScale > 1.2 ? 15.0 : 5.0;
-                    const speed = currentScale > 1.2 ? 3.0 : 1.2;
+                    const displacementStrength = currentScale > 1.2 ? 15.0 : 6.0;
+                    const speed = 1.2;
                     
                     const localMouse = mouse3D.clone();
                     coreGroup.worldToLocal(localMouse);
@@ -311,36 +375,56 @@ const GlowCanvasBackground = () => {
                         const oy = originalPositions[iy];
                         const oz = originalPositions[iz];
 
-                        const noise = Math.sin(time * speed + (ox * 0.02)) * Math.cos(time * speed + (oy * 0.02));
+                        // 1. The default "chaotic" breathing noise
+                        const chaoticNoise = Math.sin(time * speed + (ox * 0.02)) * Math.cos(time * speed + (oy * 0.02));
+                        
+                        // 2. The organized "harmonic" wave (creates elegant vertical ripples running across the sphere)
+                        const harmonicWave = Math.sin(oy * 0.08 - time * 4.0) * 1.5;
+
+                        // 3. Blend them seamlessly based on hover state
+                        const noise = (chaoticNoise * (1.0 - currentHarmonic)) + (harmonicWave * currentHarmonic);
                         
                         const distanceCenter = Math.sqrt(ox*ox + oy*oy + oz*oz);
                         const nx = ox / distanceCenter;
                         const ny = oy / distanceCenter;
                         const nz = oz / distanceCenter;
 
+                        // Mouse Repulsion
                         const dx = ox - localMouse.x;
                         const dy = oy - localMouse.y;
                         const dz = oz - localMouse.z;
                         const distToMouse = Math.sqrt(dx*dx + dy*dy + dz*dz);
                         
                         let repulseX = 0, repulseY = 0, repulseZ = 0;
-                        
-                        const repulseRadius = 140.0; 
+                        const repulseRadius = 150.0; 
                         
                         if (distToMouse < repulseRadius && distToMouse > 0) {
-                            const force = Math.pow(1.0 - (distToMouse / repulseRadius), 2.5) * 120.0; 
+                            const force = Math.pow(1.0 - (distToMouse / repulseRadius), 2.5) * 140.0; 
                             repulseX = (dx / distToMouse) * force;
                             repulseY = (dy / distToMouse) * force;
                             repulseZ = (dz / distToMouse) * force;
                         }
 
-                        positionsArray[ix] = ox + (nx * noise * displacementStrength) + repulseX;
-                        positionsArray[iy] = oy + (ny * noise * displacementStrength) + repulseY;
-                        positionsArray[iz] = oz + (nz * noise * displacementStrength) + repulseZ;
+                        // Shockwave Displacement
+                        let shockX = 0, shockY = 0, shockZ = 0;
+                        if (shockwaveRadius >= 0) {
+                            const distFromWave = Math.abs(distanceCenter - shockwaveRadius);
+                            if (distFromWave < 40) { 
+                                const shockForce = Math.pow(1.0 - (distFromWave / 40), 2.0) * 120.0; 
+                                shockX = nx * shockForce;
+                                shockY = ny * shockForce;
+                                shockZ = nz * shockForce;
+                            }
+                        }
+
+                        positionsArray[ix] = ox + (nx * noise * displacementStrength) + repulseX + shockX;
+                        positionsArray[iy] = oy + (ny * noise * displacementStrength) + repulseY + shockY;
+                        positionsArray[iz] = oz + (nz * noise * displacementStrength) + repulseZ + shockZ;
                     }
                     
                     posAttribute.needsUpdate = true;
 
+                    // Wireframe pulses subtly
                     const wireScale = 1.0 + Math.sin(time * 2.5) * 0.025;
                     wireframe.scale.set(wireScale, wireScale, wireScale);
 
@@ -351,6 +435,7 @@ const GlowCanvasBackground = () => {
 
                 return () => {
                     window.removeEventListener('mousemove', handleMouseMove);
+                    window.removeEventListener('mousedown', handleMouseDown);
                     window.removeEventListener('resize', onWindowResize);
                     cancelAnimationFrame(animationId);
                     if (renderer) renderer.dispose();
@@ -374,8 +459,8 @@ const GlowCanvasBackground = () => {
     return (
         <div 
             ref={containerRef} 
-            className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none"
-            style={{ pointerEvents: 'auto', cursor: 'crosshair' }}
+            id="canvas-container"
+            className="absolute top-0 left-0 w-full h-full z-0 cursor-crosshair bg-[#020308]"
         />
     );
 };

@@ -77,7 +77,7 @@ app.use((req, res, next) => {
 });
 
 // ─── /api/instagram ───────────────────────────────────────────────────────────
-app.get('/api/instagram', async (req, res) => {
+app.get(['/api/instagram', '/instagram'], async (req, res) => {
   // Allow bypassing cache with ?nocache=1 for debugging
   const bypassCache = req.query.nocache === '1';
 

@@ -29,6 +29,8 @@ import {
   Search,
   Cloud,
   Smartphone,
+  Cctv,
+  Utensils,
   PartyPopper,
   Calendar,
   Users,
@@ -341,12 +343,14 @@ const BookDemo = () => {
   ];
 
   const productsList = [
-    { id: "mobilehub", name: "MobileHub", icon: Smartphone },
-    { id: "parcel", name: "Parcel Management", icon: Package },
+    { id: "stockly", name: "Stockly", icon: Smartphone },
+    { id: "dropbox", name: "Dropbox", icon: Package },
     { id: "solar", name: "Solar Sales OS", icon: Sun },
     { id: "kirana", name: "Smart Kirana & General Store", icon: Store },
     { id: "manufacturing", name: "Manufacturing Management", icon: Factory },
-    { id: "schoolhub", name: "SchoolHub ERP", icon: GraduationCap },
+    { id: "siddhanta", name: "Siddhanta", icon: GraduationCap },
+    { id: "arohana", name: "Arohana ERP", icon: Utensils },
+    { id: "trinetra", name: "TRINETRA", icon: Cctv },
   ];
 
   const timeSlots = [

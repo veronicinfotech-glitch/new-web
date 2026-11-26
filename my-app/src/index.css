@@ -8,7 +8,7 @@ html {
 
 body {
   margin: 0;
-  font-family: "Black Ops One", system-ui;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -18,10 +18,48 @@ code {
   font-family: "Black Ops One", system-ui;
 }
 
-/* Enforce perfect font rendering across all common text elements */
-body, h1, h2, h3, h4, h5, h6, p, span, div, a, li, button {
-  font-family: "Black Ops One", system-ui !important;
-  font-weight: 400 !important;
+/* Local Font Face Declarations */
+@font-face {
+  font-family: 'Chevalon';
+  src: local('Chevalon'), local('Chevalon-Regular'), local('Chevalon Regular');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'React';
+  src: local('React'), local('React-Regular'), local('React Regular');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Figerona';
+  src: local('Figerona'), local('Figerona-Regular'), local('Figerona Regular');
+  font-display: swap;
+}
+
+/* Base Body Font */
+body {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* User Defined Typography across ALL pages:
+   H1 -> Chevalon Font
+   H2 -> React Font
+   H3 -> Figerona Font */
+h1, .h1, [class*="h1-font"], .font-h1, .font-chevalon {
+  font-family: 'Chevalon', 'Playfair Display', 'Cinzel', Didot, 'Times New Roman', serif !important;
+}
+
+h2, .h2, [class*="h2-font"], .font-h2, .font-react {
+  font-family: 'React', 'Playfair Display', 'Cormorant Garamond', Georgia, serif !important;
+}
+
+h3, .h3, [class*="h3-font"], .font-h3, .font-figerona {
+  font-family: 'Figerona', 'Figtree', 'Plus Jakarta Sans', system-ui, sans-serif !important;
 }
 
 .black-ops-one-regular {
@@ -113,4 +151,15 @@ body, h1, h2, h3, h4, h5, h6, p, span, div, a, li, button {
 [style$="opacity: 0"] {
   opacity: 1 !important;
   transform: none !important;
+}
+
+
+/* Instagram 3D Coverflow Curved Carousel */
+.instagram-3d-swiper {
+  perspective: 1200px;
+  overflow: visible !important;
+}
+
+.instagram-3d-swiper .swiper-slide {
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }

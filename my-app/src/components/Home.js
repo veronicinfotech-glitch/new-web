@@ -116,7 +116,7 @@ import heroBgImage from "../images/s1.png";
 
 // Hero Video import
 import handshakeVideo from "../video/v4.mp4";
-import whyImage from "../images/whyveronicus.png";
+import whyImage from "../images/content.webp";
 
 
 // ========================================
@@ -583,6 +583,15 @@ function Home() {
   const [instagramLastUpdated, setInstagramLastUpdated] = useState(null);
   const [instagramFromCache, setInstagramFromCache] = useState(false);
 
+  const fallbackInstagramPosts = [
+    { id: 'fb1', image: s1, url: 'https://www.instagram.com/veronic_infotech', likes: 58, comments: 12 },
+    { id: 'fb2', image: s2, url: 'https://www.instagram.com/veronic_infotech', likes: 74, comments: 15 },
+    { id: 'fb3', image: s3, url: 'https://www.instagram.com/veronic_infotech', likes: 49, comments: 8 },
+    { id: 'fb4', image: s4, url: 'https://www.instagram.com/veronic_infotech', likes: 65, comments: 11 },
+    { id: 'fb5', image: s5, url: 'https://www.instagram.com/veronic_infotech', likes: 82, comments: 19 },
+    { id: 'fb6', image: s6, url: 'https://www.instagram.com/veronic_infotech', likes: 91, comments: 23 },
+  ];
+
   const fetchInstagramPosts = async () => {
     try {
       setInstagramError(null);
@@ -844,7 +853,7 @@ function Home() {
       {/* Navbar is managed globally in App.js */}
 
       {/* Hero Section - Clean & Perfect Three.js Glow Sphere */}
-      <section ref={heroRef} id="home" className="relative h-screen w-full overflow-hidden bg-[#04060d]">
+      <section ref={heroRef} id="home" className="relative h-screen w-full overflow-hidden bg-[#020308]">
         {/* Three.js Intense Glow & Hover Expand Sphere */}
         <GlowCanvasBackground />
 
@@ -1708,254 +1717,102 @@ function Home() {
       </section>
 
       {/* ========================================
-          INSTAGRAM FEED SECTION - UPDATED WITH LOAD MORE
+          FOLLOW US / INSTAGRAM 3D COVERFLOW SECTION
           ======================================== */}
-      <section className="relative py-16 sm:py-20 md:py-24 lg:py-28 overflow-hidden bg-[#F5F8FA] w-full border-t border-[#9DB4C6]/10">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1E2A39]/5 via-transparent to-[#1E2A39]/5" />
-
-        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
-          <motion.div
-            variants={fadeUpOnce}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            className="text-center mb-8 sm:mb-12 lg:mb-16"
-          >
-            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gradient-to-r from-[#833AB4]/10 via-[#E1306C]/10 to-[#F56040]/10 border border-[#833AB4]/20 mb-4">
-              <Instagram className="w-3 h-3 sm:w-4 sm:h-4 text-[#E1306C]" />
-              <span className="text-xs sm:text-sm text-[#0B0F14]">Follow Us</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold px-4 text-[#0B0F14] font-space hover:opacity-90 transition-opacity duration-300 select-none">
-              Instagram
-              <span className="block text-[#E1306C] mt-2">
-                Feed
-              </span>
-            </h2>
-            <p className="text-sm sm:text-base lg:text-lg text-[#0B0F14]/60 max-w-2xl mx-auto mt-3 px-4">
-              {instagramLoading ? 'Loading latest posts...' : ''}
-            </p>
-            {instagramError && (
-              <p className="text-xs text-amber-600 mt-2">
-                The Instagram feed is refreshing. Visit the profile directly for the latest updates.
-              </p>
-            )}
-            {/* Instagram Profile Banner Card */}
-            <div
-              onClick={() => window.open('https://www.instagram.com/veronic_infotech', '_blank', 'noopener,noreferrer')}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  event.preventDefault();
-                  window.open('https://www.instagram.com/veronic_infotech', '_blank', 'noopener,noreferrer');
-                }
-              }}
-              className="mt-8 mb-6 max-w-3xl mx-auto bg-[#0B0F14] border border-gray-800/80 rounded-3xl p-6 sm:p-8 shadow-2xl transition-all duration-300 hover:border-gray-700 hover:shadow-[0_15px_45px_rgba(0,0,0,0.5)] group cursor-pointer relative overflow-hidden text-left flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8"
-            >
-              <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-br from-[#833AB4]/10 via-[#E1306C]/10 to-[#F56040]/10 rounded-full blur-3xl pointer-events-none" />
-
-              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-[#0B0F14] border border-gray-800/90 p-2.5 flex-shrink-0 shadow-lg group-hover:scale-105 transition-transform duration-300 mx-auto sm:mx-0 flex items-center justify-center relative z-10">
-                <img
-                  src={instagramProfile?.profilePicture || accountLogoImage}
-                  alt="@veronic_infotech profile avatar"
-                  className="w-full h-full object-contain rounded-full"
-                  onError={(event) => {
-                    event.currentTarget.src = accountLogoImage;
-                  }}
-                />
-              </div>
-
-              <div className="flex-1 relative z-10 w-full text-center sm:text-left">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center justify-center sm:justify-start gap-2 mx-auto sm:mx-0">
-                    <h3 className="text-xl sm:text-2xl font-bold text-white font-space tracking-tight">
-                      {instagramProfile?.username || 'veronic_infotech'}
-                    </h3>
-                    <span className="w-5 h-5 rounded-full bg-[#0095F6] flex items-center justify-center text-white text-xs font-bold shrink-0" title="Verified">✓</span>
-                  </div>
-                  <a
-                    href="https://www.instagram.com/veronic_infotech"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hidden sm:flex items-center gap-2 text-xs font-bold tracking-wider text-[#E1306C] hover:text-[#F56040]"
-                    onClick={(event) => event.stopPropagation()}
-                  >
-                    <Instagram className="w-4 h-4" />
-                    Follow Us
-                  </a>
-                </div>
-
-                <div className="text-sm font-medium text-gray-400 mt-1">{instagramProfile?.name || 'Veronic'}</div>
-
-                <div className="flex items-center justify-center sm:justify-start gap-6 sm:gap-8 text-sm sm:text-base text-gray-300 my-3 font-jakarta flex-wrap">
-                  {instagramProfile?.posts !== undefined && <div><strong className="font-bold text-white">{instagramProfile.posts}</strong> <span className="text-gray-400">posts</span></div>}
-                  {instagramProfile?.followers !== undefined && <div><strong className="font-bold text-white">{instagramProfile.followers}</strong> <span className="text-gray-400">followers</span></div>}
-                  {instagramProfile?.following !== undefined && <div><strong className="font-bold text-white">{instagramProfile.following}</strong> <span className="text-gray-400">following</span></div>}
-                </div>
-
-                <div className="text-xs sm:text-sm text-gray-200 font-jakarta leading-relaxed space-y-0.5 mt-2">
-                  <div>{instagramProfile?.biography || 'Business-Driven IT & Business Software Solutions 🚀'}</div>
-                  {(instagramLastUpdated || instagramFromCache) && (
-                    <div className="text-[11px] text-gray-400 hidden">
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </motion.div>
+      <section className="relative py-16 sm:py-20 md:py-24 overflow-hidden bg-[#F8FAFC] w-full border-t border-[#9DB4C6]/10">
+        <div className="relative z-10 w-full mb-6 sm:mb-10 text-center px-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-gray-200/90 shadow-sm mb-4">
+            <Instagram className="w-4 h-4 text-[#E1306C]" />
+            <span className="text-xs sm:text-sm font-semibold text-[#0B0F14]">Follow Us</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold px-4 text-[#0B0F14] hover:opacity-90 transition-opacity duration-300 select-none">
+            Instagram <span className="text-[#E1306C]">Feed</span>
+          </h2>
         </div>
 
-        <div className="relative z-10 w-full">
-          <div className="instagram-swiper-wrapper">
-            {instagramLoading ? (
-              // Loading skeleton
-              <div className="flex justify-center items-center min-h-[300px]">
-                <div className="flex flex-col items-center gap-3">
-                  <div className="w-12 h-12 border-4 border-[#1E2A39]/20 border-t-[#1E2A39] rounded-full animate-spin"></div>
-                  <p className="text-[#0B0F14]/60 text-sm">Loading Instagram posts...</p>
-                </div>
-              </div>
-            ) : instagramPosts.length === 0 ? (
-              // Live stats display when posts are unavailable but profile data may exist
-              <div className="flex flex-col items-center justify-center min-h-[300px] text-center px-4 gap-8">
-                {/* Live account stats */}
-                <div className="flex items-center justify-center gap-8 sm:gap-12">
-                  <div className="flex flex-col items-center gap-1">
-                    <span className="text-3xl sm:text-4xl font-black text-[#0B0F14] font-space tabular-nums">
-                      {instagramProfile?.posts !== null && instagramProfile?.posts !== undefined
-                        ? instagramProfile.posts.toLocaleString()
-                        : '—'}
-                    </span>
-                    <span className="text-xs sm:text-sm font-semibold text-[#0B0F14]/50 uppercase tracking-widest">Posts</span>
-                  </div>
-                  <div className="w-px h-12 bg-[#0B0F14]/10" />
-                  <div className="flex flex-col items-center gap-1">
-                    <span className="text-3xl sm:text-4xl font-black text-[#E1306C] font-space tabular-nums">
-                      {instagramProfile?.followers !== null && instagramProfile?.followers !== undefined
-                        ? instagramProfile.followers.toLocaleString()
-                        : '—'}
-                    </span>
-                    <span className="text-xs sm:text-sm font-semibold text-[#0B0F14]/50 uppercase tracking-widest">Followers</span>
-                  </div>
-                  <div className="w-px h-12 bg-[#0B0F14]/10" />
-                  <div className="flex flex-col items-center gap-1">
-                    <span className="text-3xl sm:text-4xl font-black text-[#0B0F14] font-space tabular-nums">
-                      {instagramProfile?.following !== null && instagramProfile?.following !== undefined
-                        ? instagramProfile.following.toLocaleString()
-                        : '—'}
-                    </span>
-                    <span className="text-xs sm:text-sm font-semibold text-[#0B0F14]/50 uppercase tracking-widest">Following</span>
-                  </div>
-                </div>
-                <a
-                  href="https://www.instagram.com/veronic_infotech"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-[#833AB4] via-[#E1306C] to-[#F56040] text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105 text-sm"
+        {/* 3D Curved Arc Coverflow Carousel - Full Viewport Width (Starting to Ending Edge) */}
+        <div className="relative w-full overflow-hidden">
+          <Swiper
+            effect="coverflow"
+            grabCursor={true}
+            centeredSlides={true}
+            slidesPerView="auto"
+            initialSlide={3}
+            loop={true}
+            loopAdditionalSlides={6}
+            speed={850}
+            coverflowEffect={{
+              rotate: 35, // 3D perspective angle matching reference image
+              stretch: 45, // Overlap cards smoothly in an arc
+              depth: 170, // 3D depth perspective
+              modifier: 1,
+              scale: 0.84, // Gradual scale down for side cards
+              slideShadows: false, // NO dark color overlays! Pure cards only
+            }}
+            autoplay={{
+              delay: 2400,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true,
+            }}
+            modules={[EffectCoverflow, Autoplay]}
+            className="instagram-3d-swiper py-12 w-full"
+            style={{
+              width: '100vw',
+              paddingTop: '25px',
+              paddingBottom: '55px',
+            }}
+          >
+            {((instagramPosts && instagramPosts.length > 0 ? instagramPosts : fallbackInstagramPosts).concat(
+              instagramPosts && instagramPosts.length > 0 ? instagramPosts : fallbackInstagramPosts
+            )).map((post, index) => (
+              <SwiperSlide
+                key={`${post.id || index}-${index}`}
+                className="select-none group/slide"
+                style={{ width: '310px', maxWidth: '82vw' }}
+              >
+                <div
+                  onClick={() => window.open(post.url || 'https://www.instagram.com/veronic_infotech', '_blank', 'noopener,noreferrer')}
+                  className="w-full aspect-[3/4] rounded-[28px] sm:rounded-[36px] overflow-hidden bg-[#080B10] shadow-[0_20px_50px_rgba(0,0,0,0.32)] relative cursor-pointer border border-black/10 transition-transform duration-500 hover:shadow-[0_25px_60px_rgba(0,0,0,0.45)]"
                 >
-                  <Instagram className="w-4 h-4" />
-                  @veronic_infotech
-                </a>
-              </div>
-            ) : (
-              <>
-                <Swiper
-                  effect="coverflow"
-                  grabCursor={true}
-                  centeredSlides={true}
-                  slidesPerView={'auto'}
-                  loop={true}
-                  speed={800}
-                  freeMode={false}
-                  coverflowEffect={{
-                    rotate: 0,
-                    stretch: 80, // Overlap cards closely like the image
-                    depth: 180, // 3D depth curve
-                    modifier: 1,
-                    slideShadows: true,
-                  }}
-                  autoplay={{
-                    delay: 2500,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                  }}
-                  modules={[EffectCoverflow, Autoplay]}
-                  className="instagram-swiper py-12"
-                  style={{
-                    width: '100%',
-                    paddingTop: '30px',
-                    paddingBottom: '50px'
-                  }}
-                >
-                  {instagramPosts.map((post, index) => (
-                    <SwiperSlide key={post.id || index} className="w-[400px] sm:w-[450px] md:w-[500px] lg:w-[550px] group/slide">
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5 }}
-                        className="w-full h-full relative z-10 hover:z-20"
-                      >
-                        <div
-                          className="flex flex-col w-full aspect-[3/4] bg-[#0B0F14] rounded-3xl overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.6)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.8)] transition-all duration-300 relative cursor-pointer border border-white/5"
-                          onClick={() => window.open('https://www.instagram.com/veronic_infotech', '_blank', 'noopener,noreferrer')}
-                          role="button"
-                          tabIndex={0}
-                          aria-label="Open Veronic Infotech Instagram Profile"
-                          onKeyDown={(event) => {
-                            if (event.key === 'Enter' || event.key === ' ') {
-                              event.preventDefault();
-                              window.open('https://www.instagram.com/veronic_infotech', '_blank', 'noopener,noreferrer');
-                            }
-                          }}
-                        >
-                          {post.image ? (
-                            <img src={post.image} alt={post.caption || 'Instagram post preview'} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" onError={(event) => { event.currentTarget.style.display = 'none'; }} />
-                          ) : (
-                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-800">
-                              <Instagram className="w-10 h-10 text-gray-400 mb-1" />
-                              <span className="text-gray-400 text-xs font-medium">Post preview unavailable</span>
-                            </div>
-                          )}
+                  {post.image ? (
+                    <img
+                      src={post.image}
+                      alt={post.caption || 'Instagram Post'}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover/slide:scale-105"
+                      loading="lazy"
+                      onError={(event) => {
+                        event.currentTarget.src = heroBgImage;
+                      }}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-gray-900 text-white">
+                      <Instagram className="w-12 h-12 text-[#E1306C] mb-2" />
+                      <span className="text-xs text-gray-400">@veronic_infotech</span>
+                    </div>
+                  )}
 
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
-
-                          <div className="absolute top-5 left-5 z-20">
-                            <div className="flex items-center gap-2">
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#FFDC80] via-[#F56040] to-[#833AB4] p-[1.5px] shadow-lg">
-                                <img src={instagramProfile?.profilePicture || lolo1} alt="veronic logo" className="w-full h-full object-cover rounded-full bg-black border border-black" />
-                              </div>
-                            </div>
-                          </div>
-
-
-
-                          <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col gap-2 translate-y-3 group-hover:translate-y-0 transition-transform duration-300 z-20">
-                            <div className="flex items-center gap-4 mt-2">
-                              {post.likes !== undefined && (
-                                <div className="flex items-center gap-1.5 text-white/90 text-xs font-bold drop-shadow">
-                                  <Heart className="w-3.5 h-3.5 text-[#E1306C] fill-transparent group-hover:fill-[#E1306C] transition-all" /> {post.likes}
-                                </div>
-                              )}
-                              {post.comments !== undefined && (
-                                <div className="flex items-center gap-1.5 text-white/90 text-xs font-bold drop-shadow">
-                                  <MessageCircle className="w-3.5 h-3.5 text-white" /> {post.comments}
-                                </div>
-                              )}
-                              <span className="text-white font-bold text-[11px] ml-auto bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full hover:bg-white hover:text-black transition-colors shadow-md">View Profile</span>
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-
-              <div className="flex items-center justify-center gap-2 font-mono text-[11px] text-[#0B0F14]/40 tracking-widest uppercase hidden">
-              </div>
-              </>
-            )}
-          </div>
+                  {/* Clean subtle bottom bar on hover */}
+                  <div className="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex items-center justify-between text-white z-10 opacity-0 group-hover/slide:opacity-100 transition-opacity duration-300">
+                    <div className="flex items-center gap-3 text-xs font-semibold">
+                      {post.likes !== undefined && (
+                        <span className="flex items-center gap-1.5 drop-shadow">
+                          <Heart className="w-4 h-4 fill-[#E1306C] text-[#E1306C]" /> {post.likes}
+                        </span>
+                      )}
+                      {post.comments !== undefined && (
+                        <span className="flex items-center gap-1.5 drop-shadow">
+                          <MessageCircle className="w-4 h-4 text-white" /> {post.comments}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-xs font-bold px-3 py-1.5 bg-white/20 hover:bg-white hover:text-black backdrop-blur-md rounded-full transition-all flex items-center gap-1.5 shadow-lg">
+                      <Instagram className="w-3.5 h-3.5" /> View
+                    </span>
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
       </section>
 
@@ -2159,6 +2016,32 @@ function Home() {
 
       <style dangerouslySetInnerHTML={{
         __html: `
+        /* ========================================
+           INSTAGRAM RIGHT-TO-LEFT MARQUEE
+           ======================================== */
+        .instagram-marquee-container {
+          width: 100%;
+          overflow: hidden;
+          position: relative;
+        }
+        .instagram-marquee-track {
+          display: flex;
+          width: max-content;
+          will-change: transform;
+          animation: igMarqueeScroll 40s linear infinite;
+        }
+        .instagram-marquee-track:hover {
+          animation-play-state: paused;
+        }
+        @keyframes igMarqueeScroll {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+
         /* ========================================
            PERFECT CONTINUOUS MARQUEE - NO GLITCH
            ======================================== */
